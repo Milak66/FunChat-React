@@ -1,7 +1,8 @@
 .userProfile {
-    position: relative;           
+    position: relative;
+    width: 10vw;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     margin-right: 2vw;
 }
@@ -15,22 +16,39 @@
 
 .username {
     font-size: 1.6vw;
-    color: white;
+
+    color: #d58aff;
+
     font-family: Gill Sans, sans-serif;
+
+    text-shadow:
+        0 0 8px rgba(180, 60, 255, 0.4);
 }
 
 .profileAvatar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2vw;
-    font-family: Gill Sans, sans-serif;
-    color: rgb(150, 0, 150);
-    width: 3vw;
-    height: 3vw;              
-    border: 1px solid;
+    width: 3.5vw;
+    height: 3.5vw;
+
+    min-width: 45px;
+    min-height: 45px;
+
     border-radius: 50%;
-    overflow: hidden;         
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.profileAvatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
 }
 
 .profileSettings {
@@ -48,36 +66,98 @@
 
     animation: moveProfileSettings 0.3s ease forwards;
 
-    background-color: rgb(66, 0, 127);
+    background:
+        radial-gradient(
+            circle at 20% 10%,
+            rgba(210, 70, 255, 0.2),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            #17052c,
+            #2b0750 55%,
+            #16052d
+        );
+
+    border: 1px solid rgba(200, 80, 255, 0.3);
+
     border-radius: 1vw;
-    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+
+    box-shadow:
+        0 0 25px rgba(120, 20, 255, 0.25),
+        inset 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.userFriendCode {
+.settingsUserName {
     font-size: 1.5vw;
-    color: white;
-    padding: 0.5vw;
-    border: 1px rgb(150, 0, 150) solid;
+    color: #f0d9ff;
+
+    text-shadow:
+        0 0 8px rgba(200, 80, 255, 0.35);
 }
 
 .quitBtn {
     padding: 1vw;
     color: white;
-    font-size: 1.3vw;
-    background-color: rgb(150, 0, 150);
-    border: none;
+    font-size: 1.2vw;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid rgba(220, 140, 255, 0.3);
+
     cursor: pointer;
     border-radius: 2vw;
+
+    box-shadow:
+        0 0 12px rgba(160, 40, 255, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.quitBtn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 18px rgba(180, 60, 255, 0.4);
 }
 
 .deleteBtn {
     padding: 1vw;
     color: white;
-    font-size: 1.3vw;
-    background-color: rgb(150, 0, 150);
-    border: none;
+    font-size: 1.2vw;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid rgba(220, 140, 255, 0.3);
+
     cursor: pointer;
     border-radius: 2vw;
+
+    box-shadow:
+        0 0 12px rgba(160, 40, 255, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.deleteBtn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 18px rgba(180, 60, 255, 0.4);
 }
 
 @keyframes moveProfileSettings {
@@ -85,6 +165,7 @@
         opacity: 0;
         transform: translateY(-5vh);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -94,53 +175,220 @@
 @media all and (max-width: 768px) {
 
     .userProfile {
-        margin-right: 2vw;
+        width: auto;
+
+        margin-right: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    
+
     .profile {
-        gap: 2vw;
+        display: flex;
+        align-items: center;
+
+        gap: 1.5vw;
+
+        cursor: pointer;
     }
-    
+
     .username {
-        font-size: 4.5vw;
-    }
-    
-    .profileAvatar {
-        font-size: 6vw;
-        width: 8vw;
-        height: 8vw;              
-        border: 1px solid;
-        border-radius: 50%;       
-    }
-    
-    .profileSettings {
-        top: 100%;
-        margin-top: 1vh;
-    
-        gap: 2vh;
-    
-        width: 30vw;
-        padding: 1vw;
-    
-        background-color: rgb(66, 0, 127);
-        border-radius: 3vw;
-        box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
-    
-    .userFriendCode {
         font-size: 3.5vw;
+
+        white-space: nowrap;
+
+        color: #d58aff;
+
+        text-shadow:
+            0 0 8px rgba(180, 60, 255, 0.4);
+    }
+
+    .profileAvatar {
+        width: 8vw;
+        height: 8vw;
+
+        min-width: 8vw;
+        min-height: 8vw;
+
+        border: none;
+
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profileSettings {
+        position: absolute;
+
+        top: 100%;
+        right: 0;
+
+        margin-top: 1.5vh;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 1.5vh;
+
+        width: 38vw;
+
+        padding: 3vw;
+
+        box-sizing: border-box;
+
+        background:
+            radial-gradient(
+                circle at 20% 10%,
+                rgba(210, 70, 255, 0.2),
+                transparent 40%
+            ),
+            linear-gradient(
+                145deg,
+                #17052c,
+                #2b0750 55%,
+                #16052d
+            );
+
+        border: 1px solid rgba(200, 80, 255, 0.3);
+
+        border-radius: 3vw;
+
+        box-shadow:
+            0 0 25px rgba(120, 20, 255, 0.25),
+            inset 0 1px rgba(255, 255, 255, 0.08);
+
+        animation: moveProfileSettings 0.3s ease forwards;
+    }
+
+    .settingsUserName {
+        font-size: 3.5vw;
+
+        text-align: center;
+
+        color: #f0d9ff;
+
+        text-shadow:
+            0 0 8px rgba(200, 80, 255, 0.35);
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .userFriendCode {
+        font-size: 3vw;
+
+        padding: 2vw;
+
+        text-align: center;
+
+        word-break: break-word;
+    }
+
+    .quitBtn,
+    .deleteBtn {
+        width: 100%;
+
+        padding: 2.2vw;
+
+        font-size: 3.2vw;
+
+        border-radius: 5vw;
+
+        box-sizing: border-box;
+    }
+}
+
+@media all and (max-width: 480px) {
+
+    .profile {
+        gap: 1.2vw;
+    }
+
+    .username {
+        font-size: 3.2vw;
+    }
+
+    .profileAvatar {
+        width: 8vw;
+        height: 8vw;
+
+        min-width: 8vw;
+        min-height: 8vw;
+    }
+
+    .profileSettings {
+        width: 42vw;
+
+        padding: 3vw;
+
+        gap: 1.5vh;
+
+        border-radius: 3.5vw;
+    }
+
+    .settingsUserName {
+        font-size: 3.5vw;
+    }
+
+    .userFriendCode {
+        font-size: 2.8vw;
+
         padding: 2vw;
     }
 
-    .quitBtn {
-        padding: 2.5vw;
-        font-size: 4vw;
-        border-radius: 6vw;
-    }
-    
+    .quitBtn,
     .deleteBtn {
+        padding: 2vw;
+
+        font-size: 3vw;
+
+        border-radius: 5vw;
+    }
+}
+
+@media all and (max-width: 360px) {
+
+    .profile {
+        gap: 1vw;
+    }
+
+    .username {
+        font-size: 3vw;
+    }
+
+    .profileAvatar {
+        width: 7.5vw;
+        height: 7.5vw;
+
+        min-width: 7.5vw;
+        min-height: 7.5vw;
+    }
+
+    .profileSettings {
+        width: 45vw;
+
         padding: 2.5vw;
-        font-size: 4vw;
-        border-radius: 6vw;
+    }
+
+    .settingsUserName {
+        font-size: 3.2vw;
+    }
+
+    .userFriendCode {
+        font-size: 2.6vw;
+    }
+
+    .quitBtn,
+    .deleteBtn {
+        padding: 1.8vw;
+
+        font-size: 2.8vw;
     }
 }

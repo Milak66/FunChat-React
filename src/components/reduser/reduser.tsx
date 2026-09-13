@@ -1,24 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface ChatMessage {
-    sender: string;
-    text: string;
-    id: string;
-}
-
-export interface ChatTitle {
-    chatId: string;
-    title: string;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Texts, texts } from "./languages";
 
 export interface User {
-    name: string;
-    id: string; 
+    nickname: string;
+    username: string;
+    id: number | null;
     password: string;
+    language: keyof typeof texts;
     avatar: string;
-    friendCode: string;
-    userChats: ChatTitle[];
-    friends: string[];
+    chats: number[];
+}
+
+export interface Chat {
+    id: number;
+    title: string;
+    avatar: string;
+}
+
+export interface ChatMessage {
+    text: string;
+    id: number;
+    sender: {
+        nickname: string;
+        username: string;
+        id: number | null;
+        avatar: string;
+        chats: number[];
+    }
 }
 
 export interface EmojiModalState {
@@ -29,17 +37,24 @@ export interface EmojiModalState {
 }
 
 interface InitialState {
+    loading: boolean;
+    texts: Texts;
     isUserRegister: boolean;
+    userId: number | null;
     emojiModal: EmojiModalState;
     isLogInModalOpen: boolean;
     isLogOnModalOpen: boolean;
     user: User;
+    chats: Chat[];
     chat: ChatMessage[];
-    currentChatId: string | null;
+    currentChatId: number | null;
 }
 
 const initialState: InitialState = {
+    loading: true,
+    texts: texts["en"],
     isUserRegister: false,
+    userId: null,
     emojiModal: {
         isOpen: false,
         emoji: "",
@@ -49,29 +64,55 @@ const initialState: InitialState = {
     isLogInModalOpen: false,
     isLogOnModalOpen: false,
     user: {
-        name: "",
-        id: "",
+        nickname: "",
+        username: "",
+        id: null,
         password: "",
+        language: "en",
         avatar: "",
-        friendCode: "",
-        userChats: [],
-        friends: []
+        chats: []
     },
+    chats: [],
     chat: [],
     currentChatId: null
 };
 
 const chatSlice = createSlice({
-    name: 'chat',
+    name: "chat",
     initialState,
     reducers: {
-        onSetUserStatus: (state, action: PayloadAction<boolean>) => {
+        onSetLoading: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.loading = action.payload;
+        },
+
+        onSetLanguage: (state, action: PayloadAction<keyof typeof texts>) => {
+            state.texts = texts[action.payload];
+        },
+
+        onSetUserStatus: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
             state.isUserRegister = action.payload;
+        },
+
+        onSetUserId: (
+            state,
+            action: PayloadAction<number | null>
+        ) => {
+            state.userId = action.payload;
         },
 
         showEmojiModal: (
             state,
-            action: PayloadAction<{ emoji: string; color: "red" | "green"; text: string }>
+            action: PayloadAction<{
+                emoji: string;
+                color: "red" | "green";
+                text: string;
+            }>
         ) => {
             state.emojiModal = {
                 isOpen: true,
@@ -84,89 +125,109 @@ const chatSlice = createSlice({
         },
 
         onSetLogInModal: (state) => {
-            state.isLogInModalOpen = !state.isLogInModalOpen;
+            state.isLogInModalOpen =
+                !state.isLogInModalOpen;
         },
 
         onSetLogOnModal: (state) => {
-            state.isLogOnModalOpen = !state.isLogOnModalOpen;
+            state.isLogOnModalOpen =
+                !state.isLogOnModalOpen;
         },
 
-        onSetUser: (state, action: PayloadAction<User>) => {
-            state.user = action.payload;
+        onSetUser: (
+            state,
+            action: PayloadAction<User>
+        ) => {
+            state.user = {
+                ...state.user,
+                ...action.payload
+            };
+        },
+
+        onSetUserChats: (
+            state,
+            action: PayloadAction<number>
+        ) => {
+            if (!state.user.chats.includes(action.payload)) {
+                state.user.chats.push(action.payload);
+            }
+        },
+
+        onSetChats: (
+            state,
+            action: PayloadAction<Chat[]>
+        ) => {
+            state.chats = action.payload;
+        },
+
+        onAddChat: (
+            state,
+            action: PayloadAction<Chat>
+        ) => {
+            const alreadyExists = state.chats.some(
+                chat => chat.id === action.payload.id
+            );
+
+            if (!alreadyExists) {
+                state.chats.push(action.payload);
+            }
         },
 
         onSetCurrentChat: (
             state,
-            action: PayloadAction<{ chatId: string; messages: ChatMessage[] }>
+            action: PayloadAction<number | null>
         ) => {
-            state.currentChatId = action.payload.chatId;
-            state.chat = action.payload.messages;
+            state.currentChatId =
+                action.payload;
         },
 
-        onAddMessage: (state, action: PayloadAction<ChatMessage>) => {
+        onAddMessage: (
+            state,
+            action: PayloadAction<ChatMessage>
+        ) => {
             state.chat.push(action.payload);
         },
 
-        onAddChatToUser: (
+        onSetChat: (
             state,
-            action: PayloadAction<{ chatId: string; title: string; friendId: string }>
+            action: PayloadAction<ChatMessage[]>
         ) => {
-            if (state.user.id) {
-                state.user.userChats.push({
-                    chatId: action.payload.chatId,
-                    title: action.payload.title
-                });
-
-                const exists = state.user.userChats.some(
-                    (chat) => chat.chatId === action.payload.chatId
-                );
-    
-                if (!exists) {
-                    state.user.userChats.push({
-                        chatId: action.payload.chatId,
-                        title: action.payload.title
-                    });
-                }
-
-                if (!state.user.friends.includes(action.payload.friendId)) {
-                    state.user.friends.push(action.payload.friendId);
-                }
-            }
+            state.chat = action.payload;
         },
 
-        onUserDeleted: (state, action: PayloadAction<string>) => {
-            if (state.user.id === action.payload) {
-                state.isUserRegister = false;
-                state.user = {
-                    name: "",
-                    id: "",
-                    password: "",
-                    avatar: "",
-                    friendCode: "",
-                    userChats: [],
-                    friends: [],
-                };
-                state.chat = [];
-                state.currentChatId = null;
-            } else {
-                state.user.friends = state.user.friends.filter(id => id !== action.payload);
-                state.user.userChats = state.user.userChats.filter(chat => !chat.chatId.includes(action.payload));
-            }
+        onRemoveChat: (
+            state,
+            action: PayloadAction<number>
+        ) => {
+            state.chats = state.chats.filter(
+                chat => chat.id !== action.payload
+            );
+
+            state.user.chats =
+                state.user.chats.filter(
+                    chatId => chatId !== action.payload
+                );
         }
     }
 });
 
 export const {
     onSetUserStatus,
+    onSetLanguage,
+    onSetLoading,
+    onSetUserId,
     onSetLogInModal,
     onSetLogOnModal,
     onSetUser,
     showEmojiModal,
     hideEmojiModal,
+    onSetUserChats,
+    onSetChats,
+    onAddChat,
     onSetCurrentChat,
     onAddMessage,
-    onAddChatToUser,
-    onUserDeleted
+    onSetChat,
+    onRemoveChat
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

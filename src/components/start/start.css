@@ -1,79 +1,799 @@
 .start {
     display: flex;
     width: 100vw;
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(190, 60, 255, 0.22),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(90, 30, 255, 0.18),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #080313 0%,
+            #17052d 45%,
+            #0c0620 100%
+        );
     height: 10vh;
     justify-content: center;
-    background-image: url('../../assets/modern-futuristic-neon-purple-background-free-vector.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: fixed; 
+    position: fixed;
     z-index: 100;
+
+    border-bottom: 1px solid rgba(190, 70, 255, 0.25);
+
+    box-shadow:
+        0 8px 30px rgba(110, 0, 255, 0.12),
+        inset 0 -1px rgba(220, 120, 255, 0.08);
 }
 
 .menu {
     width: 95vw;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 10vw 1fr auto;
+    gap: 1vw;
     align-items: center;
 }
 
 .logoOfSite {
     display: flex;
     align-items: center;
+    margin-left: 0.5vw;
 }
 
 .siteName {
     font-size: 2.5vw;
-    color: white;
-    font-family: Gill Sans, sans-serif;
+
+    color: #d98cff;
+
+    text-shadow:
+        0 0 8px rgba(190, 60, 255, 0.7),
+        0 0 20px rgba(140, 40, 255, 0.35);
+
+    letter-spacing: 0.03em;
 }
 
-.sitePic {
-    width: 5vw;
+.startSettings {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.modeButtonImg {
+    width: 4vw;
 }
 
 .btnsDiv {
     display: flex;
     width: 20vw;
-    justify-content: space-between;
+    gap: 1vw;
+    align-items: center;
 }
 
 .btn {
     padding: 1vw;
-    color: white;
+    color: #ffffff;
     border-radius: 2vw;
     font-size: 1.3vw;
-    background-color:rgb(150, 0, 150);
-    border: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid rgba(220, 140, 255, 0.35);
+
     cursor: pointer;
+
+    box-shadow:
+        0 0 12px rgba(160, 40, 255, 0.25),
+        inset 0 1px rgba(255, 255, 255, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #bc4cff,
+            #7625e8
+        );
+
+    box-shadow:
+        0 0 18px rgba(180, 60, 255, 0.45),
+        inset 0 1px rgba(255, 255, 255, 0.2);
+
+    transform: translateY(-1px);
+}
+
+.languageButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 4.5vw;
+    height: 4.5vw;
+
+    min-width: 45px;
+    min-height: 45px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
+}
+
+.languageButton:hover {
+    transform: scale(1.08);
+
+    filter:
+        drop-shadow(0 0 8px rgba(190, 70, 255, 0.8))
+        drop-shadow(0 0 18px rgba(130, 30, 255, 0.5));
+}
+
+.languageButton:active {
+    transform: scale(0.96);
+}
+
+.modeButtonImg {
+    width: 4vw;
+    min-width: 40px;
+    max-width: 60px;
+
+    border-radius: 50%;
+}
+
+.languageModalOverlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 2vw;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(150, 40, 255, 0.12),
+            transparent 45%
+        ),
+        rgba(3, 1, 12, 0.78);
+
+    backdrop-filter: blur(10px);
+
+    animation: languageOverlayIn 0.2s ease;
+}
+
+.languageModal {
+    position: relative;
+
+    width: min(850px, 90vw);
+    max-height: 82vh;
+
+    overflow-y: auto;
+
+    padding: 2vw;
+
+    border-radius: 1.5vw;
+
+    border: 1px solid rgba(190, 70, 255, 0.4);
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(190, 60, 255, 0.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 100%,
+            rgba(70, 40, 255, 0.12),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(18, 5, 35, 0.98),
+            rgba(7, 3, 20, 0.98)
+        );
+
+    box-shadow:
+        0 0 30px rgba(130, 30, 255, 0.25),
+        0 0 80px rgba(100, 20, 255, 0.15),
+        inset 0 1px rgba(255, 255, 255, 0.08);
+
+    animation: languageModalIn 0.25s ease;
+}
+
+.languageModalClose {
+    position: absolute;
+
+    top: 0.8vw;
+    right: 1vw;
+
+    width: 2.5vw;
+    height: 2.5vw;
+
+    min-width: 35px;
+    min-height: 35px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(220, 140, 255, 0.2);
+
+    background: rgba(100, 20, 160, 0.2);
+
+    color: #e5b5ff;
+
+    font-size: 1.7vw;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.languageModalClose:hover {
+    background: rgba(180, 50, 255, 0.3);
+
+    transform: rotate(90deg);
+
+    box-shadow:
+        0 0 15px rgba(180, 60, 255, 0.4);
+}
+
+.languageModalHeader {
+    display: flex;
+
+    align-items: center;
+
+    gap: 1.2vw;
+
+    margin-bottom: 1.8vw;
+
+    padding-right: 3vw;
+}
+
+.languageModalIcon {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    width: 4.5vw;
+    height: 4.5vw;
+
+    min-width: 55px;
+    min-height: 55px;
+
+    border-radius: 1vw;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(180, 50, 255, 0.35),
+            rgba(70, 30, 200, 0.25)
+        );
+
+    border: 1px solid rgba(210, 120, 255, 0.3);
+
+    box-shadow:
+        0 0 20px rgba(150, 40, 255, 0.25),
+        inset 0 1px rgba(255, 255, 255, 0.1);
+
+    font-size: 2.2vw;
+}
+
+.languageModalHeader h2 {
+    margin: 0;
+
+    color: #df9cff;
+
+    font-size: 1.8vw;
+
+    text-shadow:
+        0 0 8px rgba(190, 60, 255, 0.5);
+}
+
+.languageModalHeader p {
+    margin: 0.4vw 0 0;
+
+    color: rgba(220, 200, 235, 0.65);
+
+    font-size: 0.95vw;
+}
+
+.languageGrid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 0.7vw;
+}
+
+.languageOption {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.8vw;
+
+    min-height: 4.5vw;
+
+    padding: 0.7vw 1vw;
+
+    border-radius: 0.8vw;
+
+    border: 1px solid rgba(160, 60, 255, 0.12);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(80, 25, 130, 0.18),
+            rgba(30, 10, 70, 0.2)
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.languageOption:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(190, 70, 255, 0.55);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(150, 40, 230, 0.28),
+            rgba(60, 20, 120, 0.3)
+        );
+
+    box-shadow:
+        0 0 15px rgba(150, 40, 255, 0.2),
+        inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.languageOption:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.languageFlag {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 2.5vw;
+    height: 2.5vw;
+
+    min-width: 35px;
+    min-height: 35px;
+
+    border-radius: 0.6vw;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    font-size: 1.7vw;
+
+    transition: transform 0.2s ease;
+}
+
+.languageOption:hover .languageFlag {
+    transform: scale(1.12);
+}
+
+.languageNames {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.languageName {
+    color: #f1dfff;
+
+    font-size: 1vw;
+    font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.languageEnglishName {
+    margin-top: 0.15vw;
+
+    color: rgba(210, 190, 225, 0.45);
+
+    font-size: 0.72vw;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.languageModal::-webkit-scrollbar {
+    width: 7px;
+}
+
+.languageModal::-webkit-scrollbar-track {
+    background: rgba(20, 5, 35, 0.5);
+    border-radius: 10px;
+}
+
+.languageModal::-webkit-scrollbar-thumb {
+    background:
+        linear-gradient(
+            #a52cff,
+            #6416d8
+        );
+
+    border-radius: 10px;
+}
+
+.languageModal::-webkit-scrollbar-thumb:hover {
+    background:
+        linear-gradient(
+            #c04cff,
+            #8125ed
+        );
+}
+
+@keyframes languageOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes languageModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @media all and (max-width: 768px) {
+
+    .start {
+        width: 100vw;
+        height: 10vh;
+
+        padding: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        box-sizing: border-box;
+    }
+
+    .menu {
+        width: 94vw;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 2vw;
+    }
+
+    .logoOfSite {
+        display: flex;
+        align-items: center;
+
+        margin-left: 0;
+
+        min-width: 0;
+    }
+
+    .siteName {
+        font-size: 5.5vw;
+        line-height: 1;
+
+        white-space: nowrap;
+
+        letter-spacing: 0.02em;
+    }
+
+    .sitePic {
+        width: 9vw;
+        height: 9vw;
+    }
+
+    .startSettings {
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-end;
+
+        margin-left: auto;
+    }
+
+    .btnsDiv {
+        width: auto;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-end;
+
+        gap: 1.5vw;
+    }
+
+    .btn {
+        padding: 2vw 2.8vw;
+
+        min-height: 5.5vw;
+
+        border-radius: 5vw;
+
+        font-size: 3vw;
+        line-height: 1;
+
+        white-space: nowrap;
+
+        box-sizing: border-box;
+    }
+
+    .languageButton {
+        width: 9vw;
+        height: 9vw;
+
+        min-width: 9vw;
+        min-height: 9vw;
+
+        padding: 0;
+    }
+
+    .modeButtonImg {
+        width: 8vw;
+
+        min-width: 8vw;
+        max-width: 8vw;
+
+        height: 8vw;
+    }
+
+    .languageModalOverlay {
+        padding: 3vw;
+    }
+
+    .languageModal {
+        width: 94vw;
+        max-width: none;
+
+        max-height: 84vh;
+
+        padding: 4vw;
+
+        border-radius: 4vw;
+    }
+
+    .languageModalClose {
+        top: 2vw;
+        right: 2vw;
+
+        width: 8vw;
+        height: 8vw;
+
+        min-width: 8vw;
+        min-height: 8vw;
+
+        font-size: 5vw;
+    }
+
+    .languageModalHeader {
+        gap: 2.5vw;
+
+        margin-bottom: 4vw;
+
+        padding-right: 9vw;
+    }
+
+    .languageModalIcon {
+        width: 12vw;
+        height: 12vw;
+
+        min-width: 12vw;
+        min-height: 12vw;
+
+        border-radius: 2.5vw;
+
+        font-size: 6vw;
+    }
+
+    .languageModalHeader h2 {
+        font-size: 5vw;
+    }
+
+    .languageModalHeader p {
+        margin-top: 0.8vw;
+
+        font-size: 2.8vw;
+    }
+
+    .languageGrid {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 1.5vw;
+    }
+
+    .languageOption {
+        min-height: 12vw;
+
+        padding: 1.8vw 2vw;
+
+        gap: 2vw;
+
+        border-radius: 2vw;
+    }
+
+    .languageFlag {
+        width: 7vw;
+        height: 7vw;
+
+        min-width: 7vw;
+        min-height: 7vw;
+
+        border-radius: 1.5vw;
+
+        font-size: 4.5vw;
+    }
+
+    .languageName {
+        font-size: 2.8vw;
+    }
+
+    .languageEnglishName {
+        margin-top: 0.3vw;
+
+        font-size: 2vw;
+    }
+}
+
+@media all and (max-width: 480px) {
 
     .start {
         height: 10vh;
     }
 
     .menu {
-        width: 95vw;
+        width: 94vw;
+
+        gap: 1.5vw;
     }
-    
+
     .siteName {
         font-size: 5vw;
     }
-    
+
     .sitePic {
-        width: 12vw;
+        width: 8vw;
+        height: 8vw;
     }
-    
+
     .btnsDiv {
-        width: 50vw;
         gap: 1vw;
     }
-    
+
     .btn {
-        padding: 2.2vw;
-        border-radius: 6vw;
-        font-size: 3.5vw;
+        padding: 1.8vw 2.3vw;
+
+        min-height: 5vw;
+
+        font-size: 2.7vw;
+
+        border-radius: 5vw;
+    }
+
+    .languageButton {
+        width: 8vw;
+        height: 8vw;
+
+        min-width: 8vw;
+        min-height: 8vw;
+    }
+
+    .modeButtonImg {
+        width: 7vw;
+
+        min-width: 7vw;
+        max-width: 7vw;
+
+        height: 7vw;
+    }
+
+    .languageModal {
+        width: 94vw;
+
+        padding: 4vw;
+
+        border-radius: 4vw;
+    }
+
+    .languageGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media all and (max-width: 360px) {
+
+    .siteName {
+        font-size: 4.7vw;
+    }
+
+    .sitePic {
+        width: 7vw;
+        height: 7vw;
+    }
+
+    .btn {
+        padding: 1.6vw 2vw;
+
+        font-size: 2.5vw;
+    }
+
+    .languageButton {
+        width: 7vw;
+        height: 7vw;
+
+        min-width: 7vw;
+        min-height: 7vw;
+    }
+
+    .modeButtonImg {
+        width: 6.2vw;
+
+        min-width: 6.2vw;
+        max-width: 6.2vw;
+
+        height: 6.2vw;
     }
 }

@@ -1,0 +1,336 @@
+.avatarEditor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6vw;
+}
+
+.avatarPreview {
+    width: 4vw;
+    height: 8vh;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        linear-gradient(
+            135deg,
+            #6c35ff,
+            #2196f3
+        );
+    border: 3px solid rgba(180, 120, 255, 0.7);
+    box-shadow:
+        0 0 20px rgba(100, 70, 255, 0.35);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.avatarPreview:hover {
+    transform: scale(1.04);
+    box-shadow:
+        0 0 28px rgba(100, 100, 255, 0.55);
+}
+
+.avatarPreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    font-size: 2vw;
+    color: white;
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+.avatarHint {
+    color: rgba(210, 210, 255, 0.7);
+    font-size: 1vw;
+    font-family: Gill Sans, sans-serif;
+}
+
+.avatarModal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        rgba(5, 5, 20, 0.78);
+    backdrop-filter: blur(8px);
+}
+
+.avatarModalContent {
+    width: 40vw;
+    max-width: 600px;
+    padding: 1.5vw;
+    border-radius: 1.5vw;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 15, 40, 0.98),
+            rgba(10, 20, 50, 0.98)
+        );
+    border: 1px solid
+        rgba(120, 100, 255, 0.35);
+    box-shadow:
+        0 0 40px rgba(50, 50, 200, 0.35);
+}
+
+.avatarModalTitle {
+    text-align: center;
+    color: #eeeaff;
+    font-size: 1.5vw;
+    margin-bottom: 1vw;
+    font-family: Gill Sans, sans-serif;
+}
+
+.cropContainer {
+    position: relative;
+    width: 100%;
+    height: 25vw;
+    max-height: 500px;
+    background: #050510;
+    border-radius: 1vw;
+    overflow: hidden;
+}
+
+.zoomContainer {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    padding: 1vw 0.5vw;
+    color: white;
+    font-size: 1.2vw;
+}
+
+.zoomContainer input {
+    flex: 1;
+    accent-color: #7357ff;
+    cursor: pointer;
+}
+
+.avatarModalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8vw;
+}
+
+.avatarModalButtons button {
+    border: none;
+    padding: 0.7vw 1.5vw;
+    border-radius: 0.8vw;
+    font-size: 1vw;
+    cursor: pointer;
+    font-family: Gill Sans, sans-serif;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.avatarCancelButton {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ddd;
+}
+
+.avatarSaveButton {
+    color: white;
+    background:
+        linear-gradient(
+            135deg,
+            #704cff,
+            #2879ff
+        );
+    box-shadow:
+        0 0 12px
+        rgba(80, 100, 255, 0.3);
+}
+
+.avatarSaveButton:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0 0 20px
+        rgba(80, 100, 255, 0.5);
+}
+
+.avatarModalButtons button:active {
+    transform: scale(0.96);
+}
+
+.avatarModalButtons button:disabled {
+    opacity: 0.5;
+
+    cursor: default;
+}
+
+@media all and (max-width: 768px) {
+
+    .avatarEditor {
+        gap: 2vw;
+    }
+
+    .avatarPreview {
+        width: 22vw;
+        height: 22vw;
+
+        border: 0.6vw solid rgba(180, 120, 255, 0.7);
+        box-shadow:
+            0 0 20px rgba(100, 70, 255, 0.35);
+    }
+
+    .avatarPlaceholder {
+        font-size: 8vw;
+    }
+
+    .avatarHint {
+        font-size: 3.2vw;
+        text-align: center;
+    }
+
+    .avatarModal {
+        padding: 3vw;
+        box-sizing: border-box;
+    }
+
+    .avatarModalContent {
+        width: 88vw;
+        max-width: none;
+
+        padding: 4vw;
+
+        border-radius: 5vw;
+
+        box-sizing: border-box;
+    }
+
+    .avatarModalTitle {
+        font-size: 5vw;
+
+        margin-bottom: 3vw;
+    }
+
+    .cropContainer {
+        width: 100%;
+        height: 76vw;
+
+        max-height: none;
+
+        border-radius: 4vw;
+    }
+
+    .zoomContainer {
+        gap: 3vw;
+
+        padding: 4vw 1vw;
+
+        font-size: 4vw;
+    }
+
+    .zoomContainer input {
+        min-width: 0;
+    }
+
+    .avatarModalButtons {
+        width: 100%;
+
+        justify-content: flex-end;
+
+        gap: 2.5vw;
+    }
+
+    .avatarModalButtons button {
+        padding: 2.5vw 4.5vw;
+
+        border-radius: 3vw;
+
+        font-size: 3.5vw;
+    }
+}
+
+@media all and (max-width: 480px) {
+
+    .avatarPreview {
+        width: 24vw;
+        height: 24vw;
+    }
+
+    .avatarPlaceholder {
+        font-size: 9vw;
+    }
+
+    .avatarHint {
+        font-size: 3.5vw;
+    }
+
+    .avatarModalContent {
+        width: 92vw;
+        padding: 4vw;
+
+        border-radius: 5vw;
+    }
+
+    .avatarModalTitle {
+        font-size: 5.5vw;
+        margin-bottom: 3.5vw;
+    }
+
+    .cropContainer {
+        height: 80vw;
+        border-radius: 4vw;
+    }
+
+    .zoomContainer {
+        gap: 2.5vw;
+        padding: 4vw 1vw;
+        font-size: 4.2vw;
+    }
+
+    .avatarModalButtons {
+        gap: 2vw;
+    }
+
+    .avatarModalButtons button {
+        padding: 2.5vw 4vw;
+        font-size: 3.7vw;
+        border-radius: 3vw;
+    }
+}
+
+@media all and (max-width: 360px) {
+
+    .avatarPreview {
+        width: 25vw;
+        height: 25vw;
+    }
+
+    .avatarHint {
+        font-size: 3.7vw;
+    }
+
+    .avatarModalContent {
+        width: 94vw;
+        padding: 3.5vw;
+    }
+
+    .avatarModalTitle {
+        font-size: 5.8vw;
+    }
+
+    .cropContainer {
+        height: 82vw;
+    }
+
+    .zoomContainer {
+        font-size: 4.3vw;
+    }
+
+    .avatarModalButtons button {
+        padding: 2.5vw 3.5vw;
+        font-size: 3.8vw;
+    }
+}

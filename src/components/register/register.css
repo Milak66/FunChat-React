@@ -1,22 +1,23 @@
-.logOn {
+.logIn {
     width: 50vw;
-    height: 45vh;
+    height: 60vh;
+    margin-top: 1vw;
 
     background:
         radial-gradient(
-            circle at 15% 15%,
+            circle at 12% 12%,
             rgba(0, 174, 255, 0.18),
             transparent 35%
         ),
         radial-gradient(
-            circle at 85% 85%,
-            rgba(100, 40, 255, 0.18),
-            transparent 40%
+            circle at 88% 88%,
+            rgba(100, 40, 255, 0.2),
+            transparent 42%
         ),
         linear-gradient(
             145deg,
             #07101f 0%,
-            #081a32 50%,
+            #081a32 48%,
             #120a2b 100%
         );
 
@@ -29,7 +30,7 @@
         inset 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.userFormLogOn {
+.userFormLogIn {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -42,6 +43,7 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    gap: 1vw;
 }
 
 .writeUserInfoText {
@@ -140,9 +142,12 @@
 
 @media all and (max-width: 768px) {
 
-    .logOn {
-        width: 72vw;
-        height: 32vh;
+    .logIn {
+        width: 82vw;
+        height: 52vh;
+
+        margin-top: 2vw;
+
         border-radius: 4vw;
 
         box-shadow:
@@ -150,27 +155,35 @@
             0 0 50px rgba(110, 40, 255, 0.08);
     }
 
-    .userFormLogOn {
+    .userFormLogIn {
         height: 100%;
+
         display: flex;
         flex-direction: column;
+
         justify-content: space-around;
         align-items: center;
     }
 
     .writeUserInfoDiv {
         width: 100%;
-        gap: 2.5vw;
+
+        gap: 3vw;
+
         display: flex;
         flex-direction: column;
+
         justify-content: center;
         align-items: center;
     }
 
     .writeUserInfoText {
         font-size: 4vw;
+
         font-family: Gill Sans, sans-serif;
+
         text-align: center;
+
         color: #e8f7ff;
 
         text-shadow:
@@ -178,18 +191,23 @@
     }
 
     .inputText {
-        width: 58vw;
+        width: 65vw;
+
         padding: 2.5vw;
 
         box-sizing: border-box;
 
+        font-size: 3.5vw;
+
+        border-radius: 4vw;
+
         color: #e8f7ff;
+
         background: rgba(3, 15, 32, 0.8);
 
         border: 1px solid rgba(0, 174, 255, 0.4);
-        border-radius: 4vw;
 
-        font-size: 3.5vw;
+        outline: none;
     }
 
     .inputText::placeholder {
@@ -198,16 +216,18 @@
 
     .submitBtnDiv {
         display: flex;
+
         justify-content: center;
         align-items: center;
     }
 
     .submitBtn {
-        padding: 2.2vw 5vw;
+        padding: 2.5vw 5vw;
 
         color: white;
 
         border-radius: 5vw;
+
         font-size: 4vw;
 
         background:
@@ -219,6 +239,8 @@
 
         border: 1px solid rgba(120, 210, 255, 0.35);
 
+        cursor: pointer;
+
         box-shadow:
             0 0 12px rgba(0, 140, 255, 0.25),
             0 0 25px rgba(100, 50, 255, 0.12);
@@ -227,24 +249,30 @@
 
 @media all and (max-width: 480px) {
 
-    .logOn {
-        width: 74vw;
-        height: 32vh;
+    .logIn {
+        width: 88vw;
+        height: 50vh;
+
         border-radius: 5vw;
     }
 
     .writeUserInfoDiv {
-        gap: 3vw;
+        gap: 3.5vw;
     }
 
     .writeUserInfoText {
         font-size: 4.2vw;
+
+        padding: 0 4vw;
     }
 
     .inputText {
-        width: 62vw;
+        width: 72vw;
+
         padding: 2.8vw;
+
         font-size: 3.7vw;
+
         border-radius: 5vw;
     }
 
@@ -254,16 +282,18 @@
 
     .submitBtn {
         padding: 2.5vw 6vw;
+
         font-size: 4vw;
+
         border-radius: 6vw;
     }
 }
 
 @media all and (max-width: 360px) {
 
-    .logOn {
-        width: 76vw;
-        height: 30vh;
+    .logIn {
+        width: 92vw;
+        height: 48vh;
     }
 
     .writeUserInfoText {
@@ -271,12 +301,14 @@
     }
 
     .inputText {
-        width: 64vw;
+        width: 78vw;
+
         font-size: 3.8vw;
     }
 
     .submitBtn {
         padding: 2.5vw 6vw;
+
         font-size: 4vw;
     }
 }

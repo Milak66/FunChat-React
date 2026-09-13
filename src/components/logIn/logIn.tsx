@@ -1,120 +1,101 @@
 import React, { useState } from "react";
 import "./logIn.css";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import {
-  onSetLogInModal,
-  onSetUser,
   onSetUserStatus,
+  onSetLogOnModal,
+  onSetUser,
+  onSetUserId,
 } from "../reduser/reduser";
-import { useEmojiModal } from "../emojiModal/useEmojiHook";
-import { socket } from "../socket/socket";
+import { useEmojiModal } from "../hooks/useEmojiHook";
 
-interface LogInProps {}
+interface LogOnProps {}
 
-const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
+const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const texts = useSelector((state: RootState) => state.reduser.texts);
 
   const dispatch = useDispatch<AppDispatch>();
   const { showEmoji } = useEmojiModal();
 
-  const sendData = async (e: React.FormEvent<HTMLFormElement>) => {
+  const getUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!username.trim()) {
-      showEmoji(":(", "red", "Отсутствует имя пользователя");
+      showEmoji(":(", "red", "Enter a username");
       return;
     }
 
-    if (username.trim().length > 10) {
-      showEmoji(":(", "red", "Имя пользователя больше 10 символов");
-      return;
-    }
-
-    if (password.trim().length < 5) {
-      showEmoji(":(", "red", "Пароль слишком короткий");
+    if (!password.trim()) {
+      showEmoji(":(", "red", "Enter a password");
       return;
     }
 
     try {
-      const response = await fetch("https://chat-api-y8is.onrender.com/addUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username.trim(),
-          password: password.trim(),
-        }),
-      });
-
-      const data = await response.json();
+      const response = await fetch(
+        "http://localhost:8888/users/getUserByProperties",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
 
       if (!response.ok) {
-        showEmoji(":(", "red", data.message || "Ошибка при регистрации");
+        showEmoji(":(", "red", "Coudn't find the user");
         return;
       }
 
-      dispatch(
-        onSetUser({
-          id: data.user._id,
-          name: data.user.name,
-          password: data.user.password,
-          avatar: data.user.avatar,
-          friendCode: data.user.friendCode,
-          userChats: data.user.userChats,
-          friends: data.user.friends,
-        })
-      );
+      const correctUser = await response.json();
 
+      dispatch(onSetUser(correctUser));
+      dispatch(onSetUserId(correctUser.id));
       dispatch(onSetUserStatus(true));
+      localStorage.removeItem("temporaryMode");
+      localStorage.setItem("userId", String(correctUser.id));
+      dispatch(onSetLogOnModal());
 
-      socket.emit("register", data.user._id);
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: data.user._id,
-          name: data.user.name,
-          password: data.user.password,
-          avatar: data.user.avatar,
-          friendCode: data.user.friendCode,
-          userChats: data.user.userChats,
-          friends: data.user.friends,
-        })
-      );
-
-      showEmoji(":)", "green", "Регистрация успешна");
-      dispatch(onSetLogInModal());
+      showEmoji(":)", "green", "You have successfully logged into your account.");
     } catch (err) {
       console.error(err);
-      showEmoji(":(", "red", "Ошибка сервера");
+      showEmoji(":(", "red", "Something went wrong!");
     }
   };
 
   return (
-    <div className="logIn">
-      <form className="userFormLogIn" onSubmit={sendData}>
+    <div className="logOn">
+      <form className="userFormLogOn" onSubmit={getUser}>
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">Введите имя пользователя</label>
+          <label className="writeUserInfoText">{texts.enterUserNameText}</label>
           <input
             className="inputText"
             type="text"
-            placeholder="текст..."
+            value={username}
+            placeholder={texts.inputText}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">Введите пароль</label>
+          <label className="writeUserInfoText">{texts.enterPasswordText}</label>
           <input
             className="inputText"
             type="password"
-            placeholder="текст..."
+            value={password}
+            placeholder={texts.inputText}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="submitBtnDiv">
           <button className="submitBtn" type="submit">
-            Зарегистрироваться
+            {texts.logInText}
           </button>
         </div>
       </form>
@@ -122,4 +103,4 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
   );
 };
 
-export default LogIn;
+export default LogOn;

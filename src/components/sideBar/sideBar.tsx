@@ -1,163 +1,115 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./sideBar.css";
+
 import { RootState, AppDispatch } from "../store/store";
+
 import { useSelector, useDispatch } from "react-redux";
-import submitSymbol from "../../assets/7117136-middle-no-bg-preview (carve.photos).png";
-import { useEmojiModal } from "../emojiModal/useEmojiHook";
-import { onSetCurrentChat, onAddChatToUser } from "../reduser/reduser";
-import { socket } from "../socket/socket";
+
+import { onSetChats, onSetCurrentChat } from "../reduser/reduser";
+
+import { useEmojiModal } from "../hooks/useEmojiHook";
+
+import { NavLink } from "react-router-dom";
+
+import userIcon from "../../assets/userIcon.jpg";
 
 interface ChatsSideBarProps {}
 
 const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
-  const [isCodePlaceOpen, setIsCodePlaceOpen] = useState<boolean>(false);
-  const [friendCode, setFriendCode] = useState<string>("");
-
   const dispatch = useDispatch<AppDispatch>();
+
   const { showEmoji } = useEmojiModal();
 
-  const user = useSelector((state: RootState) => state.reduser.user);
-  const userId = user?.id || "";
-  const userChats = user?.userChats || [];
+  const texts = useSelector((state: RootState) => state.reduser.texts);
 
-  const handleOpenCodePlace = () => setIsCodePlaceOpen(!isCodePlaceOpen);
+  const userId = useSelector((state: RootState) => state.reduser.userId);
+
+  const chats = useSelector((state: RootState) => state.reduser.chats);
 
   useEffect(() => {
-    const handleNewChat = (chatData: { chat: any; title: string }) => {
-      const friendId = chatData.chat.participants.find(
-        (id: string) => id !== userId
-      );
-
-      dispatch(
-        onAddChatToUser({
-          chatId: chatData.chat._id,
-          title: chatData.title,
-          friendId,
-        })
-      );
-
-      showEmoji(":)", "green", `Новый чат с ${chatData.title}`);
-    };
-
-    socket.on("newChat", handleNewChat);
-    return () => {
-      socket.off("newChat", handleNewChat);
-    };
-  }, [dispatch, showEmoji, userId]);
-
-  const addChatFc = async () => {
-    if (!friendCode.trim() || !userId) {
-      showEmoji(":(", "red", "Отсутствует код друга!");
+    if (!userId) {
+      dispatch(onSetChats([]));
       return;
     }
 
-    try {
-      const response = await fetch("https://chat-api-y8is.onrender.com/addChat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, friendCode }),
-      });
+    const loadChats = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8888/chats/getChats/${userId}`
+        );
 
-      const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Couldn't load chats");
+        }
 
-      if (!response.ok || !data.success) {
-        showEmoji(":(", "red", data.message || "Ошибка");
-        return;
+        const data = await response.json();
+
+        dispatch(onSetChats(data));
+      } catch (error) {
+        console.error("Failed to load chats:", error);
+
+        showEmoji(":(", "red", "Couldn't load your chats");
       }
+    };
 
-      showEmoji(":)", "green", "Чат добавлен");
-      setFriendCode("");
-    } catch (err) {
-      console.error(err);
-      showEmoji(":(", "red", "Ошибка сервера");
+    loadChats();
+  }, [userId, dispatch]);
+
+  const openChat = async (chatId: number) => {
+    if (!userId) {
+      return;
     }
-  };
 
-  const openChat = async (chatId: string) => {
-    if (!chatId) return;
-
-    try {
-      const response = await fetch("https://chat-api-y8is.onrender.com/getChatById", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatId }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        showEmoji(":(", "red", error.message || "Ошибка загрузки чата");
-        return;
-      }
-
-      const chatData = await response.json();
-
-      dispatch(
-        onSetCurrentChat({
-          chatId: chatData.chatId,
-          messages: chatData.messages.map((m: any) => ({
-            ...m,
-            id: m._id,
-          })),
-        })
-      );
-    } catch (err) {
-      console.error(err);
-      showEmoji(":(", "red", "Ошибка сервера");
-    }
+    dispatch(onSetCurrentChat(chatId));
   };
 
   const returnChats = () => {
-    if (!userChats || userChats.length === 0) {
-      return <div className="noChatsMessage">У вас пока нет чатов:/</div>;
+    if (chats.length === 0) {
+      return <div className="noChatsMessage">{texts.zeroChatsText}</div>;
     }
 
-    return userChats.map((item) => (
+    return chats.map((chat) => (
       <div
         className="singleChat"
-        key={item.chatId}
-        onClick={() => openChat(item.chatId)}
+        key={chat.id}
+        onClick={() => openChat(chat.id)}
       >
-        <div className="singleChatTitle">{item.title}</div>
+        {chat.avatar ?     <img
+          className="chatAvatar"
+          src={`http://localhost:8888${chat.avatar}`}
+          alt={chat.title}
+        /> : <img
+        className="chatAvatar"
+        src={userIcon}
+        alt={chat.title}
+      />}
+        <div className="singleChatTitle">{chat.title}</div>
       </div>
     ));
-  };
-
-  const returnCodePlace = () => {
-    if (!isCodePlaceOpen) return null;
-
-    return (
-      <div className="enterUserCodePlace">
-        <input
-          className="codeInput"
-          type="text"
-          placeholder="Введите код пользователя..."
-          value={friendCode}
-          onChange={(e) => setFriendCode(e.target.value)}
-        />
-        <img
-          className="submitImg"
-          src={submitSymbol}
-          alt="submit"
-          onClick={addChatFc}
-        />
-      </div>
-    );
   };
 
   return (
     <div className="sideBar">
       <div className="sideBarHeader">
         <div className="chatsSettings">
-          <div className="chatsTitle">Чаты</div>
+          <div className="chatsTitle">{texts.chatsText}</div>
           <div className="addBtnPlace">
-            <button className="addBtn" onClick={handleOpenCodePlace}>
-              +
-            </button>
+            {userId ? (
+              <NavLink to="/addChat">
+                <button className="addBtn">+</button>
+              </NavLink>
+            ) : (
+              <button
+                className="addBtn"
+                onClick={() => {
+                  showEmoji(":(", "red", "You need to sign in first!");
+                }}
+              >
+                +
+              </button>
+            )}
           </div>
         </div>
-        {returnCodePlace()}
       </div>
       <div className="chats">{returnChats()}</div>
     </div>

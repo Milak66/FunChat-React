@@ -3,71 +3,100 @@ import "./app.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import {
-  onSetUserStatus,
-  onSetUser,
+  onSetLoading,
+  onSetLanguage,
   onSetLogInModal,
   onSetLogOnModal,
+  onSetUserStatus,
+  onSetUser,
+  onSetUserId
 } from "../reduser/reduser";
+import Loading from "./loading";
 import Start from "../start/start";
-import LogIn from "../logIn/logIn";
-import LogOn from "../logOn/logOn";
+import LogIn from "../register/register";
+import LogOn from "../logIn/logIn";
 import MainContent from "../mainContent/mainContent";
-import { EmojiModal } from "../emojiModal/emojiModal";
-import { socket } from "../socket/socket";
+import AddChat from "../addChat/addChat";
+import { EmojiModal } from "../hooks/emojiModal";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { connectSocket, disconnectSocket } from "../socket/socket";
 
-const App: React.FC = (): React.JSX.Element => {
+interface AppProps {};
+
+const App: React.FC<AppProps> = (): React.JSX.Element => {
+
   const dispatch = useDispatch<AppDispatch>();
+
+  const loading = useSelector(
+    (state: RootState) => state.reduser.loading
+  );
 
   const emojiModal = useSelector(
     (state: RootState) => state.reduser.emojiModal
   );
+
   const isLoginInModalOpen = useSelector(
     (state: RootState) => state.reduser.isLogInModalOpen
   );
+
   const isLogOnModalOpen = useSelector(
     (state: RootState) => state.reduser.isLogOnModalOpen
   );
-  const user = useSelector((state: RootState) => state.reduser.user);
+
+  async function fetchAccount(id: number | null) {
+    if (!id) {
+      dispatch(onSetLoading(false));
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:8888/users/getUserById/${id}`);
+
+      if (!response.ok) {
+        dispatch(onSetLoading(false));
+        return;
+      }
+
+      const data = await response.json();
+      
+      dispatch(onSetUser(data));
+      dispatch(onSetLanguage(data.language));
+      dispatch(onSetUserStatus(true));
+      dispatch(onSetLoading(false));
+    } catch (err) {
+      dispatch(onSetLoading(false));
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-
-    if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
-      dispatch(onSetUser(parsedUser));
-      dispatch(onSetUserStatus(true));
-
-      socket.emit("register", parsedUser._id || parsedUser.id);
-      console.log("🟢 User registered on socket:", parsedUser);
-    }
+    const initializeApp = async () => {
+      const savedUserId = localStorage.getItem("userId");
+  
+      if (!savedUserId) {
+        dispatch(onSetLoading(false));
+        return;
+      }
+  
+      const id = Number(savedUserId);
+  
+      dispatch(onSetUserId(id));3
+  
+      await fetchAccount(id);
+    };
+  
+    initializeApp();
   }, [dispatch]);
 
   useEffect(() => {
-    if (user.id || user.id) {
-      localStorage.setItem("user", JSON.stringify(user));
-      socket.emit("register", user.id || user.id);
-    }
-  }, [user]);
 
-  useEffect(() => {
-    socket.on("newMessage", (message) => {
-      console.log("📩 New message received:", message);
-    });
-
-    socket.on("newChat", (chatData) => {
-      console.log("🆕 New chat created:", chatData);
-    });
-
-    socket.on("userDeleted", (data) => {
-      console.log("❌ User deleted:", data);
-    });
+    connectSocket();
 
     return () => {
-      socket.off("newMessage");
-      socket.off("newChat");
-      socket.off("userDeleted");
+        disconnectSocket();
     };
-  }, []);
+
+}, []);
 
   const handleModalClick1 = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -81,8 +110,14 @@ const App: React.FC = (): React.JSX.Element => {
     }
   };
 
-  return (
-    <div className="app">
+  const isWebsiteLoading = () => {
+    if (loading) {
+      return <Loading/>
+    } else {
+      return (
+      <Router>
+      <Routes>
+      <Route path="/" element={<div className="app">
       <div className="startPlace">
         <Start />
         {emojiModal.isOpen && (
@@ -105,7 +140,20 @@ const App: React.FC = (): React.JSX.Element => {
       ) : null}
 
       <MainContent />
-    </div>
+      </div>}/>
+      <Route path="/addChat" element={
+        <AddChat/>
+      }/>
+      </Routes>
+      </Router>
+      )
+    }
+  }
+
+  return (
+      <>
+        {isWebsiteLoading()}
+      </>
   );
 };
 

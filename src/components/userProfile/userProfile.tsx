@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { onSetUserStatus, onUserDeleted } from "../reduser/reduser";
-import { useEmojiModal } from "../emojiModal/useEmojiHook";
-import { socket } from "../socket/socket";
+import {
+  onSetUserStatus,
+  onSetUser,
+  onSetUserId,
+  onSetCurrentChat,
+} from "../reduser/reduser";
+import { useEmojiModal } from "../hooks/useEmojiHook";
+import AvatarEditor from "../avatarEditor/avatarEditor";
+import userIcon from "../../assets/userIcon.jpg";
 
 interface UserProfileProps {}
 
 const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  const user = useSelector((state: RootState) => state.reduser.user || {});
-  const userId = useSelector(
-    (state: RootState) => state.reduser.user?.id || ""
-  );
+  const texts = useSelector((state: RootState) => state.reduser.texts);
+
+  const user = useSelector((state: RootState) => state.reduser.user);
 
   const dispatch = useDispatch<AppDispatch>();
   const { showEmoji } = useEmojiModal();
@@ -24,37 +29,50 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
   };
 
   const quitFromProfile = () => {
-    localStorage.removeItem("user");
+    dispatch(
+      onSetUser({
+        nickname: "",
+        username: "",
+        id: null,
+        password: "",
+        language: "en",
+        avatar: "",
+        chats: [],
+      })
+    );
+    dispatch(onSetUserId(null));
     dispatch(onSetUserStatus(false));
-
-    showEmoji(":)", "green", "Выход успешно выполнен");
-
-    socket.disconnect();
+    dispatch(onSetCurrentChat(null));
+    localStorage.removeItem("userId");
+    showEmoji(":)", "green", "Exit successfully completed");
   };
 
-  const deleteUserFc = async () => {
-    if (!userId) return;
-
+  const deleteAccount = async () => {
     try {
-      const response = await fetch("https://chat-api-y8is.onrender.com/deleteProfile", {
-        method: "POST",
+      fetch(`http://localhost:8888/users/deleteUser/${user?.id}`, {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
       });
 
-      if (response.ok) {
-        localStorage.removeItem("user");
-        dispatch(onSetUserStatus(false));
-
-        socket.disconnect();
-
-        showEmoji(":)", "green", "Профиль удалён");
-      } else {
-        showEmoji(":(", "red", "Ошибка при удалении профиля");
-      }
-    } catch (error) {
-      console.error(error);
-      showEmoji(":(", "red", "Ошибка сервера");
+      showEmoji(":)", "green", "Account has been successfully deleted");
+      dispatch(
+        onSetUser({
+          nickname: "",
+          username: "",
+          id: null,
+          password: "",
+          language: "en",
+          avatar: "",
+          chats: [],
+        })
+      );
+      dispatch(onSetUserId(null));
+      dispatch(onSetUserStatus(false));
+      dispatch(onSetCurrentChat(null));
+      localStorage.removeItem("userId");
+    } catch (err) {
+      console.error(err);
+      showEmoji(":(", "red", "Server error");
     }
   };
 
@@ -63,38 +81,34 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
 
     return (
       <div className="profileSettings">
-        <div className="userFriendCode">{user.friendCode}</div>
+        <div className="settingsUserName">@{user?.username}</div>
+
+        <AvatarEditor userId={user.id} currentAvatar={user.avatar} />
 
         <button className="quitBtn" onClick={quitFromProfile}>
-          Выйти
+          {texts.logOutText}
         </button>
 
-        <button className="deleteBtn" onClick={deleteUserFc}>
-          Удалить
+        <button className="deleteBtn" onClick={deleteAccount}>
+          {texts.deleteAccountText}
         </button>
       </div>
     );
   };
 
-  useEffect(() => {
-    socket.on(
-      "userDeleted",
-      (data: { deletedUserId: string; chatIds: string[] }) => {
-        dispatch(onUserDeleted(data.deletedUserId));
-      }
-    );
-
-    return () => {
-      socket.off("userDeleted");
-    };
-  }, [dispatch]);
-
   return (
     <div className="userProfile">
       <div className="profile" onClick={handleOpenSettings}>
-        <div className="username">{user.name}</div>
-
-        <div className="profileAvatar">{user.avatar}</div>
+        <div className="username">{user?.nickname}</div>
+        {user.avatar ? <img
+          className="profileAvatar"
+          src={`http://localhost:8888${user.avatar}`}
+          alt="Avatar"
+        /> : <img
+          className="profileAvatar"
+          src={userIcon}
+          alt="Avatar"
+      />}
       </div>
 
       {returnProfileSettings()}
