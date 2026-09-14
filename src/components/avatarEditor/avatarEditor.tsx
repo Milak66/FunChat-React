@@ -100,7 +100,7 @@ const AvatarEditor: React.FC<AvatarEditorProps> = ({
             );
 
             const response = await fetch(
-                `http://localhost:8888/users/${userId}/avatar`,
+                `https://funchat-rwvy.onrender.com/users/${userId}/avatar`,
                 {
                     method: "PATCH",
                     body: formData
