@@ -53,7 +53,7 @@ const ChatWithUser: React.FC = () => {
     const loadMessages = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8888/messages/getMessages/${currentChatId}`
+          `https://funchat-rwvy.onrender.com/messages/getMessages/${currentChatId}`
         );
 
         if (!response.ok) {
@@ -144,7 +144,7 @@ const ChatWithUser: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8888/messages/addMessage",
+        "https://funchat-rwvy.onrender.com/messages/addMessage",
         {
           method: "POST",
 
@@ -187,7 +187,7 @@ const ChatWithUser: React.FC = () => {
   const deleteChat = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8888/chats/deleteChat/${currentChatId}`,
+        `https://funchat-rwvy.onrender.com/chats/deleteChat/${currentChatId}`,
         {
           method: "DElETE",
           headers: { "Content-Type": "application/json" }

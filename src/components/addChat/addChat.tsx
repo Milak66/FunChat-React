@@ -41,7 +41,7 @@ const AddChat: React.FC<AddChatProps> = () => {
       try {
 
         const response = await fetch(
-        `http://localhost:8888/users/getUsersByUsername/${userId}?username=${encodeURIComponent(atUsername)}`
+        `https://funchat-rwvy.onrender.com/users/getUsersByUsername/${userId}?username=${encodeURIComponent(atUsername)}`
         );
 
         if (!response.ok) {

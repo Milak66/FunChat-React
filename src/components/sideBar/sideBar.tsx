@@ -35,7 +35,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
     const loadChats = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8888/chats/getChats/${userId}`
+          `https://funchat-rwvy.onrender.com/chats/getChats/${userId}`
         );
 
         if (!response.ok) {

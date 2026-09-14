@@ -49,7 +49,7 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
 
   const deleteAccount = async () => {
     try {
-      fetch(`http://localhost:8888/users/deleteUser/${user?.id}`, {
+      fetch(`https://funchat-rwvy.onrender.com/users/deleteUser/${user?.id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -102,7 +102,7 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
         <div className="username">{user?.nickname}</div>
         {user.avatar ? <img
           className="profileAvatar"
-          src={`http://localhost:8888${user.avatar}`}
+          src={`https://funchat-rwvy.onrender.com${user.avatar}`}
           alt="Avatar"
         /> : <img
           className="profileAvatar"

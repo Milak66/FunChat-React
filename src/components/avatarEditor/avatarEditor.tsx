@@ -165,7 +165,7 @@ const AvatarEditor: React.FC<AvatarEditorProps> = ({
                 >
                     {currentAvatar ? (
                         <img
-                            src={`http://localhost:8888${currentAvatar}`}
+                            src={`https://funchat-rwvy.onrender.com${currentAvatar}`}
                             alt="Avatar"
                         />
                     ) : (

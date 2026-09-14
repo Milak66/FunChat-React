@@ -20,6 +20,7 @@ import AddChat from "../addChat/addChat";
 import { EmojiModal } from "../hooks/emojiModal";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { connectSocket, disconnectSocket } from "../socket/socket";
+import { useEmojiModal } from "../hooks/useEmojiHook";
 
 interface AppProps {};
 
@@ -43,6 +44,8 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
     (state: RootState) => state.reduser.isLogOnModalOpen
   );
 
+  const { showEmoji } = useEmojiModal();
+
   async function fetchAccount(id: number | null) {
     if (!id) {
       dispatch(onSetLoading(false));
@@ -50,10 +53,11 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
     }
     
     try {
-      const response = await fetch(`http://localhost:8888/users/getUserById/${id}`);
+      const response = await fetch(`https://funchat-rwvy.onrender.com/users/getUserById/${id}`);
 
       if (!response.ok) {
         dispatch(onSetLoading(false));
+        showEmoji(":(", "red", "Couldn't connect you to your account");
         return;
       }
 

@@ -36,7 +36,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
     try {
       const response = await fetch(
-        "http://localhost:8888/users/getUserByProperties",
+        "https://funchat-rwvy.onrender.com/users/getUserByProperties",
         {
           method: "POST",
           headers: {

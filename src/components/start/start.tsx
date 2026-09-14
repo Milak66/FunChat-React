@@ -78,7 +78,7 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
 
     try {
       const response = await fetch(
-        `http://localhost:8888/users/setLanguage/${
+        `https://funchat-rwvy.onrender.com/users/setLanguage/${
           user.id
         }?language=${encodeURIComponent(lang)}`,
         {
