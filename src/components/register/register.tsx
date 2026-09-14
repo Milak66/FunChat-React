@@ -45,7 +45,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     }
 
     try {
-      const response = await fetch("http://localhost:8888/users/addUser", {
+      const response = await fetch("https://funchat-rwvy.onrender.com/users/addUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

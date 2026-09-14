@@ -10,7 +10,7 @@ export const connectSocket = () => {
     }
 
     socket = new Client({
-        brokerURL: "ws://funchat-rwvy.onrender.com/ws",
+        brokerURL: "wss://funchat-rwvy.onrender.com/ws",
 
         reconnectDelay: 5000,
 
