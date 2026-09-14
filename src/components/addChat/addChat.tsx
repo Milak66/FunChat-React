@@ -66,7 +66,7 @@ const AddChat: React.FC<AddChatProps> = () => {
   const createChat = async (otherUserId: number) => {
     try {
       const response = await fetch(
-        `http://funchat-rwvy.onrender.com/chats/createChat/${userId}`, {
+        `https://funchat-rwvy.onrender.com/chats/createChat/${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(otherUserId),
