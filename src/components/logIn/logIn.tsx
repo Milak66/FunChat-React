@@ -40,7 +40,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
       setIsLoading(true);
 
       const response = await fetch(
-        `${import.meta.env.SERVER_URL}/users/getUserByProperties`,
+        `${import.meta.env.VITE_SERVER_URL}/users/getUserByProperties`,
         {
           method: "POST",
           headers: {

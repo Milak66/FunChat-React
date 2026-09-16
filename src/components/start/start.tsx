@@ -78,7 +78,7 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.SERVER_URL}/users/setLanguage/${
+        `${import.meta.env.VITE_SERVER_URL}/users/setLanguage/${
           user.id
         }?language=${encodeURIComponent(lang)}`,
         {

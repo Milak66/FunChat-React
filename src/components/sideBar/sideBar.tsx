@@ -35,7 +35,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
     const loadChats = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.SERVER_URL}/chats/getChats/${userId}`
+          `${import.meta.env.VITE_SERVER_URL}/chats/getChats/${userId}`
         );
 
         if (!response.ok) {
@@ -75,7 +75,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
       >
         {chat.avatar ?     <img
           className="chatAvatar"
-          src={`${import.meta.env.SERVER_URL}${chat.avatar}`}
+          src={`${import.meta.env.VITE_SERVER_URL}${chat.avatar}`}
           alt={chat.title}
         /> : <img
         className="chatAvatar"

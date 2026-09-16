@@ -41,7 +41,7 @@ const AddChat: React.FC<AddChatProps> = () => {
       try {
 
         const response = await fetch(
-        `${import.meta.env.SERVER_URL}/users/getUsersByUsername/${userId}?username=${encodeURIComponent(atUsername)}`
+        `${import.meta.env.VITE_SERVER_URL}/users/getUsersByUsername/${userId}?username=${encodeURIComponent(atUsername)}`
         );
 
         if (!response.ok) {
@@ -66,7 +66,7 @@ const AddChat: React.FC<AddChatProps> = () => {
   const createChat = async (otherUserId: number) => {
     try {
       const response = await fetch(
-        `${import.meta.env.SERVER_URL}/chats/createChat/${userId}`, {
+        `${import.meta.env.VITE_SERVER_URL}/chats/createChat/${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(otherUserId),

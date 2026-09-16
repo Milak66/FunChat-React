@@ -49,7 +49,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${import.meta.env.SERVER_URL}/users/addUser`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/addUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

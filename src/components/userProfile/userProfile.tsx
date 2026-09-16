@@ -49,7 +49,7 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
 
   const deleteAccount = async () => {
     try {
-      fetch(`${import.meta.env.SERVER_URL}/users/deleteUser/${user?.id}`, {
+      fetch(`${import.meta.env.VITE_SERVER_URL}/users/deleteUser/${user?.id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -102,7 +102,7 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
         <div className="username">{user?.nickname}</div>
         {user.avatar ? <img
           className="profileAvatar"
-          src={`${import.meta.env.SERVER_URL}${user.avatar}`}
+          src={`${import.meta.env.VITE_SERVER_URL}${user.avatar}`}
           alt="Avatar"
         /> : <img
           className="profileAvatar"
