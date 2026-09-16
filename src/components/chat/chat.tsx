@@ -53,7 +53,7 @@ const ChatWithUser: React.FC = () => {
     const loadMessages = async () => {
       try {
         const response = await fetch(
-          `https://funchat-rwvy.onrender.com/messages/getMessages/${currentChatId}`
+          `${import.meta.env.SERVER_URL}/messages/getMessages/${currentChatId}`
         );
 
         if (!response.ok) {
@@ -144,7 +144,7 @@ const ChatWithUser: React.FC = () => {
 
     try {
       const response = await fetch(
-        "https://funchat-rwvy.onrender.com/messages/addMessage",
+        `${import.meta.env.SERVER_URL}/messages/addMessage`,
         {
           method: "POST",
 
@@ -187,7 +187,7 @@ const ChatWithUser: React.FC = () => {
   const deleteChat = async () => {
     try {
       const response = await fetch(
-        `https://funchat-rwvy.onrender.com/chats/deleteChat/${currentChatId}`,
+        `${import.meta.env.SERVER_URL}/chats/deleteChat/${currentChatId}`,
         {
           method: "DElETE",
           headers: { "Content-Type": "application/json" }

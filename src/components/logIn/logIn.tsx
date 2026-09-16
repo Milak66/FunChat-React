@@ -40,7 +40,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
       setIsLoading(true);
 
       const response = await fetch(
-        "https://funchat-rwvy.onrender.com/users/getUserByProperties",
+        `${import.meta.env.SERVER_URL}/users/getUserByProperties`,
         {
           method: "POST",
           headers: {
@@ -55,7 +55,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
       if (!response.ok) {
         showEmoji(":(", "red", "Coudn't find the user");
-        setIsLoading(false);
+  
         return;
       }
 
@@ -64,7 +64,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
       dispatch(onSetUser(correctUser));
       dispatch(onSetUserId(correctUser.id));
       dispatch(onSetUserStatus(true));
-      setIsLoading(false);
+
       localStorage.removeItem("temporaryMode");
       localStorage.setItem("userId", String(correctUser.id));
       dispatch(onSetLogOnModal());

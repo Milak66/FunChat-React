@@ -53,7 +53,7 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
     }
     
     try {
-      const response = await fetch(`https://funchat-rwvy.onrender.com/users/getUserById/${id}`);
+      const response = await fetch(`${import.meta.env.SERVER_URL}/users/getUserById/${id}`);
 
       if (!response.ok) {
         dispatch(onSetLoading(false));

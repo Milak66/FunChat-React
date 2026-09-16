@@ -100,7 +100,7 @@ const AvatarEditor: React.FC<AvatarEditorProps> = ({
             );
 
             const response = await fetch(
-                `https://funchat-rwvy.onrender.com/users/${userId}/avatar`,
+                `${import.meta.env.SERVER_URL}/users/${userId}/avatar`,
                 {
                     method: "PATCH",
                     body: formData
@@ -165,7 +165,7 @@ const AvatarEditor: React.FC<AvatarEditorProps> = ({
                 >
                     {currentAvatar ? (
                         <img
-                            src={`https://funchat-rwvy.onrender.com${currentAvatar}`}
+                            src={`${import.meta.env.SERVER_URL}${currentAvatar}`}
                             alt="Avatar"
                         />
                     ) : (
