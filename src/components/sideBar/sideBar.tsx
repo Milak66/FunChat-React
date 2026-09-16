@@ -47,8 +47,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
         dispatch(onSetChats(data));
       } catch (error) {
         console.error("Failed to load chats:", error);
-
-        showEmoji(":(", "red", "Couldn't load your chats");
+        throw new Error("Couldn't load chats");
       }
     };
 

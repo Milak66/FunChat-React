@@ -9,6 +9,7 @@ import {
   onSetUserStatus,
 } from "../reduser/reduser";
 import { useEmojiModal } from "../hooks/useEmojiHook";
+import MiniLoading from "../miniLoading/miniLoadin";
 
 interface LogInProps {}
 
@@ -16,6 +17,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
@@ -45,6 +47,8 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     }
 
     try {
+      setIsLoading(true);
+
       const response = await fetch("https://funchat-rwvy.onrender.com/users/addUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,6 +63,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
 
       if (!response.ok) {
         showEmoji(":(", "red", data.message || "Ошибка при регистрации");
+        setIsLoading(false);
         return;
       }
 
@@ -66,11 +71,13 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
       dispatch(onSetUser(data));
       dispatch(onSetUserId(data.id));
       dispatch(onSetUserStatus(true));
+      setIsLoading(false);
       localStorage.removeItem("temporaryMode");
       localStorage.setItem("userId", String(data.id));
       dispatch(onSetLogInModal());
     } catch (err) {
       console.error(err);
+      setIsLoading(false);
       showEmoji(":(", "red", "Ошибка сервера");
     }
   };
@@ -110,6 +117,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
             {texts.registerText}
           </button>
         </div>
+        {isLoading ? <MiniLoading/> : null}
       </form>
     </div>
   );
