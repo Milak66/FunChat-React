@@ -9,7 +9,7 @@ import {
   onSetUserStatus,
 } from "../reduser/reduser";
 import { useEmojiModal } from "../hooks/useEmojiHook";
-import MiniLoading from "../miniLoading/miniLoadin";
+import MiniLoading from "../animations/miniLoading/miniLoadin";
 
 interface LogInProps {}
 
@@ -49,15 +49,18 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     try {
       setIsLoading(true);
 
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/addUser`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username.trim(),
-          password: password.trim(),
-          nickname: nickname.trim(),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/addUser`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: username.trim(),
+            password: password.trim(),
+            nickname: nickname.trim(),
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -117,7 +120,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
             {texts.registerText}
           </button>
         </div>
-        {isLoading ? <MiniLoading/> : null}
+        {isLoading ? <MiniLoading /> : null}
       </form>
     </div>
   );

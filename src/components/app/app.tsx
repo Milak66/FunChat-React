@@ -9,28 +9,25 @@ import {
   onSetLogOnModal,
   onSetUserStatus,
   onSetUser,
-  onSetUserId
+  onSetUserId,
 } from "../reduser/reduser";
-import Loading from "./loading";
+import Loading from "../animations/loading/loading";
 import Start from "../start/start";
 import LogIn from "../register/register";
 import LogOn from "../logIn/logIn";
 import MainContent from "../mainContent/mainContent";
 import AddChat from "../addChat/addChat";
 import { EmojiModal } from "../hooks/emojiModal";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { connectSocket, disconnectSocket } from "../socket/socket";
 import { useEmojiModal } from "../hooks/useEmojiHook";
 
-interface AppProps {};
+interface AppProps {}
 
 const App: React.FC<AppProps> = (): React.JSX.Element => {
-
   const dispatch = useDispatch<AppDispatch>();
 
-  const loading = useSelector(
-    (state: RootState) => state.reduser.loading
-  );
+  const loading = useSelector((state: RootState) => state.reduser.loading);
 
   const emojiModal = useSelector(
     (state: RootState) => state.reduser.emojiModal
@@ -51,9 +48,11 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
       dispatch(onSetLoading(false));
       return;
     }
-    
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/getUserById/${id}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/getUserById/${id}`
+      );
 
       if (!response.ok) {
         dispatch(onSetLoading(false));
@@ -62,7 +61,7 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
       }
 
       const data = await response.json();
-      
+
       dispatch(onSetUser(data));
       dispatch(onSetLanguage(data.language));
       dispatch(onSetUserStatus(true));
@@ -76,31 +75,29 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
   useEffect(() => {
     const initializeApp = async () => {
       const savedUserId = localStorage.getItem("userId");
-  
+
       if (!savedUserId) {
         dispatch(onSetLoading(false));
         return;
       }
-  
+
       const id = Number(savedUserId);
-  
-      dispatch(onSetUserId(id));3
-  
+
+      dispatch(onSetUserId(id));
+
       await fetchAccount(id);
     };
-  
+
     initializeApp();
   }, [dispatch]);
 
   useEffect(() => {
-
     connectSocket();
 
     return () => {
-        disconnectSocket();
+      disconnectSocket();
     };
-
-}, []);
+  }, []);
 
   const handleModalClick1 = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -116,49 +113,48 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
 
   const isWebsiteLoading = () => {
     if (loading) {
-      return <Loading/>
+      return <Loading />;
     } else {
       return (
-      <Router>
-      <Routes>
-      <Route path="/" element={<div className="app">
-      <div className="startPlace">
-        <Start />
-        {emojiModal.isOpen && (
-          <EmojiModal
-            emoji={emojiModal.emoji}
-            color={emojiModal.color}
-            text={emojiModal.text}
-          />
-        )}
-      </div>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div className="app">
+                  <div className="startPlace">
+                    <Start />
+                    {emojiModal.isOpen && (
+                      <EmojiModal
+                        emoji={emojiModal.emoji}
+                        color={emojiModal.color}
+                        text={emojiModal.text}
+                      />
+                    )}
+                  </div>
 
-      {isLoginInModalOpen ? (
-        <div className="placeForModal" onClick={handleModalClick1}>
-          <LogIn />
-        </div>
-      ) : isLogOnModalOpen ? (
-        <div className="placeForModal" onClick={handleModalClick2}>
-          <LogOn />
-        </div>
-      ) : null}
+                  {isLoginInModalOpen ? (
+                    <div className="placeForModal" onClick={handleModalClick1}>
+                      <LogIn />
+                    </div>
+                  ) : isLogOnModalOpen ? (
+                    <div className="placeForModal" onClick={handleModalClick2}>
+                      <LogOn />
+                    </div>
+                  ) : null}
 
-      <MainContent />
-      </div>}/>
-      <Route path="/addChat" element={
-        <AddChat/>
-      }/>
-      </Routes>
-      </Router>
-      )
+                  <MainContent />
+                </div>
+              }
+            />
+            <Route path="/addChat" element={<AddChat />} />
+          </Routes>
+        </Router>
+      );
     }
-  }
+  };
 
-  return (
-      <>
-        {isWebsiteLoading()}
-      </>
-  );
+  return <>{isWebsiteLoading()}</>;
 };
 
 export default App;

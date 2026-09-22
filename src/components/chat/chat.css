@@ -321,10 +321,194 @@
         rgba(160, 40, 255, 0.2);
 }
 
+.typingMessage {
+    animation:
+        typingMessageAppear 0.2s ease-out;
+}
+
+.typingBubble {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.35vw;
+
+    width: 4.5vw;
+    height: 2.8vw;
+
+    margin-left: 1vw;
+
+    padding: 0.5vw 0.8vw;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid
+        rgba(220, 140, 255, 0.35);
+
+    border-radius: 1.3vw;
+
+    box-shadow:
+        0 0 12px
+        rgba(160, 40, 255, 0.25),
+
+        inset 0 1px
+        rgba(255, 255, 255, 0.15);
+
+    box-sizing: border-box;
+}
+
+.typingBubble::before {
+    content: "";
+
+    position: absolute;
+
+    left: -0.65vw;
+    bottom: -0.45vw;
+
+    width: 0.85vw;
+    height: 0.85vw;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid
+        rgba(220, 140, 255, 0.25);
+
+    box-shadow:
+        0 0 8px
+        rgba(160, 40, 255, 0.22);
+}
+
+.typingBubble::after {
+    content: "";
+
+    position: absolute;
+
+    left: -1.45vw;
+    bottom: -1.05vw;
+
+    width: 0.45vw;
+    height: 0.45vw;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #6416d8
+        );
+
+    border: 1px solid
+        rgba(220, 140, 255, 0.2);
+
+    box-shadow:
+        0 0 6px
+        rgba(160, 40, 255, 0.2);
+}
+
+.myMessage .typingBubble {
+    margin-left: 0;
+}
+
+.myMessage .typingBubble::before {
+    left: auto;
+
+    right: -0.65vw;
+}
+
+.myMessage .typingBubble::after {
+    left: auto;
+    right: -1.45vw;
+}
+
+.typingDot {
+    display: block;
+
+    width: 0.55vw;
+    height: 0.55vw;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 6px
+        rgba(255, 255, 255, 0.9),
+
+        0 0 12px
+        rgba(255, 255, 255, 0.45);
+
+    animation:
+        typingDotAnimation 1.2s
+        infinite ease-in-out;
+}
+
+.typingDot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typingDot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typingDot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typingDotAnimation {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.45;
+    }
+
+    30% {
+        transform: translateY(-0.35vw);
+        opacity: 1;
+    }
+}
+
+@keyframes typingMessageAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(0.4vw)
+            scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
 .writeMessagePlace {
     display: grid;
 
-    grid-template-columns: 10vw minmax(0, 1fr) 10vw;
+    grid-template-columns:
+        10vw minmax(0, 1fr) 10vw;
 
     align-items: center;
 
@@ -615,12 +799,14 @@
 
 .deleteChatPlace {
     display: flex;
+
     justify-content: center;
     align-items: center;
 }
 
 .deleteChatImg {
     width: 3vw;
+
     cursor: pointer;
 }
 
@@ -628,6 +814,7 @@
 
     .main {
         height: 90vh;
+
         background-image:
             url(../../assets/mobileDarkBackground.jpg);
     }
@@ -756,6 +943,80 @@
         left: -4vw;
     }
 
+    .typingBubble {
+        width: 14vw;
+        height: 9vw;
+
+        gap: 1.2vw;
+
+        margin-left: 1vw;
+
+        padding: 1.5vw 2vw;
+
+        border-radius: 4vw;
+    }
+
+    .typingDot {
+        width: 1.8vw;
+        height: 1.8vw;
+
+        box-shadow:
+            0 0 5px
+            rgba(255, 255, 255, 0.9),
+
+            0 0 10px
+            rgba(255, 255, 255, 0.45);
+    }
+
+    .typingBubble::before {
+        width: 2.5vw;
+        height: 2.5vw;
+
+        left: -1.8vw;
+        bottom: -1.2vw;
+    }
+
+    .typingBubble::after {
+        width: 1.3vw;
+        height: 1.3vw;
+
+        left: -4vw;
+        bottom: -3vw;
+    }
+
+    .myMessage .typingBubble {
+        margin-left: 0;
+
+        margin-right: 1vw;
+    }
+
+    .myMessage .typingBubble::before {
+        left: auto;
+
+        right: -1.8vw;
+    }
+
+    .myMessage .typingBubble::after {
+        left: auto;
+
+        right: -4vw;
+    }
+
+    @keyframes typingDotAnimation {
+
+        0%,
+        60%,
+        100% {
+            transform: translateY(0);
+            opacity: 0.45;
+        }
+
+        30% {
+            transform: translateY(-1.2vw);
+            opacity: 1;
+        }
+    }
+
     .writeMessagePlace {
         display: grid;
 
@@ -869,6 +1130,34 @@
         border-radius: 5vw;
     }
 
+    .typingBubble {
+        width: 16vw;
+        height: 10vw;
+
+        gap: 1.4vw;
+
+        border-radius: 5vw;
+    }
+
+    .typingDot {
+        width: 2vw;
+        height: 2vw;
+    }
+
+    .myMessage .typingBubble {
+        margin-left: 0;
+
+        margin-right: 1vw;
+    }
+
+    .myMessage .typingBubble::before {
+        right: -1.8vw;
+    }
+
+    .myMessage .typingBubble::after {
+        right: -4vw;
+    }
+
     .writeMessagePlace {
         grid-template-columns:
             11vw minmax(0, 1fr) 11vw;
@@ -883,6 +1172,7 @@
 
     .writeMessageInput {
         font-size: 3.5vw;
+
         padding: 1.8vw 2vw;
     }
 
@@ -920,6 +1210,32 @@
         max-width: 61vw;
 
         padding: 2vw 3vw;
+    }
+
+    .typingBubble {
+        width: 18vw;
+        height: 11vw;
+
+        gap: 1.5vw;
+    }
+
+    .typingDot {
+        width: 2.2vw;
+        height: 2.2vw;
+    }
+
+    .myMessage .typingBubble {
+        margin-left: 0;
+
+        margin-right: 1vw;
+    }
+
+    .myMessage .typingBubble::before {
+        right: -1.8vw;
+    }
+
+    .myMessage .typingBubble::after {
+        right: -4vw;
     }
 
     .writeMessageInput {

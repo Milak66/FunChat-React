@@ -9,7 +9,7 @@ import {
   onSetUserId,
 } from "../reduser/reduser";
 import { useEmojiModal } from "../hooks/useEmojiHook";
-import MiniLoading from "../miniLoading/miniLoadin";
+import MiniLoading from "../animations/miniLoading/miniLoadin";
 
 interface LogOnProps {}
 
@@ -55,7 +55,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
       if (!response.ok) {
         showEmoji(":(", "red", "Coudn't find the user");
-  
+
         return;
       }
 
@@ -69,7 +69,11 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
       localStorage.setItem("userId", String(correctUser.id));
       dispatch(onSetLogOnModal());
 
-      showEmoji(":)", "green", "You have successfully logged into your account.");
+      showEmoji(
+        ":)",
+        "green",
+        "You have successfully logged into your account."
+      );
     } catch (err) {
       console.error(err);
       setIsLoading(false);
@@ -105,7 +109,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
             {texts.logInText}
           </button>
         </div>
-        {isLoading ? <MiniLoading/> : null}
+        {isLoading ? <MiniLoading /> : null}
       </form>
     </div>
   );

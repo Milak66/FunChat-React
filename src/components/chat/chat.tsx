@@ -12,28 +12,51 @@ import {
   onRemoveChat
 } from "../reduser/reduser";
 import deleteIcon from "../../assets/deleteIcon.jpg";
-import { subscribeToChat } from "../socket/socket";
+import {
+  subscribeToChat,
+  subscribeToTyping,
+  sendTyping
+} from "../socket/socket";
 
 const ChatGretting: React.FC = () => {
-  const texts = useSelector((state: RootState) => state.reduser.texts);
+  const texts = useSelector(
+    (state: RootState) => state.reduser.texts
+  );
 
   return (
     <div className="gretting">
-      <div className="createChatMessage">{texts.createChatText}</div>
+      <div className="createChatMessage">
+        {texts.createChatText}
+      </div>
 
-      <img className="chatImage" draggable="false" src={chatImage} alt="" />
+      <img
+        className="chatImage"
+        draggable="false"
+        src={chatImage}
+        alt=""
+      />
     </div>
   );
 };
 
 const ChatWithUser: React.FC = () => {
-  const texts = useSelector((state: RootState) => state.reduser.texts);
+  const texts = useSelector(
+    (state: RootState) => state.reduser.texts
+  );
 
-  const chat = useSelector((state: RootState) => state.reduser.chat);
+  const chat = useSelector(
+    (state: RootState) => state.reduser.chat
+  );
 
   const [messageText, setMessageText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
 
-  const userId = useSelector((state: RootState) => state.reduser.user.id);
+  const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  const userId = useSelector(
+    (state: RootState) => state.reduser.user.id
+  );
 
   const currentChatId = useSelector(
     (state: RootState) => state.reduser.currentChatId
@@ -43,7 +66,8 @@ const ChatWithUser: React.FC = () => {
 
   const { showEmoji } = useEmojiModal();
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef =
+    useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!currentChatId || !userId) {
@@ -60,11 +84,15 @@ const ChatWithUser: React.FC = () => {
           throw new Error("Failed to load messages");
         }
 
-        const data: ChatMessage[] = await response.json();
+        const data: ChatMessage[] =
+          await response.json();
 
         dispatch(onSetChat(data));
       } catch (error) {
-        console.error("Error loading messages:", error);
+        console.error(
+          "Error loading messages:",
+          error
+        );
       }
     };
 
@@ -88,6 +116,56 @@ const ChatWithUser: React.FC = () => {
     };
   }, [currentChatId, dispatch]);
 
+  useEffect(() => {
+    if (!currentChatId || !userId) {
+      return;
+    }
+
+    const subscription = subscribeToTyping(
+      currentChatId,
+      (event) => {
+        if (event.userId === userId) {
+          return;
+        }
+
+        setOtherUserTyping(event.typing);
+      }
+    );
+
+    return () => {
+      subscription?.unsubscribe();
+      setOtherUserTyping(false);
+    };
+  }, [currentChatId, userId]);
+
+  const startTyping = () => {
+    if (!currentChatId || !userId || isTyping) {
+      return;
+    }
+
+    sendTyping(
+      currentChatId,
+      userId,
+      true
+    );
+
+    setIsTyping(true);
+  };
+
+  const stopTyping = () => {
+    if (!currentChatId || !userId || !isTyping) {
+      return;
+    }
+
+    sendTyping(
+      currentChatId,
+      userId,
+      false
+    );
+
+    setIsTyping(false);
+  };
+
   const resizeTextarea = () => {
     const textarea = textareaRef.current;
 
@@ -109,11 +187,19 @@ const ChatWithUser: React.FC = () => {
     resizeTextarea();
   }, [messageText]);
 
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({
+      behavior: "smooth"
+    });
+  }, [chat, isTyping, otherUserTyping]);
+
   const showChat = () => {
     if (!chat || chat.length === 0) {
       return (
         <div className="gretting">
-          <div className="emptyChatText">{texts.emptyChatText}</div>
+          <div className="emptyChatText">
+            {texts.emptyChatText}
+          </div>
         </div>
       );
     }
@@ -121,10 +207,20 @@ const ChatWithUser: React.FC = () => {
     return chat.map((msg) => {
       return (
         <div
-          className={userId == msg.sender.id ? "myMessage" : "userMessage"}
+          className={
+            userId == msg.sender.id
+              ? "myMessage"
+              : "userMessage"
+          }
           key={msg.id}
         >
-          <span className={userId == msg.sender.id ? "myText" : "userText"}>
+          <span
+            className={
+              userId == msg.sender.id
+                ? "myText"
+                : "userText"
+            }
+          >
             {msg.text}
           </span>
         </div>
@@ -134,13 +230,19 @@ const ChatWithUser: React.FC = () => {
 
   const sendMessage = async () => {
     if (!messageText.trim()) {
-      showEmoji(":(", "red", "Enter a text");
+      showEmoji(
+        ":(",
+        "red",
+        "Enter a text"
+      );
       return;
     }
 
     if (!currentChatId || !userId) {
       return;
     }
+
+    stopTyping();
 
     try {
       const response = await fetch(
@@ -163,7 +265,12 @@ const ChatWithUser: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        showEmoji(":(", "red", data.message || "Error sending message");
+        showEmoji(
+          ":(",
+          "red",
+          data.message ||
+            "Error sending message"
+        );
 
         return;
       }
@@ -172,12 +279,21 @@ const ChatWithUser: React.FC = () => {
     } catch (err) {
       console.error(err);
 
-      showEmoji(":(", "red", "Server error");
+      showEmoji(
+        ":(",
+        "red",
+        "Server error"
+      );
     }
   };
 
-  const addMessage = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+  const addMessage = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (
+      e.key === "Enter" &&
+      !e.shiftKey
+    ) {
       e.preventDefault();
 
       sendMessage();
@@ -190,34 +306,76 @@ const ChatWithUser: React.FC = () => {
         `${import.meta.env.VITE_SERVER_URL}/chats/deleteChat/${currentChatId}`,
         {
           method: "DElETE",
-          headers: { "Content-Type": "application/json" }
+          headers: {
+            "Content-Type": "application/json"
+          }
         }
       );
 
       if (!response.ok) {
-        showEmoji(":(", "red", "Error deleting chat");
+        showEmoji(
+          ":(",
+          "red",
+          "Error deleting chat"
+        );
         return;
       }
 
-      dispatch(onRemoveChat(currentChatId!));
-      dispatch(onSetCurrentChat(null));
+      dispatch(
+        onRemoveChat(currentChatId!)
+      );
+
+      dispatch(
+        onSetCurrentChat(null)
+      );
     } catch (err) {
       console.error(err);
-      showEmoji(":(", "red", "Server error");
+
+      showEmoji(
+        ":(",
+        "red",
+        "Server error"
+      );
     }
-  }
+  };
 
   return (
     <div className="placeForChat">
-      <div className="chatWithUser">{showChat()}</div>
 
+<div className="chatWithUser">
+  {showChat()}
+
+  {isTyping && (
+    <div className="myMessage typingMessage">
+      <div className="typingBubble">
+        <span className="typingDot"></span>
+        <span className="typingDot"></span>
+        <span className="typingDot"></span>
+      </div>
+    </div>
+  )}
+
+  {otherUserTyping && (
+    <div className="userMessage typingMessage">
+      <div className="typingBubble">
+        <span className="typingDot"></span>
+        <span className="typingDot"></span>
+        <span className="typingDot"></span>
+      </div>
+    </div>
+  )}
+
+  <div ref={chatBottomRef} />
+</div>
       <div className="writeMessagePlace">
+
         <div className="closeChatBtnPlace">
           <button
             className="closeChatBtn"
             type="button"
             aria-label="Close chat"
             onClick={() => {
+              stopTyping();
               dispatch(onSetCurrentChat(null));
             }}
           >
@@ -226,15 +384,20 @@ const ChatWithUser: React.FC = () => {
         </div>
 
         <div className="messageInputWrapper">
+
           <textarea
             ref={textareaRef}
             className="writeMessageInput"
             placeholder={texts.inputText}
             value={messageText}
             rows={1}
+            onFocus={startTyping}
+            onBlur={stopTyping}
             onKeyDown={addMessage}
             onChange={(e) => {
-              setMessageText(e.target.value);
+              setMessageText(
+                e.target.value
+              );
             }}
           />
 
@@ -245,11 +408,18 @@ const ChatWithUser: React.FC = () => {
           >
             ➤
           </button>
+
         </div>
 
         <div className="deleteChatPlace">
-          <img className="deleteChatImg" onClick={deleteChat} src={deleteIcon} alt="" />
+          <img
+            className="deleteChatImg"
+            onClick={deleteChat}
+            src={deleteIcon}
+            alt=""
+          />
         </div>
+
       </div>
     </div>
   );
@@ -257,12 +427,15 @@ const ChatWithUser: React.FC = () => {
 
 const Chat: React.FC = () => {
   const currentChatId = useSelector(
-    (state: RootState) => state.reduser.currentChatId
+    (state: RootState) =>
+      state.reduser.currentChatId
   );
 
   return (
     <div className="main">
-      {!currentChatId ? <ChatGretting /> : <ChatWithUser />}
+      {!currentChatId
+        ? <ChatGretting />
+        : <ChatWithUser />}
     </div>
   );
 };
