@@ -17,6 +17,7 @@ import {
   subscribeToTyping,
   sendTyping
 } from "../socket/socket";
+import MiniLoading from "../animations/miniLoading/miniLoadin";
 
 const ChatGretting: React.FC = () => {
   const texts = useSelector(
@@ -49,6 +50,7 @@ const ChatWithUser: React.FC = () => {
   );
 
   const [messageText, setMessageText] = useState("");
+  const [messagesLoading, setMessagesLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
 
@@ -81,6 +83,7 @@ const ChatWithUser: React.FC = () => {
         );
 
         if (!response.ok) {
+          setMessagesLoading(false);
           throw new Error("Failed to load messages");
         }
 
@@ -88,11 +91,13 @@ const ChatWithUser: React.FC = () => {
           await response.json();
 
         dispatch(onSetChat(data));
+        setMessagesLoading(false);
       } catch (error) {
         console.error(
           "Error loading messages:",
           error
         );
+        setMessagesLoading(false);
       }
     };
 
@@ -339,8 +344,12 @@ const ChatWithUser: React.FC = () => {
     }
   };
 
-  return (
-    <div className="placeForChat">
+  const messagesLoaded = () => {
+    if (messagesLoading) {
+      return <MiniLoading/>
+    } else {
+      return (
+      <div className="placeForChat">
 
 <div className="chatWithUser">
   {showChat()}
@@ -422,6 +431,14 @@ const ChatWithUser: React.FC = () => {
 
       </div>
     </div>
+      )
+    }
+  }
+
+  return (
+    <>
+    {messagesLoaded()}
+    </>
   );
 };
 

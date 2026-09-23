@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./sideBar.css";
 
 import { RootState, AppDispatch } from "../store/store";
@@ -13,6 +13,8 @@ import { NavLink } from "react-router-dom";
 
 import userIcon from "../../assets/userIcon.jpg";
 
+import MiniLoading from "../animations/miniLoading/miniLoadin";
+
 interface ChatsSideBarProps {}
 
 const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
@@ -25,6 +27,8 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
   const userId = useSelector((state: RootState) => state.reduser.userId);
 
   const chats = useSelector((state: RootState) => state.reduser.chats);
+
+  const [chatsLoading, setChatsLoading] = useState(true);
 
   useEffect(() => {
     if (!userId) {
@@ -39,15 +43,17 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
         );
 
         if (!response.ok) {
+          setChatsLoading(false);
           throw new Error("Couldn't load chats");
         }
 
         const data = await response.json();
 
         dispatch(onSetChats(data));
+        setChatsLoading(false);
       } catch (error) {
         console.error("Failed to load chats:", error);
-        throw new Error("Couldn't load chats");
+        setChatsLoading(false);
       }
     };
 
@@ -89,7 +95,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
 
   return (
     <div className="sideBar">
-      <div className="sideBarHeader">
+      {chatsLoading ? <div style={{display: "flex", height: "100%", justifyContent: "center", alignItems: "center"}}><MiniLoading/></div> : <> <div className="sideBarHeader"> 
         <div className="chatsSettings">
           <div className="chatsTitle">{texts.chatsText}</div>
           <div className="addBtnPlace">
@@ -110,7 +116,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
           </div>
         </div>
       </div>
-      <div className="chats">{returnChats()}</div>
+      <div className="chats">{returnChats()}</div></>}
     </div>
   );
 };
