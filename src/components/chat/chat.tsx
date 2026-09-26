@@ -1,64 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import "./chat.css";
+
 import { useSelector, useDispatch } from "react-redux";
+
 import { RootState, AppDispatch } from "../store/store";
+
 import chatImage from "../../assets/chatImage.jpg";
+
 import { useEmojiModal } from "../hooks/useEmojiHook";
+
 import {
   onAddMessage,
   ChatMessage,
   onSetChat,
   onSetCurrentChat,
-  onRemoveChat
+  onRemoveChat,
 } from "../reduser/reduser";
+
 import deleteIcon from "../../assets/deleteIcon.jpg";
+
 import {
   subscribeToChat,
   subscribeToTyping,
-  sendTyping
+  sendTyping,
 } from "../socket/socket";
+
 import MiniLoading from "../animations/miniLoading/miniLoadin";
 
 const ChatGretting: React.FC = () => {
-  const texts = useSelector(
-    (state: RootState) => state.reduser.texts
-  );
+  const texts = useSelector((state: RootState) => state.reduser.texts);
 
   return (
     <div className="gretting">
-      <div className="createChatMessage">
-        {texts.createChatText}
-      </div>
+      <div className="createChatMessage">{texts.createChatText}</div>
 
-      <img
-        className="chatImage"
-        draggable="false"
-        src={chatImage}
-        alt=""
-      />
+      <img className="chatImage" draggable="false" src={chatImage} alt="" />
     </div>
   );
 };
 
 const ChatWithUser: React.FC = () => {
-  const texts = useSelector(
-    (state: RootState) => state.reduser.texts
-  );
+  const texts = useSelector((state: RootState) => state.reduser.texts);
 
-  const chat = useSelector(
-    (state: RootState) => state.reduser.chat
-  );
+  const chat = useSelector((state: RootState) => state.reduser.chat);
 
-  const [messageText, setMessageText] = useState("");
-  const [messagesLoading, setMessagesLoading] = useState(true);
-  const [isTyping, setIsTyping] = useState(false);
-  const [otherUserTyping, setOtherUserTyping] = useState(false);
-
-  const chatBottomRef = useRef<HTMLDivElement>(null);
-
-  const userId = useSelector(
-    (state: RootState) => state.reduser.user.id
-  );
+  const userId = useSelector((state: RootState) => state.reduser.user.id);
 
   const currentChatId = useSelector(
     (state: RootState) => state.reduser.currentChatId
@@ -68,8 +55,17 @@ const ChatWithUser: React.FC = () => {
 
   const { showEmoji } = useEmojiModal();
 
-  const textareaRef =
-    useRef<HTMLTextAreaElement>(null);
+  const [messageText, setMessageText] = useState("");
+
+  const [messagesLoading, setMessagesLoading] = useState(true);
+
+  const [isTyping, setIsTyping] = useState(false);
+
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
+
+  const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!currentChatId || !userId) {
@@ -77,26 +73,25 @@ const ChatWithUser: React.FC = () => {
     }
 
     const loadMessages = async () => {
+      setMessagesLoading(true);
+
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/messages/getMessages/${currentChatId}`
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/messages/getMessages/${currentChatId}`
         );
 
         if (!response.ok) {
-          setMessagesLoading(false);
           throw new Error("Failed to load messages");
         }
 
-        const data: ChatMessage[] =
-          await response.json();
+        const data: ChatMessage[] = await response.json();
 
         dispatch(onSetChat(data));
-        setMessagesLoading(false);
       } catch (error) {
-        console.error(
-          "Error loading messages:",
-          error
-        );
+        console.error("Error loading messages:", error);
+      } finally {
         setMessagesLoading(false);
       }
     };
@@ -126,19 +121,17 @@ const ChatWithUser: React.FC = () => {
       return;
     }
 
-    const subscription = subscribeToTyping(
-      currentChatId,
-      (event) => {
-        if (event.userId === userId) {
-          return;
-        }
-
-        setOtherUserTyping(event.typing);
+    const subscription = subscribeToTyping(currentChatId, (event) => {
+      if (event.userId === userId) {
+        return;
       }
-    );
+
+      setOtherUserTyping(event.typing);
+    });
 
     return () => {
       subscription?.unsubscribe();
+
       setOtherUserTyping(false);
     };
   }, [currentChatId, userId]);
@@ -148,11 +141,7 @@ const ChatWithUser: React.FC = () => {
       return;
     }
 
-    sendTyping(
-      currentChatId,
-      userId,
-      true
-    );
+    sendTyping(currentChatId, userId, true);
 
     setIsTyping(true);
   };
@@ -162,11 +151,7 @@ const ChatWithUser: React.FC = () => {
       return;
     }
 
-    sendTyping(
-      currentChatId,
-      userId,
-      false
-    );
+    sendTyping(currentChatId, userId, false);
 
     setIsTyping(false);
   };
@@ -194,7 +179,7 @@ const ChatWithUser: React.FC = () => {
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }, [chat, isTyping, otherUserTyping]);
 
@@ -202,32 +187,34 @@ const ChatWithUser: React.FC = () => {
     if (!chat || chat.length === 0) {
       return (
         <div className="gretting">
-          <div className="emptyChatText">
-            {texts.emptyChatText}
-          </div>
+          <div className="emptyChatText">{texts.emptyChatText}</div>
         </div>
       );
     }
 
     return chat.map((msg) => {
       return (
-        <div
-          className={
-            userId == msg.sender.id
-              ? "myMessage"
-              : "userMessage"
-          }
-          key={msg.id}
-        >
-          <span
-            className={
-              userId == msg.sender.id
-                ? "myText"
-                : "userText"
-            }
-          >
-            {msg.text}
-          </span>
+        <div className="message" key={msg.id}>
+          <img
+            className="messageAvatar"
+            src={msg.sender.avatar}
+            alt={`${msg.sender.nickname} avatar`}
+          />
+
+          <div className="messageContent">
+            <div className="messageHeader">
+              <span className="messageSender">{msg.sender.nickname}</span>
+
+              <span className="messageTime">
+                {new Date(msg.sendTime).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+
+            <div className="messageText">{msg.text}</div>
+          </div>
         </div>
       );
     });
@@ -235,11 +222,8 @@ const ChatWithUser: React.FC = () => {
 
   const sendMessage = async () => {
     if (!messageText.trim()) {
-      showEmoji(
-        ":(",
-        "red",
-        "Enter a text"
-      );
+      showEmoji(":(", "red", "Enter a text");
+
       return;
     }
 
@@ -270,12 +254,7 @@ const ChatWithUser: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        showEmoji(
-          ":(",
-          "red",
-          data.message ||
-            "Error sending message"
-        );
+        showEmoji(":(", "red", data.message || "Error sending message");
 
         return;
       }
@@ -284,21 +263,12 @@ const ChatWithUser: React.FC = () => {
     } catch (err) {
       console.error(err);
 
-      showEmoji(
-        ":(",
-        "red",
-        "Server error"
-      );
+      showEmoji(":(", "red", "Server error");
     }
   };
 
-  const addMessage = (
-    e: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (
-      e.key === "Enter" &&
-      !e.shiftKey
-    ) {
+  const addMessage = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
 
       sendMessage();
@@ -310,149 +280,147 @@ const ChatWithUser: React.FC = () => {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/chats/deleteChat/${currentChatId}`,
         {
-          method: "DElETE",
+          method: "DELETE",
+
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
 
       if (!response.ok) {
-        showEmoji(
-          ":(",
-          "red",
-          "Error deleting chat"
-        );
+        showEmoji(":(", "red", "Error deleting chat");
+
         return;
       }
 
-      dispatch(
-        onRemoveChat(currentChatId!)
-      );
+      dispatch(onRemoveChat(currentChatId!));
 
-      dispatch(
-        onSetCurrentChat(null)
-      );
+      dispatch(onSetCurrentChat(null));
     } catch (err) {
       console.error(err);
 
-      showEmoji(
-        ":(",
-        "red",
-        "Server error"
-      );
+      showEmoji(":(", "red", "Server error");
     }
   };
 
   const messagesLoaded = () => {
     if (messagesLoading) {
-      return <MiniLoading/>
-    } else {
-      return (
-      <div className="placeForChat">
-
-<div className="chatWithUser">
-  {showChat()}
-
-  {isTyping && (
-    <div className="myMessage typingMessage">
-      <div className="typingBubble">
-        <span className="typingDot"></span>
-        <span className="typingDot"></span>
-        <span className="typingDot"></span>
-      </div>
-    </div>
-  )}
-
-  {otherUserTyping && (
-    <div className="userMessage typingMessage">
-      <div className="typingBubble">
-        <span className="typingDot"></span>
-        <span className="typingDot"></span>
-        <span className="typingDot"></span>
-      </div>
-    </div>
-  )}
-
-  <div ref={chatBottomRef} />
-</div>
-      <div className="writeMessagePlace">
-
-        <div className="closeChatBtnPlace">
-          <button
-            className="closeChatBtn"
-            type="button"
-            aria-label="Close chat"
-            onClick={() => {
-              stopTyping();
-              dispatch(onSetCurrentChat(null));
-            }}
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="messageInputWrapper">
-
-          <textarea
-            ref={textareaRef}
-            className="writeMessageInput"
-            placeholder={texts.inputText}
-            value={messageText}
-            rows={1}
-            onFocus={startTyping}
-            onBlur={stopTyping}
-            onKeyDown={addMessage}
-            onChange={(e) => {
-              setMessageText(
-                e.target.value
-              );
-            }}
-          />
-
-          <button
-            className="sendMessageBtn"
-            type="button"
-            onClick={sendMessage}
-          >
-            ➤
-          </button>
-
-        </div>
-
-        <div className="deleteChatPlace">
-          <img
-            className="deleteChatImg"
-            onClick={deleteChat}
-            src={deleteIcon}
-            alt=""
-          />
-        </div>
-
-      </div>
-    </div>
-      )
+      return <MiniLoading />;
     }
-  }
 
-  return (
-    <>
-    {messagesLoaded()}
-    </>
-  );
+    return (
+      <div className="placeForChat">
+        <div className="chatWithUser">
+          {showChat()}
+
+          {isTyping && (
+            <div className="typingMessage">
+              <img
+                className="messageAvatar"
+                src={
+                  chat?.find((msg) => msg.sender.id !== userId)?.sender.avatar
+                }
+                alt=""
+              />
+
+              <div className="typingBubble">
+                <span className="typingDot"></span>
+
+                <span className="typingDot"></span>
+
+                <span className="typingDot"></span>
+              </div>
+            </div>
+          )}
+
+          {otherUserTyping && (
+            <div className="typingMessage">
+              <img
+                className="messageAvatar"
+                src={
+                  chat?.find((msg) => msg.sender.id !== userId)?.sender.avatar
+                }
+                alt=""
+              />
+
+              <div className="typingBubble">
+                <span className="typingDot"></span>
+
+                <span className="typingDot"></span>
+
+                <span className="typingDot"></span>
+              </div>
+            </div>
+          )}
+
+          <div ref={chatBottomRef} />
+        </div>
+
+        <div className="writeMessagePlace">
+          <div className="closeChatBtnPlace">
+            <button
+              className="closeChatBtn"
+              type="button"
+              aria-label="Close chat"
+              onClick={() => {
+                stopTyping();
+
+                dispatch(onSetCurrentChat(null));
+              }}
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="messageInputWrapper">
+            <textarea
+              ref={textareaRef}
+              className="writeMessageInput"
+              placeholder={texts.inputText}
+              value={messageText}
+              rows={1}
+              onFocus={startTyping}
+              onBlur={stopTyping}
+              onKeyDown={addMessage}
+              onChange={(e) => {
+                setMessageText(e.target.value);
+              }}
+            />
+
+            <button
+              className="sendMessageBtn"
+              type="button"
+              onClick={sendMessage}
+            >
+              ➤
+            </button>
+          </div>
+
+          <div className="deleteChatPlace">
+            <img
+              className="deleteChatImg"
+              onClick={deleteChat}
+              src={deleteIcon}
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return <>{messagesLoaded()}</>;
 };
 
 const Chat: React.FC = () => {
   const currentChatId = useSelector(
-    (state: RootState) =>
-      state.reduser.currentChatId
+    (state: RootState) => state.reduser.currentChatId
   );
 
   return (
     <div className="main">
-      {!currentChatId
-        ? <ChatGretting />
-        : <ChatWithUser />}
+      {!currentChatId ? <ChatGretting /> : <ChatWithUser />}
     </div>
   );
 };

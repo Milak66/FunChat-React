@@ -20,13 +20,14 @@ export interface Chat {
 export interface ChatMessage {
     text: string;
     id: number;
+    sendTime: string;
     sender: {
         nickname: string;
         username: string;
         id: number | null;
         avatar: string;
         chats: number[];
-    }
+    };
 }
 
 export interface EmojiModalState {

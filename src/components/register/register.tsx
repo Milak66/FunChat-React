@@ -65,12 +65,12 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
       const data = await response.json();
 
       if (!response.ok) {
-        showEmoji(":(", "red", data.message || "Ошибка при регистрации");
+        showEmoji(":(", "red", data.message || "Error");
         setIsLoading(false);
         return;
       }
 
-      showEmoji(":)", "green", "Регистрация успешна");
+      showEmoji(":)", "green", "You have successfully created an account");
       dispatch(onSetUser(data));
       dispatch(onSetUserId(data.id));
       dispatch(onSetUserStatus(true));
@@ -81,7 +81,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     } catch (err) {
       console.error(err);
       setIsLoading(false);
-      showEmoji(":(", "red", "Ошибка сервера");
+      showEmoji(":(", "red", "Server error");
     }
   };
 

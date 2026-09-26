@@ -10,7 +10,7 @@ export const connectSocket = () => {
     }
 
     socket = new Client({
-        brokerURL: `wss://${import.meta.env.VITE_SERVER_SOCKET_URL}/ws`,
+        brokerURL: `ws://${import.meta.env.VITE_SERVER_SOCKET_URL}/ws`,
 
         reconnectDelay: 5000,
 

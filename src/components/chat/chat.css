@@ -29,6 +29,7 @@
     font-size: 2.5vw;
     text-align: center;
     font-family: Gill Sans, sans-serif;
+
     text-shadow:
         0 0 10px rgba(180, 60, 255, 0.35);
 }
@@ -85,11 +86,10 @@
     padding-right: 1vw;
 }
 
-.myMessage {
+.message {
     display: flex;
 
-    justify-content: flex-end;
-    align-items: center;
+    align-items: flex-start;
 
     width: 100%;
     min-width: 0;
@@ -99,124 +99,74 @@
     padding: 0.3vw 0.5vw;
 }
 
-.userMessage {
-    display: flex;
+.messageAvatar {
+    flex-shrink: 0;
 
-    justify-content: flex-start;
-    align-items: center;
+    width: 3vw;
+    height: 3vw;
 
-    width: 100%;
-    min-width: 0;
+    object-fit: cover;
 
-    box-sizing: border-box;
+    border-radius: 50%;
 
-    padding: 0.3vw 0.5vw;
+    border: 1px solid
+        rgba(220, 140, 255, 0.35);
+
+    box-shadow:
+        0 0 10px
+        rgba(160, 40, 255, 0.25);
 }
 
-.myText {
-    position: relative;
-
+.messageContent {
     display: flex;
 
-    justify-content: center;
-    align-items: center;
-
-    font-size: 1.3vw;
-
-    font-family: Gill Sans, sans-serif;
+    flex-direction: column;
 
     min-width: 0;
+
     max-width: 80%;
 
-    padding: 0.7vw 1vw;
-
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    color: white;
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.35);
-
-    border-radius: 1.3vw;
-
-    box-shadow:
-        0 0 12px
-        rgba(160, 40, 255, 0.25),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.15);
-
-    line-height: 1.4;
-
-    box-sizing: border-box;
+    margin-left: 1vw;
 }
 
-.myText::before {
-    content: "";
+.messageHeader {
+    display: flex;
 
-    position: absolute;
+    align-items: center;
 
-    right: -0.65vw;
-    bottom: -0.45vw;
+    gap: 0.7vw;
 
-    width: 0.85vw;
-    height: 0.85vw;
+    min-width: 0;
 
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.25);
-
-    box-shadow:
-        0 0 8px
-        rgba(160, 40, 255, 0.22);
+    margin-bottom: 0.35vw;
 }
 
-.myText::after {
-    content: "";
+.messageSender {
+    color: #d9a1ff;
 
-    position: absolute;
+    font-size: 1vw;
 
-    right: -1.45vw;
-    bottom: -1.05vw;
+    font-family: Gill Sans, sans-serif;
 
-    width: 0.45vw;
-    height: 0.45vw;
+    white-space: nowrap;
 
-    border-radius: 50%;
+    overflow: hidden;
 
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.2);
-
-    box-shadow:
-        0 0 6px
-        rgba(160, 40, 255, 0.2);
+    text-overflow: ellipsis;
 }
 
-.userText {
+.messageTime {
+    color:
+        rgba(220, 200, 240, 0.55);
+
+    font-size: 0.8vw;
+
+    font-family: Gill Sans, sans-serif;
+
+    white-space: nowrap;
+}
+
+.messageText {
     position: relative;
 
     display: flex;
@@ -229,11 +179,9 @@
     font-family: Gill Sans, sans-serif;
 
     min-width: 0;
-    max-width: 70%;
+    max-width: 100%;
 
     padding: 0.7vw 1vw;
-
-    margin-left: 1vw;
 
     word-wrap: break-word;
     word-break: break-word;
@@ -263,72 +211,27 @@
     line-height: 1.4;
 
     box-sizing: border-box;
-}
-
-.userText::before {
-    content: "";
-
-    position: absolute;
-
-    left: -0.65vw;
-    bottom: -0.45vw;
-
-    width: 0.85vw;
-    height: 0.85vw;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.25);
-
-    box-shadow:
-        0 0 8px
-        rgba(160, 40, 255, 0.22);
-}
-
-.userText::after {
-    content: "";
-
-    position: absolute;
-
-    left: -1.45vw;
-    bottom: -1.05vw;
-
-    width: 0.45vw;
-    height: 0.45vw;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.2);
-
-    box-shadow:
-        0 0 6px
-        rgba(160, 40, 255, 0.2);
 }
 
 .typingMessage {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    padding: 0.3vw 0.5vw;
+
+    gap: 0.8vw;
+
     animation:
         typingMessageAppear 0.2s ease-out;
 }
 
 .typingBubble {
-    position: relative;
-
     display: flex;
 
     align-items: center;
@@ -339,9 +242,9 @@
     width: 4.5vw;
     height: 2.8vw;
 
-    margin-left: 1vw;
-
     padding: 0.5vw 0.8vw;
+
+    box-sizing: border-box;
 
     background:
         linear-gradient(
@@ -361,79 +264,6 @@
 
         inset 0 1px
         rgba(255, 255, 255, 0.15);
-
-    box-sizing: border-box;
-}
-
-.typingBubble::before {
-    content: "";
-
-    position: absolute;
-
-    left: -0.65vw;
-    bottom: -0.45vw;
-
-    width: 0.85vw;
-    height: 0.85vw;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.25);
-
-    box-shadow:
-        0 0 8px
-        rgba(160, 40, 255, 0.22);
-}
-
-.typingBubble::after {
-    content: "";
-
-    position: absolute;
-
-    left: -1.45vw;
-    bottom: -1.05vw;
-
-    width: 0.45vw;
-    height: 0.45vw;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.2);
-
-    box-shadow:
-        0 0 6px
-        rgba(160, 40, 255, 0.2);
-}
-
-.myMessage .typingBubble {
-    margin-left: 0;
-}
-
-.myMessage .typingBubble::before {
-    left: auto;
-
-    right: -0.65vw;
-}
-
-.myMessage .typingBubble::after {
-    left: auto;
-    right: -1.45vw;
 }
 
 .typingDot {
@@ -868,79 +698,80 @@
         box-sizing: border-box;
     }
 
-    .userMessage,
-    .myMessage {
+    .message {
         width: 100%;
         min-width: 0;
 
         padding: 1vw;
 
+        gap: 2vw;
+
         box-sizing: border-box;
     }
 
-    .userMessage {
-        justify-content: flex-start;
+    .messageAvatar {
+        width: 10vw;
+        height: 10vw;
+
+        min-width: 40px;
+        min-height: 40px;
+
+        max-width: 50px;
+        max-height: 50px;
     }
 
-    .myMessage {
-        justify-content: flex-end;
+    .messageContent {
+        max-width: calc(100% - 55px);
+
+        margin-left: 0;
     }
 
-    .userText,
-    .myText {
+    .messageHeader {
+        gap: 2vw;
+
+        margin-bottom: 0.8vw;
+    }
+
+    .messageSender {
+        font-size: 3.5vw;
+    }
+
+    .messageTime {
+        font-size: 2.7vw;
+    }
+
+    .messageText {
         font-size: 3.8vw;
 
-        min-width: 0;
-        max-width: 62vw;
+        max-width: 100%;
 
         padding: 1.5vw 2.5vw;
 
         border-radius: 4vw;
 
         line-height: 1.4;
-
-        overflow-wrap: anywhere;
-        word-break: break-word;
     }
 
-    .userText {
-        margin-left: 1vw;
+    .typingMessage {
+        width: 100%;
+        min-width: 0;
+
+        padding: 1vw;
+
+        gap: 2vw;
+
+        box-sizing: border-box;
     }
 
-    .myText {
-        margin-right: 1vw;
-    }
+    .typingMessage .messageAvatar {
+        width: 10vw;
+        height: 10vw;
 
-    .myText::before,
-    .userText::before {
-        width: 2.5vw;
-        height: 2.5vw;
+        min-width: 40px;
+        min-height: 40px;
 
-        bottom: -1.2vw;
-    }
-
-    .myText::after,
-    .userText::after {
-        width: 1.3vw;
-        height: 1.3vw;
-
-        bottom: -3vw;
-    }
-
-    .myText::before {
-        right: -1.8vw;
-    }
-
-    .myText::after {
-        right: -4vw;
-    }
-
-    .userText::before {
-        left: -1.8vw;
-    }
-
-    .userText::after {
-        left: -4vw;
+        max-width: 50px;
+        max-height: 50px;
     }
 
     .typingBubble {
@@ -948,8 +779,6 @@
         height: 9vw;
 
         gap: 1.2vw;
-
-        margin-left: 1vw;
 
         padding: 1.5vw 2vw;
 
@@ -966,40 +795,6 @@
 
             0 0 10px
             rgba(255, 255, 255, 0.45);
-    }
-
-    .typingBubble::before {
-        width: 2.5vw;
-        height: 2.5vw;
-
-        left: -1.8vw;
-        bottom: -1.2vw;
-    }
-
-    .typingBubble::after {
-        width: 1.3vw;
-        height: 1.3vw;
-
-        left: -4vw;
-        bottom: -3vw;
-    }
-
-    .myMessage .typingBubble {
-        margin-left: 0;
-
-        margin-right: 1vw;
-    }
-
-    .myMessage .typingBubble::before {
-        left: auto;
-
-        right: -1.8vw;
-    }
-
-    .myMessage .typingBubble::after {
-        left: auto;
-
-        right: -4vw;
     }
 
     @keyframes typingDotAnimation {
@@ -1119,15 +914,68 @@
         gap: 1.5vh;
     }
 
-    .userText,
-    .myText {
+    .message {
+        gap: 2.5vw;
+
+        padding: 1.2vw;
+    }
+
+    .messageAvatar {
+        width: 11vw;
+        height: 11vw;
+
+        min-width: 38px;
+        min-height: 38px;
+
+        max-width: 48px;
+        max-height: 48px;
+    }
+
+    .messageContent {
+        max-width: calc(100% - 50px);
+
+        margin-left: 0;
+    }
+
+    .messageHeader {
+        gap: 1.5vw;
+
+        margin-bottom: 1vw;
+    }
+
+    .messageSender {
+        font-size: 3.7vw;
+    }
+
+    .messageTime {
+        font-size: 2.5vw;
+    }
+
+    .messageText {
         font-size: 4vw;
 
-        max-width: 62vw;
+        max-width: 100%;
 
         padding: 1.8vw 2.8vw;
 
         border-radius: 5vw;
+    }
+
+    .typingMessage {
+        gap: 2.5vw;
+
+        padding: 1.2vw;
+    }
+
+    .typingMessage .messageAvatar {
+        width: 11vw;
+        height: 11vw;
+
+        min-width: 38px;
+        min-height: 38px;
+
+        max-width: 48px;
+        max-height: 48px;
     }
 
     .typingBubble {
@@ -1142,20 +990,6 @@
     .typingDot {
         width: 2vw;
         height: 2vw;
-    }
-
-    .myMessage .typingBubble {
-        margin-left: 0;
-
-        margin-right: 1vw;
-    }
-
-    .myMessage .typingBubble::before {
-        right: -1.8vw;
-    }
-
-    .myMessage .typingBubble::after {
-        right: -4vw;
     }
 
     .writeMessagePlace {
@@ -1203,13 +1037,68 @@
         max-width: 80vw;
     }
 
-    .userText,
-    .myText {
+    .message {
+        gap: 2.5vw;
+
+        padding: 1.5vw;
+    }
+
+    .messageAvatar {
+        width: 12vw;
+        height: 12vw;
+
+        min-width: 36px;
+        min-height: 36px;
+
+        max-width: 44px;
+        max-height: 44px;
+    }
+
+    .messageContent {
+        max-width: calc(100% - 48px);
+
+        margin-left: 0;
+    }
+
+    .messageHeader {
+        gap: 1.2vw;
+
+        margin-bottom: 1vw;
+    }
+
+    .messageSender {
+        font-size: 3.8vw;
+    }
+
+    .messageTime {
+        font-size: 2.4vw;
+    }
+
+    .messageText {
         font-size: 4.2vw;
 
-        max-width: 61vw;
+        max-width: 100%;
 
         padding: 2vw 3vw;
+
+        border-radius: 5vw;
+    }
+
+    .typingMessage {
+        gap: 2.5vw;
+
+        padding: 1.5vw;
+    }
+
+    .typingMessage .messageAvatar {
+        width: 12vw;
+        height: 12vw;
+
+        min-width: 36px;
+        min-height: 36px;
+
+        max-width: 44px;
+        max-height: 44px;
     }
 
     .typingBubble {
@@ -1217,25 +1106,13 @@
         height: 11vw;
 
         gap: 1.5vw;
+
+        border-radius: 5vw;
     }
 
     .typingDot {
         width: 2.2vw;
         height: 2.2vw;
-    }
-
-    .myMessage .typingBubble {
-        margin-left: 0;
-
-        margin-right: 1vw;
-    }
-
-    .myMessage .typingBubble::before {
-        right: -1.8vw;
-    }
-
-    .myMessage .typingBubble::after {
-        right: -4vw;
     }
 
     .writeMessageInput {
