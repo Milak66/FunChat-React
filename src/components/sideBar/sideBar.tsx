@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./sideBar.css";
 
 import { RootState, AppDispatch } from "../store/store";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { onSetChats, onSetCurrentChat } from "../reduser/reduser";
+import { onSetChats, onSetCurrentChat, onSetChatsLoading } from "../reduser/reduser";
 
 import { useEmojiModal } from "../hooks/useEmojiHook";
 
@@ -28,11 +28,12 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
 
   const chats = useSelector((state: RootState) => state.reduser.chats);
 
-  const [chatsLoading, setChatsLoading] = useState(true);
+  const chatsLoading = useSelector((state: RootState) => state.reduser.chatsLoading);
 
   useEffect(() => {
     if (!userId) {
       dispatch(onSetChats([]));
+      dispatch(onSetChatsLoading(false));
       return;
     }
 
@@ -43,17 +44,17 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
         );
 
         if (!response.ok) {
-          setChatsLoading(false);
+          dispatch(onSetChatsLoading(false));
           throw new Error("Couldn't load chats");
         }
 
         const data = await response.json();
 
         dispatch(onSetChats(data));
-        setChatsLoading(false);
+        dispatch(onSetChatsLoading(false));
       } catch (error) {
         console.error("Failed to load chats:", error);
-        setChatsLoading(false);
+        dispatch(onSetChatsLoading(false));
       }
     };
 
@@ -95,7 +96,8 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
 
   return (
     <div className="sideBar">
-      {chatsLoading ? <div style={{display: "flex", height: "100%", justifyContent: "center", alignItems: "center"}}><MiniLoading/></div> : <> <div className="sideBarHeader"> 
+      {chatsLoading ? <div style={{display: "flex", height: "100%", justifyContent: "center", alignItems: "center"}}><MiniLoading/></div> 
+      : <> <div className="sideBarHeader"> 
         <div className="chatsSettings">
           <div className="chatsTitle">{texts.chatsText}</div>
           <div className="addBtnPlace">

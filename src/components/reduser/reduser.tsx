@@ -47,6 +47,7 @@ interface InitialState {
     isLogOnModalOpen: boolean;
     user: User;
     chats: Chat[];
+    chatsLoading: boolean;
     chat: ChatMessage[];
     currentChatId: number | null;
 }
@@ -74,6 +75,7 @@ const initialState: InitialState = {
         chats: []
     },
     chats: [],
+    chatsLoading: true,
     chat: [],
     currentChatId: null
 };
@@ -154,6 +156,13 @@ const chatSlice = createSlice({
             }
         },
 
+        onSetChatsLoading: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            state.chatsLoading = action.payload;
+        },
+
         onSetChats: (
             state,
             action: PayloadAction<Chat[]>
@@ -223,6 +232,7 @@ export const {
     showEmojiModal,
     hideEmojiModal,
     onSetUserChats,
+    onSetChatsLoading,
     onSetChats,
     onAddChat,
     onSetCurrentChat,

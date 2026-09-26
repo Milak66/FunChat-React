@@ -9,7 +9,7 @@ import {
   onSetLogOnModal,
   onSetUserStatus,
   onSetUser,
-  onSetUserId,
+  onSetUserId
 } from "../reduser/reduser";
 import Loading from "../animations/loading/loading";
 import Start from "../start/start";
