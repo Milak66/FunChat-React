@@ -18,6 +18,8 @@ import {
   onRemoveChat,
 } from "../reduser/reduser";
 
+import userIcon from "../../assets/userIcon.jpg";
+
 import deleteIcon from "../../assets/deleteIcon.jpg";
 
 import {
@@ -195,12 +197,16 @@ const ChatWithUser: React.FC = () => {
     return chat.map((msg) => {
       return (
         <div className="message" key={msg.id}>
-          <img
+          {msg.sender.avatar ? <img
             className="messageAvatar"
-            src={msg.sender.avatar}
+            src={`${import.meta.env.VITE_SERVER_URL}${msg.sender.avatar}`}
             alt={`${msg.sender.nickname} avatar`}
-          />
-
+          /> : <img
+          className="messageAvatar"
+          src={userIcon}
+          alt={`${msg.sender.nickname} avatar`}
+          /> } 
+          
           <div className="messageContent">
             <div className="messageHeader">
               <span className="messageSender">{msg.sender.nickname}</span>
