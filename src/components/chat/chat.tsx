@@ -202,7 +202,7 @@ const ChatWithUser: React.FC = () => {
             src={`${import.meta.env.VITE_SERVER_URL}${msg.sender.avatar}`}
             alt={`${msg.sender.nickname} avatar`}
           /> : <img
-          className="messageAvatar"
+          className="defaultMessageAvatar"
           src={userIcon}
           alt={`${msg.sender.nickname} avatar`}
           /> } 
