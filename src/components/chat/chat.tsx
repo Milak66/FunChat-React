@@ -261,14 +261,12 @@ const ChatWithUser: React.FC = () => {
 
       if (!response.ok) {
         showEmoji(":(", "red", data.message || "Error sending message");
-
         return;
       }
 
       setMessageText("");
     } catch (err) {
       console.error(err);
-
       showEmoji(":(", "red", "Server error");
     }
   };
