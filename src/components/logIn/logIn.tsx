@@ -72,7 +72,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
       showEmoji(
         ":)",
         "green",
-        "You have successfully logged into your account."
+        "You have successfully logged into your account"
       );
     } catch (err) {
       console.error(err);
