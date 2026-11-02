@@ -27,22 +27,17 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     e.preventDefault();
 
     if (!username.trim()) {
-      showEmoji(":(", "red", "Отсутствует имя пользователя");
-      return;
-    }
-
-    if (username.trim().length > 10) {
-      showEmoji(":(", "red", "Имя пользователя больше 10 символов");
+      showEmoji(":(", "red", "The username is missing");
       return;
     }
 
     if (password.trim().length < 6) {
-      showEmoji(":(", "red", "Пароль не должен быть меньше 6 символов");
+      showEmoji(":(", "red", "The password must be at least 6 characters long");
       return;
     }
 
     if (!nickname.trim()) {
-      showEmoji(":(", "red", "Отсутствует ник");
+      showEmoji(":(", "red", "The username is missing");
       return;
     }
 
