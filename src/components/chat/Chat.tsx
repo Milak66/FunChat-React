@@ -1,19 +1,24 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import "./chat.css";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { RootState, AppDispatch } from "../store/store";
+import { RootState, AppDispatch } from "../store/store.ts";
 
 import chatImage from "../../assets/chatImage.jpg";
 
+import MessageEye from "../images/messageEye.tsx";
 
-import MessageEye from "../images/MessageEye.tsx";
+import { ReplyIcon } from "../images/messageMenuIcons.tsx";
 
-import { ReplyIcon } from "../images/MessageMenuIcons";
-
-import { useNotify } from "../hooks/useNotify";
+import { useNotify } from "../hooks/useNotify.ts";
 
 import {
   onAddMessage,
@@ -23,18 +28,18 @@ import {
   onUpdateMessage,
   onDeleteMessage,
   onSetChatReads,
-} from "../reduser/reduser";
+} from "../reduser/reduser.ts";
 
 import {
   subscribeToChat,
   subscribeToTyping,
   subscribeToMessageUpdates,
   subscribeToReads,
-} from "../socket/socket";
+} from "../socket/socket.ts";
 
-import MessageMenu from "../menus/MessageMenu";
+import MessageMenu from "../menus/MessageMenu.tsx";
 
-import MiniLoading from "../animations/miniLoading/MiniLoading.tsx";
+import MiniLoading from "../animations/miniLoading/miniLoading.tsx";
 
 import { avatarUrl, handleAvatarError } from "../avatarEditor/avatarUrl.ts";
 
@@ -60,7 +65,9 @@ function sendTyping(chatId: number, userId: number, typing: boolean) {
   })
     .then((response) => {
       if (!response.ok) {
-        console.warn(`[FunChat] the server answered ${response.status} to /typing`);
+        console.warn(
+          `[FunChat] the server answered ${response.status} to /typing`
+        );
       }
     })
     .catch((error) => {
@@ -122,7 +129,10 @@ const GROUP_GAP_MS = 5 * 60 * 1000;
  * has its own copy of the sender object, so "a.sender === b.sender"
  * is always false even when it's the same person.
  */
-function sameGroup(a: ChatMessage | undefined, b: ChatMessage | undefined): boolean {
+function sameGroup(
+  a: ChatMessage | undefined,
+  b: ChatMessage | undefined
+): boolean {
   if (!a || !b) {
     return false;
   }
@@ -151,8 +161,12 @@ const ReplyPreview: React.FC<{
     }}
     disabled={!original}
   >
-    {original && <span className="messageReplyName">{original.sender.nickname}</span>}
-    <span className="messageReplyText">{original ? original.text : deletedText}</span>
+    {original && (
+      <span className="messageReplyName">{original.sender.nickname}</span>
+    )}
+    <span className="messageReplyText">
+      {original ? original.text : deletedText}
+    </span>
   </button>
 );
 
@@ -172,7 +186,11 @@ const ChatWithUser: React.FC = () => {
   // always a number (or null), so comparing with message.sender.id works
   // even if one of them arrived as a string like "5"
   const userId: number | null =
-    accountId != null ? Number(accountId) : savedUserId != null ? Number(savedUserId) : null;
+    accountId != null
+      ? Number(accountId)
+      : savedUserId != null
+      ? Number(savedUserId)
+      : null;
 
   const currentChatId = useSelector(
     (state: RootState) => state.reduser.currentChatId
@@ -190,7 +208,11 @@ const ChatWithUser: React.FC = () => {
   const [isSending, setIsSending] = useState(false);
 
   /** the message whose options menu is open, and where to show the menu */
-  const [menu, setMenu] = useState<{ message: ChatMessage; x: number; y: number } | null>(null);
+  const [menu, setMenu] = useState<{
+    message: ChatMessage;
+    x: number;
+    y: number;
+  } | null>(null);
 
   /** the message you're answering (null = not a reply) */
   const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
@@ -199,7 +221,9 @@ const ChatWithUser: React.FC = () => {
   const [flashMessageId, setFlashMessageId] = useState<number | null>(null);
 
   /** the message you're changing right now (null = writing a new one) */
-  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(null);
+  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(
+    null
+  );
 
   /** what was in the box before you started editing, given back on cancel */
   const draftBeforeEditRef = useRef("");
@@ -214,7 +238,10 @@ const ChatWithUser: React.FC = () => {
   const openedByTouchAtRef = useRef(0);
 
   /** who is typing right now (null = nobody) */
-  const [typingUser, setTypingUser] = useState<{ id: number; name: string } | null>(null);
+  const [typingUser, setTypingUser] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const otherUserTyping = typingUser !== null;
 
@@ -247,8 +274,14 @@ const ChatWithUser: React.FC = () => {
       try {
         // messages and "who has read how far" at the same time
         const [response, readsResponse] = await Promise.all([
-          fetch(`${import.meta.env.VITE_SERVER_URL}/messages/getMessages/${currentChatId}`),
-          fetch(`${import.meta.env.VITE_SERVER_URL}/messages/reads/${currentChatId}`),
+          fetch(
+            `${
+              import.meta.env.VITE_SERVER_URL
+            }/messages/getMessages/${currentChatId}`
+          ),
+          fetch(
+            `${import.meta.env.VITE_SERVER_URL}/messages/reads/${currentChatId}`
+          ),
         ]);
 
         if (!response.ok) {
@@ -411,7 +444,10 @@ const ChatWithUser: React.FC = () => {
       ([memberId]) => Number(memberId) !== Number(message.sender.id)
     );
 
-    return others.length > 0 && others.every(([, lastRead]) => Number(lastRead) >= message.id);
+    return (
+      others.length > 0 &&
+      others.every(([, lastRead]) => Number(lastRead) >= message.id)
+    );
   };
 
   // ---------------------------------------------------------------- typing indicator
@@ -719,7 +755,10 @@ const ChatWithUser: React.FC = () => {
 
       if (textarea) {
         textarea.focus();
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        textarea.setSelectionRange(
+          textarea.value.length,
+          textarea.value.length
+        );
       }
     });
   };
@@ -774,7 +813,10 @@ const ChatWithUser: React.FC = () => {
 
       if (textarea) {
         textarea.focus();
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        textarea.setSelectionRange(
+          textarea.value.length,
+          textarea.value.length
+        );
       }
     });
   };
@@ -835,7 +877,9 @@ const ChatWithUser: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/messages/deleteMessage/${message.id}?userId=${userId}`,
+        `${import.meta.env.VITE_SERVER_URL}/messages/deleteMessage/${
+          message.id
+        }?userId=${userId}`,
         { method: "DELETE" }
       );
 
@@ -936,14 +980,18 @@ const ChatWithUser: React.FC = () => {
               <ReplyPreview
                 original={messagesById.get(msg.replyToId)}
                 deletedText={texts.deletedMessageText}
-                onClick={() => msg.replyToId != null && scrollToMessage(msg.replyToId)}
+                onClick={() =>
+                  msg.replyToId != null && scrollToMessage(msg.replyToId)
+                }
               />
             )}
 
             <div className="messageHeader">
               <span className="messageSender">{msg.sender.nickname}</span>
               <span className="messageTime">
-                {msg.edited && <span className="messageEdited">{texts.editedText}</span>}
+                {msg.edited && (
+                  <span className="messageEdited">{texts.editedText}</span>
+                )}
                 {formatTime(msg.sendTime)}
                 {isOwn && <MessageEye seen={isSeenByAll(msg)} />}
               </span>
@@ -1010,7 +1058,9 @@ const ChatWithUser: React.FC = () => {
       {/* "Editing" bar above the message box */}
       {editingMessage && (
         <div className="editingBar">
-          <span className="editingBarIcon" aria-hidden="true">✎</span>
+          <span className="editingBarIcon" aria-hidden="true">
+            ✎
+          </span>
 
           <div className="editingBarText">
             <span className="editingBarTitle">{texts.editingText}</span>

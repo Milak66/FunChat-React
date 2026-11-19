@@ -14,9 +14,9 @@ import {
 
 import { NavLink } from "react-router-dom";
 
-import MiniLoading from "../animations/miniLoading/MiniLoading";
+import MiniLoading from "../animations/miniLoading/miniLoading";
 
-import ChatMenu from "../menus/ChatMenu";
+import ChatMenu from "../menus/chatMenu";
 
 import { useUnreadCounts } from "../hooks/useUnreadCounts";
 
@@ -55,7 +55,9 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
   useUnreadCounts();
 
   /** the chat whose menu is open, and where to show the menu */
-  const [menu, setMenu] = useState<{ chat: Chat; x: number; y: number } | null>(null);
+  const [menu, setMenu] = useState<{ chat: Chat; x: number; y: number } | null>(
+    null
+  );
 
   const longPressRef = useRef<{
     timer: ReturnType<typeof setTimeout>;
@@ -198,47 +200,52 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
 
     return chats.map((chat) => {
       // the open chat is being read right now, so no number on it
-      const unread = chat.id === currentChatId ? 0 : notifications[chat.id]?.count ?? 0;
+      const unread =
+        chat.id === currentChatId ? 0 : notifications[chat.id]?.count ?? 0;
 
       return (
-      <div
-        className={[
-          "singleChat",
-          chat.id === currentChatId ? "active" : "",
-          menu?.chat.id === chat.id ? "menuOpen" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        key={chat.id}
-        title={chat.title}
-        role="button"
-        tabIndex={0}
-        onClick={() => handleClick(chat.id)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") openChat(chat.id);
-        }}
-        onContextMenu={(e) => handleContextMenu(e, chat)}
-        onTouchStart={(e) => handleTouchStart(e, chat)}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={cancelLongPress}
-        onTouchCancel={cancelLongPress}
-      >
-        <img
-          className="chatAvatar"
-          src={avatarUrl(chat.avatar)}
-          alt=""
-          draggable={false}
-          onError={handleAvatarError}
-        />
-        <div className="singleChatTitle">{chat.title}</div>
+        <div
+          className={[
+            "singleChat",
+            chat.id === currentChatId ? "active" : "",
+            menu?.chat.id === chat.id ? "menuOpen" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          key={chat.id}
+          title={chat.title}
+          role="button"
+          tabIndex={0}
+          onClick={() => handleClick(chat.id)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") openChat(chat.id);
+          }}
+          onContextMenu={(e) => handleContextMenu(e, chat)}
+          onTouchStart={(e) => handleTouchStart(e, chat)}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={cancelLongPress}
+          onTouchCancel={cancelLongPress}
+        >
+          <img
+            className="chatAvatar"
+            src={avatarUrl(chat.avatar)}
+            alt=""
+            draggable={false}
+            onError={handleAvatarError}
+          />
+          <div className="singleChatTitle">{chat.title}</div>
 
-        {/* purple circle with the number of unread messages */}
-        {unread > 0 && (
-          <span className="unreadBadge" key={unread} aria-label={`${unread} unread`}>
-            {unread > 99 ? "99+" : unread}
-          </span>
-        )}
-      </div>
+          {/* purple circle with the number of unread messages */}
+          {unread > 0 && (
+            <span
+              className="unreadBadge"
+              key={unread}
+              aria-label={`${unread} unread`}
+            >
+              {unread > 99 ? "99+" : unread}
+            </span>
+          )}
+        </div>
       );
     });
   };
@@ -267,8 +274,7 @@ const SideBar: React.FC<ChatsSideBarProps> = (): React.JSX.Element => {
                   <button
                     className="addBtn"
                     aria-label="New chat"
-                    onClick={() => {
-                    }}
+                    onClick={() => {}}
                   >
                     +
                   </button>

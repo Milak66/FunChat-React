@@ -4,8 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import "./chatMenu.css";
 
 import { RootState, AppDispatch } from "../store/store";
-import { Chat, onRemoveChat, onSetChat, onSetCurrentChat } from "../reduser/reduser";
-import { TrashIcon } from "../images/MessageMenuIcons";
+import {
+  Chat,
+  onRemoveChat,
+  onSetChat,
+  onSetCurrentChat,
+} from "../reduser/reduser";
+import { TrashIcon } from "../images/messageMenuIcons";
 import { useNotify } from "../hooks/useNotify";
 
 interface ChatMenuProps {
@@ -32,12 +37,18 @@ const ChatMenu: React.FC<ChatMenuProps> = ({ x, y, chat, onClose }) => {
   const notify = useNotify();
 
   const texts = useSelector((state: RootState) => state.reduser.texts);
-  const currentChatId = useSelector((state: RootState) => state.reduser.currentChatId);
+  const currentChatId = useSelector(
+    (state: RootState) => state.reduser.currentChatId
+  );
 
   const menuRef = useRef<HTMLDivElement>(null);
   const openedAtRef = useRef(Date.now());
 
-  const [position, setPosition] = useState({ left: x, top: y, origin: "top left" });
+  const [position, setPosition] = useState({
+    left: x,
+    top: y,
+    origin: "top left",
+  });
   const [placed, setPlaced] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -55,8 +66,14 @@ const ChatMenu: React.FC<ChatMenuProps> = ({ x, y, chat, onClose }) => {
     const opensUp = y + height > window.innerHeight - EDGE;
 
     setPosition({
-      left: Math.min(Math.max(EDGE, opensLeft ? x - width : x), window.innerWidth - width - EDGE),
-      top: Math.min(Math.max(EDGE, opensUp ? y - height : y), window.innerHeight - height - EDGE),
+      left: Math.min(
+        Math.max(EDGE, opensLeft ? x - width : x),
+        window.innerWidth - width - EDGE
+      ),
+      top: Math.min(
+        Math.max(EDGE, opensUp ? y - height : y),
+        window.innerHeight - height - EDGE
+      ),
       origin: `${opensUp ? "bottom" : "top"} ${opensLeft ? "right" : "left"}`,
     });
 
@@ -65,7 +82,9 @@ const ChatMenu: React.FC<ChatMenuProps> = ({ x, y, chat, onClose }) => {
 
   // Esc closes; scrolling the list or resizing closes
   useEffect(() => {
-    menuRef.current?.querySelector<HTMLButtonElement>(".chatMenuItem")?.focus({ preventScroll: true });
+    menuRef.current
+      ?.querySelector<HTMLButtonElement>(".chatMenuItem")
+      ?.focus({ preventScroll: true });
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -139,7 +158,11 @@ const ChatMenu: React.FC<ChatMenuProps> = ({ x, y, chat, onClose }) => {
         className={`chatMenu${placed ? " placed" : ""}`}
         role="menu"
         aria-label={texts.chatOptionsText}
-        style={{ left: position.left, top: position.top, transformOrigin: position.origin }}
+        style={{
+          left: position.left,
+          top: position.top,
+          transformOrigin: position.origin,
+        }}
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onContextMenu={(e) => e.preventDefault()}
@@ -155,7 +178,9 @@ const ChatMenu: React.FC<ChatMenuProps> = ({ x, y, chat, onClose }) => {
             style={{ "--i": 0 } as React.CSSProperties}
             onClick={deleteChat}
           >
-            <span className="chatMenuIcon"><TrashIcon /></span>
+            <span className="chatMenuIcon">
+              <TrashIcon />
+            </span>
             {confirmDelete ? texts.deleteChatConfirmText : texts.deleteChatText}
           </button>
         </div>

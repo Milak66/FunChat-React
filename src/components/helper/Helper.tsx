@@ -9,7 +9,7 @@ import {
   onSetConsoleEnabled,
   onClearConsole,
 } from "../reduser/reduser";
-import { ConsoleIcon, ClearIcon, ChevronIcon, CloseIcon } from "../images/ConsoleIcons";
+import { ConsoleIcon, ClearIcon, ChevronIcon, CloseIcon } from "../images/consoleIcons";
 
 /** after a new line, the console shrinks back to one line after this long */
 const AUTO_COLLAPSE_MS = 5000;

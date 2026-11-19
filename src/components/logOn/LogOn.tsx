@@ -10,9 +10,9 @@ import {
   onSetLanguage,
   User,
 } from "../reduser/reduser";
-import MiniLoading from "../animations/miniLoading/MiniLoading";
-import VerifyEmail from "../register/VerifyEmail";
-import GoogleSignInButton from "../googleSignIn/GoogleSignIn";
+import MiniLoading from "../animations/miniLoading/miniLoading";
+import VerifyEmail from "../register/verifyEmail";
+import GoogleSignInButton from "../googleSignIn/googleSignIn";
 import { useNotify } from "../hooks/useNotify";
 
 interface LogOnProps {}

@@ -11,12 +11,12 @@ import {
   onSetUser,
   onSetUserId,
 } from "../reduser/reduser";
-import Loading from "../animations/loading/Loading";
-import Start from "../start/Start";
-import LogIn from "../register/Register";
-import LogOn from "../logOn/LogOn";
-import MainContent from "../mainContent/MainContent";
-import AddChat from "../addChat/AddChat";
+import Loading from "../animations/loading/loading";
+import Start from "../start/start";
+import LogIn from "../register/register";
+import LogOn from "../logOn/logOn";
+import MainContent from "../mainContent/mainContent";
+import AddChat from "../addChat/addChat";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { connectSocket, disconnectSocket } from "../socket/socket";
 

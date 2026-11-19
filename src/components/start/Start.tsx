@@ -10,11 +10,11 @@ import {
   onSetSideBarOpen,
 } from "../reduser/reduser";
 import { texts as translations } from "../reduser/languages";
-import UserProfile from "../userProfile/UserProfile";
-import LanguageIcon from "../images/LanguageIcon";
-import SettingsIcon from "../images/SettingsIcon";
+import UserProfile from "../userProfile/userProfile";
+import LanguageIcon from "../images/languageIcon";
+import SettingsIcon from "../images/settingsIcon";
 import { useNotify } from "../hooks/useNotify";
-import SidebarToggleIcon from "../images/SidebarToggleIcon";
+import SidebarToggleIcon from "../images/sidebarToggleIcon";
 
 interface StartProps {}
 
@@ -199,9 +199,7 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
             <div className="siteName">FunChat</div>
           </div>
 
-          <div className="startSettings">
-            {showIcons()}
-          </div>
+          <div className="startSettings">{showIcons()}</div>
 
           {showUserOrBtn()}
         </div>

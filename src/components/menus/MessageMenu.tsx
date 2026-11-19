@@ -11,7 +11,7 @@ import {
   EditIcon,
   TrashIcon,
   ClockIcon,
-} from "../images/MessageMenuIcons";
+} from "../images/messageMenuIcons";
 
 interface MessageMenuProps {
   /** where the right click / long press happened (px, viewport) */
@@ -46,7 +46,10 @@ function formatFullTime(sendTime: string): string {
     return "";
   }
 
-  const time = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const time = date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   const today = new Date();
   const yesterday = new Date();
@@ -88,7 +91,11 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
 
   const openedAtRef = useRef(Date.now());
 
-  const [position, setPosition] = useState({ left: x, top: y, origin: "top left" });
+  const [position, setPosition] = useState({
+    left: x,
+    top: y,
+    origin: "top left",
+  });
 
   const [placed, setPlaced] = useState(false);
 
@@ -125,7 +132,11 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
     const items = (): HTMLButtonElement[] => {
       const menu = menuRef.current;
 
-      return menu ? Array.from(menu.querySelectorAll<HTMLButtonElement>(".messageMenuItem")) : [];
+      return menu
+        ? Array.from(
+            menu.querySelectorAll<HTMLButtonElement>(".messageMenuItem")
+          )
+        : [];
     };
 
     items()[0]?.focus({ preventScroll: true });
@@ -141,7 +152,9 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
         e.preventDefault();
 
         const list = items();
-        const current = list.indexOf(document.activeElement as HTMLButtonElement);
+        const current = list.indexOf(
+          document.activeElement as HTMLButtonElement
+        );
         const step = e.key === "ArrowDown" ? 1 : -1;
         const next = (current + step + list.length) % list.length;
 
@@ -218,7 +231,9 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
           <ClockIcon />
           <span>{formatFullTime(message.sendTime)}</span>
 
-          {message.edited && <span className="messageMenuChip">{texts.editedText}</span>}
+          {message.edited && (
+            <span className="messageMenuChip">{texts.editedText}</span>
+          )}
         </div>
 
         <div className="messageMenuItems">
@@ -228,7 +243,9 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
             style={delay()}
             onClick={() => choose(onReply)}
           >
-            <span className="messageMenuIcon"><ReplyIcon /></span>
+            <span className="messageMenuIcon">
+              <ReplyIcon />
+            </span>
             {texts.replyText}
           </button>
 
@@ -238,7 +255,9 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
             style={delay()}
             onClick={() => choose(onCopy)}
           >
-            <span className="messageMenuIcon"><CopyIcon /></span>
+            <span className="messageMenuIcon">
+              <CopyIcon />
+            </span>
             {texts.copyText}
           </button>
 
@@ -249,7 +268,9 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
               style={delay()}
               onClick={() => choose(onEdit)}
             >
-              <span className="messageMenuIcon"><EditIcon /></span>
+              <span className="messageMenuIcon">
+                <EditIcon />
+              </span>
               {texts.editText}
             </button>
           )}
@@ -259,12 +280,16 @@ const MessageMenu: React.FC<MessageMenuProps> = ({
               <div className="messageMenuDivider" style={delay()} />
 
               <button
-                className={`messageMenuItem danger${confirmDelete ? " confirm" : ""}`}
+                className={`messageMenuItem danger${
+                  confirmDelete ? " confirm" : ""
+                }`}
                 role="menuitem"
                 style={delay()}
                 onClick={handleDelete}
               >
-                <span className="messageMenuIcon"><TrashIcon /></span>
+                <span className="messageMenuIcon">
+                  <TrashIcon />
+                </span>
                 {confirmDelete ? texts.deleteConfirmText : texts.deleteText}
               </button>
             </>

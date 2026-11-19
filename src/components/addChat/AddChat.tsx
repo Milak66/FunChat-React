@@ -3,7 +3,7 @@ import "./addChat.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { onSetUserChats } from "../reduser/reduser";
-import MiniLoading from "../animations/miniLoading/MiniLoading";
+import MiniLoading from "../animations/miniLoading/miniLoading";
 
 interface AddChatProps {}
 

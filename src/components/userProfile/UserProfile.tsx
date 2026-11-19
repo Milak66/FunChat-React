@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../store/store.tsx";
+import { RootState, AppDispatch } from "../store/store.ts";
 import {
   onSetUserStatus,
   onSetUser,

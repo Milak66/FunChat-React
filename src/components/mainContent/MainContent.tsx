@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import "./mainContent.css";
 import { RootState } from "../store/store";
-import SideBar from "../sideBar/SideBar";
-import Chat from "../chat/Chat";
-import Console from "../helper/Helper";
+import SideBar from "../sideBar/sideBar";
+import Chat from "../chat/chat";
+import Console from "../helper/helper";
 
 interface MainContentProps {}
 
