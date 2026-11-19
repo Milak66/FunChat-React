@@ -7,42 +7,54 @@ import {
   onSetUser,
   onSetUserId,
   onSetUserStatus,
+  onSetLanguage,
+  User,
 } from "../reduser/reduser";
-import { useEmojiModal } from "../hooks/useEmojiHook";
-import MiniLoading from "../animations/miniLoading/miniLoadin";
+import MiniLoading from "../animations/miniLoading/MiniLoading";
+import VerifyEmail from "./VerifyEmail";
+import GoogleSignInButton from "../googleSignIn/GoogleSignIn";
 
 interface LogInProps {}
 
+const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
 const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
   const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // set after a successful sign-up → shows the code screen
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { showEmoji } = useEmojiModal();
   const sendData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (isLoading) return;
+
+    const cleanEmail = email.trim().toLowerCase();
+
     if (!username.trim()) {
-      showEmoji(":(", "red", "Отсутствует имя пользователя");
       return;
     }
 
     if (username.trim().length > 10) {
-      showEmoji(":(", "red", "Имя пользователя больше 10 символов");
+      return;
+    }
+
+    if (!EMAIL_PATTERN.test(cleanEmail)) {
       return;
     }
 
     if (password.trim().length < 6) {
-      showEmoji(":(", "red", "Пароль не должен быть меньше 6 символов");
       return;
     }
 
     if (!nickname.trim()) {
-      showEmoji(":(", "red", "Отсутствует ник");
       return;
     }
 
@@ -56,71 +68,116 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             username: username.trim(),
+            email: cleanEmail,
             password: password.trim(),
             nickname: nickname.trim(),
           }),
         }
       );
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        showEmoji(":(", "red", data.message || "Error");
-        setIsLoading(false);
         return;
       }
 
-      showEmoji(":)", "green", "You have successfully created an account");
-      dispatch(onSetUser(data));
-      dispatch(onSetUserId(data.id));
-      dispatch(onSetUserStatus(true));
-      setIsLoading(false);
-      localStorage.removeItem("temporaryMode");
-      localStorage.setItem("userId", String(data.id));
-      dispatch(onSetLogInModal());
+      // account created but not confirmed yet → ask for the code
+      setPendingEmail(data.email ?? cleanEmail);
     } catch (err) {
       console.error(err);
+    } finally {
       setIsLoading(false);
-      showEmoji(":(", "red", "Server error");
     }
   };
+
+  // runs after the right code was entered (or after Google sign-in): log in
+  const handleVerified = (user: User) => {
+    dispatch(onSetUser(user));
+    dispatch(onSetUserId(user.id));
+    dispatch(onSetUserStatus(true));
+    dispatch(onSetLanguage(user.language));
+    localStorage.removeItem("temporaryMode");
+    localStorage.setItem("userId", String(user.id));
+    dispatch(onSetLogInModal());
+  };
+
+  if (pendingEmail) {
+    return <VerifyEmail email={pendingEmail} onVerified={handleVerified} />;
+  }
 
   return (
     <div className="logIn">
       <form className="userFormLogIn" onSubmit={sendData}>
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">{texts.enterUserNameText}</label>
+          <label className="writeUserInfoText" htmlFor="registerUsername">
+            {texts.enterUserNameText}
+          </label>
           <input
+            id="registerUsername"
             className="inputText"
             type="text"
+            autoComplete="username"
             placeholder={texts.inputText}
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">{texts.enterPasswordText}</label>
+          <label className="writeUserInfoText" htmlFor="registerEmail">
+            {texts.enterEmailText}
+          </label>
           <input
+            id="registerEmail"
+            className="inputText"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="writeUserInfoDiv">
+          <label className="writeUserInfoText" htmlFor="registerPassword">
+            {texts.enterPasswordText}
+          </label>
+          <input
+            id="registerPassword"
             className="inputText"
             type="password"
+            autoComplete="new-password"
             placeholder={texts.inputText}
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">{texts.enterNicknameText}</label>
+          <label className="writeUserInfoText" htmlFor="registerNickname">
+            {texts.enterNicknameText}
+          </label>
           <input
+            id="registerNickname"
             className="inputText"
             type="text"
+            autoComplete="nickname"
             placeholder={texts.inputText}
+            value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
         </div>
+
         <div className="submitBtnDiv">
-          <button className="submitBtn" type="submit">
+          <button className="submitBtn" type="submit" disabled={isLoading}>
             {texts.registerText}
           </button>
         </div>
+
         {isLoading ? <MiniLoading /> : null}
+
+        <GoogleSignInButton onLoggedIn={handleVerified} text="continue_with" />
       </form>
     </div>
   );

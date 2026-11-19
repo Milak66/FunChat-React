@@ -1,761 +1,521 @@
+/* =========================================================
+   FunChat – header (purple)
+   ========================================================= */
+
+/* colors come from app.css */
+
 .start {
     display: flex;
-    width: 100vw;
-    background:
-        radial-gradient(
-            circle at 15% 20%,
-            rgba(190, 60, 255, 0.22),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(90, 30, 255, 0.18),
-            transparent 40%
-        ),
-        linear-gradient(
-            135deg,
-            #080313 0%,
-            #17052d 45%,
-            #0c0620 100%
-        );
-    height: 10vh;
     justify-content: center;
     position: fixed;
     z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: var(--fc-header-h);
+    background:
+        radial-gradient(circle at 12% -40%, rgba(255, 255, 255, 0.35), transparent 45%),
+        radial-gradient(circle at 88% 140%, rgba(255, 140, 230, 0.35), transparent 45%),
+        var(--fc-grad);
+    box-shadow: 0 6px 24px rgba(109, 63, 224, 0.28);
+    font-family: var(--fc-font);
+}
 
-    border-bottom: 1px solid rgba(190, 70, 255, 0.25);
-
-    box-shadow:
-        0 8px 30px rgba(110, 0, 255, 0.12),
-        inset 0 -1px rgba(220, 120, 255, 0.08);
+/* soft shine along the bottom edge */
+.start::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    pointer-events: none;
 }
 
 .menu {
-    width: 95vw;
+    width: 100%;
+    max-width: 1600px;
+    padding: 0 20px;
     display: grid;
-    grid-template-columns: 10vw 1fr auto;
-    gap: 1vw;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
     align-items: center;
 }
 
 .logoOfSite {
     display: flex;
     align-items: center;
-    margin-left: 0.5vw;
+    gap: 10px;
+    min-width: 0;
 }
 
 .siteName {
-    font-size: 2.5vw;
-
-    color: #d98cff;
-
-    text-shadow:
-        0 0 8px rgba(190, 60, 255, 0.7),
-        0 0 20px rgba(140, 40, 255, 0.35);
-
-    letter-spacing: 0.03em;
+    color: #ffffff;
+    font-size: clamp(22px, 2.1vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 12px rgba(60, 10, 150, 0.35);
 }
 
 .startSettings {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-}
-
-.modeButtonImg {
-    width: 4vw;
+    gap: 10px;
 }
 
 .btnsDiv {
     display: flex;
-    width: 20vw;
-    gap: 1vw;
+    gap: 10px;
     align-items: center;
 }
 
+/* white pill buttons on the purple bar */
 .btn {
-    padding: 1vw;
-    color: #ffffff;
-    border-radius: 2vw;
-    font-size: 1.3vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid rgba(220, 140, 255, 0.35);
-
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--fc-accent-dark);
+    font-family: var(--fc-font);
+    font-size: clamp(13px, 1vw, 15px);
+    font-weight: 700;
+    white-space: nowrap;
     cursor: pointer;
-
-    box-shadow:
-        0 0 12px rgba(160, 40, 255, 0.25),
-        inset 0 1px rgba(255, 255, 255, 0.15);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    box-shadow: 0 4px 14px rgba(60, 10, 150, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .btn:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #bc4cff,
-            #7625e8
-        );
-
-    box-shadow:
-        0 0 18px rgba(180, 60, 255, 0.45),
-        inset 0 1px rgba(255, 255, 255, 0.2);
-
+    background: var(--fc-accent-soft);
+    box-shadow: 0 6px 18px rgba(60, 10, 150, 0.32);
     transform: translateY(-1px);
 }
 
-.languageButton {
+.btn:active {
+    transform: translateY(0) scale(0.97);
+}
+
+/* a ghost variant if you want a second, quieter button: class="btn btnGhost" */
+.btnGhost {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.btnGhost:hover {
+    background: rgba(255, 255, 255, 0.26);
+}
+
+/* the round icon buttons next to the account: exactly as tall as the
+   account pill (40px avatar + 4px padding top and bottom = 48px) */
+.languageButton,
+.settingsButton {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    width: 4.5vw;
-    height: 4.5vw;
-
-    min-width: 45px;
-    min-height: 45px;
-
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
     padding: 0;
-
     border: none;
     border-radius: 50%;
-
-    background: transparent;
-
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
     cursor: pointer;
-
-    transition:
-        transform 0.25s ease,
-        filter 0.25s ease;
+    transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.languageButton:hover {
-    transform: scale(1.08);
-
-    filter:
-        drop-shadow(0 0 8px rgba(190, 70, 255, 0.8))
-        drop-shadow(0 0 18px rgba(130, 30, 255, 0.5));
+.languageButton,
+.settingsButton:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.05);
 }
 
-.languageButton:active {
-    transform: scale(0.96);
+.languageButton,
+.settingsButton:active {
+    transform: scale(0.94);
 }
 
-.modeButtonImg {
-    width: 4vw;
-    min-width: 40px;
-    max-width: 60px;
-
-    border-radius: 50%;
+/* the globe and gear buttons: the same glassy white as the account button */
+.languageButton,
+.settingsButton {
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    color: #ffffff;
 }
+
+.languageButton:hover,
+.settingsButton:hover {
+    background: rgba(255, 255, 255, 0.26);
+}
+
+/* hover: the globe's longitude lines turn, like it's spinning */
+.languageIconMeridians {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.45s ease;
+}
+
+/* hover: the gear turns a bit */
+/* both icons the same size inside their buttons */
+.languageIcon,
+.settingsIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.settingsIconGear {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.5s ease;
+}
+
+.settingsButton:hover .settingsIconGear {
+    transform: rotate(90deg);
+}
+
+.languageButton:hover .languageIconMeridians {
+    transform: scaleX(-0.45);
+}
+
+/* ---------------- chat list toggle (left of the logo) ---------------- */
+
+.sidebarToggleBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.sidebarToggleBtn:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.sidebarToggleBtn:active {
+    transform: scale(0.94);
+}
+
+/* panel: faint when closed, solid when open */
+.sidebarTogglePanel {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebarToggleIcon.open .sidebarTogglePanel {
+    opacity: 0.45;
+}
+
+/* arrow: points right when closed ("show"), flips left when open ("hide") */
+.sidebarToggleArrow {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.25s ease;
+}
+
+.sidebarToggleIcon.open .sidebarToggleArrow {
+    transform: rotate(180deg);
+}
+
+.btn:focus-visible,
+.sidebarToggleBtn:focus-visible,
+.languageButton:focus-visible,
+.settingsButton:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+.languageModalClose:focus-visible,
+.languageOption:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 2px;
+}
+
+/* ---------------- language modal ---------------- */
 
 .languageModalOverlay {
     position: fixed;
-
     inset: 0;
-
     z-index: 1000;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    padding: 2vw;
-
-    background:
-        radial-gradient(
-            circle at 50% 40%,
-            rgba(150, 40, 255, 0.12),
-            transparent 45%
-        ),
-        rgba(3, 1, 12, 0.78);
-
-    backdrop-filter: blur(10px);
-
+    padding: 24px;
+    background: rgba(45, 15, 110, 0.35);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     animation: languageOverlayIn 0.2s ease;
 }
 
 .languageModal {
     position: relative;
-
-    width: min(850px, 90vw);
-    max-height: 82vh;
-
+    width: min(820px, 92vw);
+    max-height: 85vh;
+    max-height: 85dvh;
     overflow-y: auto;
-
-    padding: 2vw;
-
-    border-radius: 1.5vw;
-
-    border: 1px solid rgba(190, 70, 255, 0.4);
-
-    background:
-        radial-gradient(
-            circle at 10% 0%,
-            rgba(190, 60, 255, 0.15),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 90% 100%,
-            rgba(70, 40, 255, 0.12),
-            transparent 40%
-        ),
-        linear-gradient(
-            135deg,
-            rgba(18, 5, 35, 0.98),
-            rgba(7, 3, 20, 0.98)
-        );
-
-    box-shadow:
-        0 0 30px rgba(130, 30, 255, 0.25),
-        0 0 80px rgba(100, 20, 255, 0.15),
-        inset 0 1px rgba(255, 255, 255, 0.08);
-
-    animation: languageModalIn 0.25s ease;
+    padding: 0 26px 26px;
+    border-radius: 24px;
+    background: var(--fc-surface);
+    box-shadow: var(--fc-shadow-lg);
+    font-family: var(--fc-font);
+    animation: languageModalIn 0.22s ease;
+    scrollbar-width: thin;
+    scrollbar-color: #d6c6fb transparent;
 }
 
 .languageModalClose {
     position: absolute;
-
-    top: 0.8vw;
-    right: 1vw;
-
-    width: 2.5vw;
-    height: 2.5vw;
-
-    min-width: 35px;
-    min-height: 35px;
-
+    top: 18px;
+    right: 18px;
+    z-index: 1;
+    width: 36px;
+    height: 36px;
+    border: none;
     border-radius: 50%;
-
-    border: 1px solid rgba(220, 140, 255, 0.2);
-
-    background: rgba(100, 20, 160, 0.2);
-
-    color: #e5b5ff;
-
-    font-size: 1.7vw;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 20px;
     line-height: 1;
-
     cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: background 0.15s ease;
 }
 
 .languageModalClose:hover {
-    background: rgba(180, 50, 255, 0.3);
-
-    transform: rotate(90deg);
-
-    box-shadow:
-        0 0 15px rgba(180, 60, 255, 0.4);
+    background: rgba(255, 255, 255, 0.34);
 }
 
+/* purple band across the top of the modal */
 .languageModalHeader {
     display: flex;
-
     align-items: center;
-
-    gap: 1.2vw;
-
-    margin-bottom: 1.8vw;
-
-    padding-right: 3vw;
+    gap: 14px;
+    margin: 0 -26px 20px;
+    padding: 22px 70px 22px 26px;
+    background:
+        radial-gradient(circle at 90% 120%, rgba(255, 140, 230, 0.35), transparent 50%),
+        var(--fc-grad);
 }
 
 .languageModalIcon {
     display: flex;
-
     justify-content: center;
     align-items: center;
-
     flex-shrink: 0;
-
-    width: 4.5vw;
-    height: 4.5vw;
-
-    min-width: 55px;
-    min-height: 55px;
-
-    border-radius: 1vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(180, 50, 255, 0.35),
-            rgba(70, 30, 200, 0.25)
-        );
-
-    border: 1px solid rgba(210, 120, 255, 0.3);
-
-    box-shadow:
-        0 0 20px rgba(150, 40, 255, 0.25),
-        inset 0 1px rgba(255, 255, 255, 0.1);
-
-    font-size: 2.2vw;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    color: #ffffff;             /* the same white globe as the header button */
 }
 
 .languageModalHeader h2 {
     margin: 0;
-
-    color: #df9cff;
-
-    font-size: 1.8vw;
-
-    text-shadow:
-        0 0 8px rgba(190, 60, 255, 0.5);
+    color: #ffffff;
+    font-size: clamp(19px, 1.6vw, 24px);
+    font-weight: 800;
 }
 
 .languageModalHeader p {
-    margin: 0.4vw 0 0;
-
-    color: rgba(220, 200, 235, 0.65);
-
-    font-size: 0.95vw;
+    margin: 4px 0 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 14px;
 }
 
 .languageGrid {
     display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 0.7vw;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
 }
 
 .languageOption {
     display: flex;
-
     align-items: center;
-
-    gap: 0.8vw;
-
-    min-height: 4.5vw;
-
-    padding: 0.7vw 1vw;
-
-    border-radius: 0.8vw;
-
-    border: 1px solid rgba(160, 60, 255, 0.12);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(80, 25, 130, 0.18),
-            rgba(30, 10, 70, 0.2)
-        );
-
-    color: white;
-
-    cursor: pointer;
-
+    gap: 12px;
+    min-height: 60px;
+    padding: 10px 12px;
+    border: 1px solid var(--fc-accent-line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #faf7ff);
+    color: var(--fc-text);
+    font-family: var(--fc-font);
     text-align: left;
-
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .languageOption:hover {
+    border-color: var(--fc-accent);
+    background: var(--fc-accent-soft);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.16);
     transform: translateY(-2px);
-
-    border-color: rgba(190, 70, 255, 0.55);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(150, 40, 230, 0.28),
-            rgba(60, 20, 120, 0.3)
-        );
-
-    box-shadow:
-        0 0 15px rgba(150, 40, 255, 0.2),
-        inset 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .languageOption:active {
-    transform: translateY(0) scale(0.98);
+    transform: scale(0.98);
 }
 
 .languageFlag {
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    width: 2.5vw;
-    height: 2.5vw;
-
-    min-width: 35px;
-    min-height: 35px;
-
-    border-radius: 0.6vw;
-
-    background: rgba(255, 255, 255, 0.04);
-
-    font-size: 1.7vw;
-
-    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--fc-accent-soft);
+    font-size: 22px;
+    transition: transform 0.15s ease;
 }
 
 .languageOption:hover .languageFlag {
-    transform: scale(1.12);
+    transform: scale(1.1);
 }
 
 .languageNames {
     display: flex;
-
     flex-direction: column;
-
     min-width: 0;
 }
 
 .languageName {
-    color: #f1dfff;
-
-    font-size: 1vw;
+    color: var(--fc-text);
+    font-size: 15px;
     font-weight: 600;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .languageEnglishName {
-    margin-top: 0.15vw;
-
-    color: rgba(210, 190, 225, 0.45);
-
-    font-size: 0.72vw;
-
+    margin-top: 2px;
+    color: var(--fc-muted);
+    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.languageModal::-webkit-scrollbar {
-    width: 7px;
-}
-
-.languageModal::-webkit-scrollbar-track {
-    background: rgba(20, 5, 35, 0.5);
-    border-radius: 10px;
-}
-
+.languageModal::-webkit-scrollbar { width: 6px; }
+.languageModal::-webkit-scrollbar-track { background: transparent; }
 .languageModal::-webkit-scrollbar-thumb {
-    background:
-        linear-gradient(
-            #a52cff,
-            #6416d8
-        );
-
+    background: #d6c6fb;
     border-radius: 10px;
-}
-
-.languageModal::-webkit-scrollbar-thumb:hover {
-    background:
-        linear-gradient(
-            #c04cff,
-            #8125ed
-        );
 }
 
 @keyframes languageOverlayIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes languageModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
 }
+
+/* ---------------- phone ---------------- */
 
 @media all and (max-width: 768px) {
 
-    .start {
-        width: 100vw;
-        height: 10vh;
-
-        padding: 0;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        box-sizing: border-box;
-    }
-
     .menu {
-        width: 94vw;
+        width: 100%;
         height: 100%;
-
+        padding: 0 12px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-
-        gap: 2vw;
+        align-items: center;
+        gap: 8px;
     }
 
     .logoOfSite {
-        display: flex;
-        align-items: center;
-
         margin-left: 0;
-
         min-width: 0;
     }
 
     .siteName {
-        font-size: 5.5vw;
-        line-height: 1;
-
+        font-size: 22px;
         white-space: nowrap;
-
-        letter-spacing: 0.02em;
     }
 
     .sitePic {
-        width: 9vw;
-        height: 9vw;
+        width: 34px;
+        height: 34px;
     }
 
     .startSettings {
-        display: flex;
-
-        align-items: center;
-        justify-content: flex-end;
-
         margin-left: auto;
+        gap: 6px;
     }
 
     .btnsDiv {
-        width: auto;
-
-        display: flex;
-
-        align-items: center;
-        justify-content: flex-end;
-
-        gap: 1.5vw;
+        gap: 6px;
     }
 
     .btn {
-        padding: 2vw 2.8vw;
-
-        min-height: 5.5vw;
-
-        border-radius: 5vw;
-
-        font-size: 3vw;
-        line-height: 1;
-
-        white-space: nowrap;
-
-        box-sizing: border-box;
+        padding: 8px 13px;
+        font-size: 13px;
     }
 
-    .languageButton {
-        width: 9vw;
-        height: 9vw;
-
-        min-width: 9vw;
-        min-height: 9vw;
-
-        padding: 0;
+    /* phones: the account pill is 32px avatar + 3px padding = 38px */
+    .languageButton,
+    .settingsButton {
+        width: 38px;
+        height: 38px;
     }
 
-    .modeButtonImg {
-        width: 8vw;
+    .sidebarToggleBtn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
 
-        min-width: 8vw;
-        max-width: 8vw;
-
-        height: 8vw;
+    .languageIcon,
+    .settingsIcon {
+        width: 20px;
+        height: 20px;
     }
 
     .languageModalOverlay {
-        padding: 3vw;
+        padding: 12px;
     }
 
     .languageModal {
-        width: 94vw;
-        max-width: none;
-
-        max-height: 84vh;
-
-        padding: 4vw;
-
-        border-radius: 4vw;
-    }
-
-    .languageModalClose {
-        top: 2vw;
-        right: 2vw;
-
-        width: 8vw;
-        height: 8vw;
-
-        min-width: 8vw;
-        min-height: 8vw;
-
-        font-size: 5vw;
+        width: 100%;
+        padding: 0 16px 18px;
+        border-radius: 20px;
     }
 
     .languageModalHeader {
-        gap: 2.5vw;
-
-        margin-bottom: 4vw;
-
-        padding-right: 9vw;
-    }
-
-    .languageModalIcon {
-        width: 12vw;
-        height: 12vw;
-
-        min-width: 12vw;
-        min-height: 12vw;
-
-        border-radius: 2.5vw;
-
-        font-size: 6vw;
-    }
-
-    .languageModalHeader h2 {
-        font-size: 5vw;
-    }
-
-    .languageModalHeader p {
-        margin-top: 0.8vw;
-
-        font-size: 2.8vw;
+        margin: 0 -16px 16px;
+        padding: 18px 60px 18px 16px;
     }
 
     .languageGrid {
-        grid-template-columns: repeat(2, 1fr);
-
-        gap: 1.5vw;
-    }
-
-    .languageOption {
-        min-height: 12vw;
-
-        padding: 1.8vw 2vw;
-
-        gap: 2vw;
-
-        border-radius: 2vw;
-    }
-
-    .languageFlag {
-        width: 7vw;
-        height: 7vw;
-
-        min-width: 7vw;
-        min-height: 7vw;
-
-        border-radius: 1.5vw;
-
-        font-size: 4.5vw;
-    }
-
-    .languageName {
-        font-size: 2.8vw;
-    }
-
-    .languageEnglishName {
-        margin-top: 0.3vw;
-
-        font-size: 2vw;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media all and (max-width: 480px) {
 
-    .start {
-        height: 10vh;
-    }
-
-    .menu {
-        width: 94vw;
-
-        gap: 1.5vw;
-    }
-
     .siteName {
-        font-size: 5vw;
-    }
-
-    .sitePic {
-        width: 8vw;
-        height: 8vw;
-    }
-
-    .btnsDiv {
-        gap: 1vw;
+        font-size: 19px;
     }
 
     .btn {
-        padding: 1.8vw 2.3vw;
-
-        min-height: 5vw;
-
-        font-size: 2.7vw;
-
-        border-radius: 5vw;
-    }
-
-    .languageButton {
-        width: 8vw;
-        height: 8vw;
-
-        min-width: 8vw;
-        min-height: 8vw;
-    }
-
-    .modeButtonImg {
-        width: 7vw;
-
-        min-width: 7vw;
-        max-width: 7vw;
-
-        height: 7vw;
-    }
-
-    .languageModal {
-        width: 94vw;
-
-        padding: 4vw;
-
-        border-radius: 4vw;
+        padding: 7px 11px;
+        font-size: 12px;
     }
 
     .languageGrid {
@@ -763,37 +523,16 @@
     }
 }
 
-@media all and (max-width: 360px) {
-
-    .siteName {
-        font-size: 4.7vw;
+@media (prefers-reduced-motion: reduce) {
+    .languageModalOverlay,
+    .languageModal {
+        animation: none;
     }
 
-    .sitePic {
-        width: 7vw;
-        height: 7vw;
-    }
-
-    .btn {
-        padding: 1.6vw 2vw;
-
-        font-size: 2.5vw;
-    }
-
-    .languageButton {
-        width: 7vw;
-        height: 7vw;
-
-        min-width: 7vw;
-        min-height: 7vw;
-    }
-
-    .modeButtonImg {
-        width: 6.2vw;
-
-        min-width: 6.2vw;
-        max-width: 6.2vw;
-
-        height: 6.2vw;
+    .sidebarTogglePanel,
+    .sidebarToggleArrow,
+    .languageIconMeridians,
+    .settingsIconGear {
+        transition: none;
     }
 }

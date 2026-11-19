@@ -1,394 +1,216 @@
+/* =========================================================
+   FunChat – profile menu (purple)
+   Sits on the purple header, so the name is white.
+   ========================================================= */
+
+/* colors come from app.css */
+
 .userProfile {
     position: relative;
-    width: 10vw;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-right: 2vw;
+    align-items: flex-end;
+    margin-right: 0;
+    font-family: var(--fc-font);
 }
 
+/* glassy pill on the purple bar */
 .profile {
     display: flex;
     align-items: center;
-    gap: 1vw;
+    gap: 10px;
+    padding: 4px 4px 4px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
     cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profile:hover {
+    background: rgba(255, 255, 255, 0.26);
 }
 
 .username {
-    font-size: 1.6vw;
-
-    color: #d58aff;
-
-    font-family: Gill Sans, sans-serif;
-
-    text-shadow:
-        0 0 8px rgba(180, 60, 255, 0.4);
+    max-width: 180px;
+    color: #ffffff;
+    font-size: clamp(14px, 1.1vw, 16px);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profileAvatar {
-    width: 3.5vw;
-    height: 3.5vw;
-
-    min-width: 45px;
-    min-height: 45px;
-
-    border-radius: 50%;
-
-    overflow: hidden;
-
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;   /* the avatar is the <img> itself, so it must not stretch */
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
 .profileAvatar img {
+    display: block;
     width: 100%;
     height: 100%;
-
     object-fit: cover;
-
-    display: block;
 }
 
+/* dropdown card */
 .profileSettings {
     position: absolute;
     top: 100%;
-    margin-top: 1vh;
-
+    right: 0;
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1vw;
-
-    width: 12vw;
-    padding: 1vw;
-
-    animation: moveProfileSettings 0.3s ease forwards;
-
-    background:
-        radial-gradient(
-            circle at 20% 10%,
-            rgba(210, 70, 255, 0.2),
-            transparent 40%
-        ),
-        linear-gradient(
-            145deg,
-            #17052c,
-            #2b0750 55%,
-            #16052d
-        );
-
-    border: 1px solid rgba(200, 80, 255, 0.3);
-
-    border-radius: 1vw;
-
-    box-shadow:
-        0 0 25px rgba(120, 20, 255, 0.25),
-        inset 0 1px rgba(255, 255, 255, 0.08);
+    align-items: stretch;
+    gap: 8px;
+    width: 250px;
+    padding: 0 14px 14px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: var(--fc-surface);
+    border-radius: 20px;
+    box-shadow: var(--fc-shadow-lg);
+    animation: moveProfileSettings 0.18s ease forwards;
 }
 
+/* purple band with the name at the top of the card */
 .settingsUserName {
-    font-size: 1.5vw;
-    color: #f0d9ff;
+    margin: 0 -14px 6px;
+    padding: 18px 14px;
+    background:
+        radial-gradient(circle at 90% 130%, rgba(255, 140, 230, 0.4), transparent 55%),
+        var(--fc-grad);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    text-shadow:
-        0 0 8px rgba(200, 80, 255, 0.35);
+.userFriendCode {
+    padding: 9px 10px;
+    border: 1px dashed var(--fc-accent-line);
+    border-radius: 12px;
+    background: #faf7ff;
+    color: var(--fc-accent-dark);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    word-break: break-word;
+}
+
+.quitBtn,
+.deleteBtn {
+    width: 100%;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--fc-font);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .quitBtn {
-    padding: 1vw;
-    color: white;
-    font-size: 1.2vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid rgba(220, 140, 255, 0.3);
-
-    cursor: pointer;
-    border-radius: 2vw;
-
-    box-shadow:
-        0 0 12px rgba(160, 40, 255, 0.2);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    background: var(--fc-grad);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(109, 63, 224, 0.3);
 }
 
 .quitBtn:hover {
+    box-shadow: 0 6px 18px rgba(109, 63, 224, 0.4);
     transform: translateY(-1px);
-
-    box-shadow:
-        0 0 18px rgba(180, 60, 255, 0.4);
 }
 
+/* delete account is destructive, so it stays red */
 .deleteBtn {
-    padding: 1vw;
-    color: white;
-    font-size: 1.2vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid rgba(220, 140, 255, 0.3);
-
-    cursor: pointer;
-    border-radius: 2vw;
-
-    box-shadow:
-        0 0 12px rgba(160, 40, 255, 0.2);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    background: var(--fc-danger-soft);
+    color: var(--fc-danger);
 }
 
 .deleteBtn:hover {
-    transform: translateY(-1px);
+    background: var(--fc-danger);
+    color: #ffffff;
+}
 
-    box-shadow:
-        0 0 18px rgba(180, 60, 255, 0.4);
+.quitBtn:active,
+.deleteBtn:active {
+    transform: scale(0.98);
+}
+
+.deleteBtn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.profile:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+.quitBtn:focus-visible,
+.deleteBtn:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 2px;
 }
 
 @keyframes moveProfileSettings {
-    from {
-        opacity: 0;
-        transform: translateY(-5vh);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
 }
+
+/* ---------------- phone ---------------- */
 
 @media all and (max-width: 768px) {
 
     .userProfile {
-        width: auto;
-
         margin-right: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .profile {
-        display: flex;
-        align-items: center;
-
-        gap: 1.5vw;
-
-        cursor: pointer;
+        gap: 6px;
+        padding: 3px 3px 3px 10px;
     }
 
     .username {
-        font-size: 3.5vw;
-
-        white-space: nowrap;
-
-        color: #d58aff;
-
-        text-shadow:
-            0 0 8px rgba(180, 60, 255, 0.4);
+        max-width: 120px;
+        font-size: 14px;
     }
 
     .profileAvatar {
-        width: 8vw;
-        height: 8vw;
-
-        min-width: 8vw;
-        min-height: 8vw;
-
-        border: none;
-
-        border-radius: 50%;
-
-        overflow: hidden;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 32px;
+        height: 32px;
     }
 
     .profileSettings {
-        position: absolute;
-
-        top: 100%;
-        right: 0;
-
-        margin-top: 1.5vh;
-
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-
-        gap: 1.5vh;
-
-        width: 38vw;
-
-        padding: 3vw;
-
-        box-sizing: border-box;
-
-        background:
-            radial-gradient(
-                circle at 20% 10%,
-                rgba(210, 70, 255, 0.2),
-                transparent 40%
-            ),
-            linear-gradient(
-                145deg,
-                #17052c,
-                #2b0750 55%,
-                #16052d
-            );
-
-        border: 1px solid rgba(200, 80, 255, 0.3);
-
-        border-radius: 3vw;
-
-        box-shadow:
-            0 0 25px rgba(120, 20, 255, 0.25),
-            inset 0 1px rgba(255, 255, 255, 0.08);
-
-        animation: moveProfileSettings 0.3s ease forwards;
-    }
-
-    .settingsUserName {
-        font-size: 3.5vw;
-
-        text-align: center;
-
-        color: #f0d9ff;
-
-        text-shadow:
-            0 0 8px rgba(200, 80, 255, 0.35);
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .userFriendCode {
-        font-size: 3vw;
-
-        padding: 2vw;
-
-        text-align: center;
-
-        word-break: break-word;
-    }
-
-    .quitBtn,
-    .deleteBtn {
-        width: 100%;
-
-        padding: 2.2vw;
-
-        font-size: 3.2vw;
-
-        border-radius: 5vw;
-
-        box-sizing: border-box;
-    }
-}
-
-@media all and (max-width: 480px) {
-
-    .profile {
-        gap: 1.2vw;
-    }
-
-    .username {
-        font-size: 3.2vw;
-    }
-
-    .profileAvatar {
-        width: 8vw;
-        height: 8vw;
-
-        min-width: 8vw;
-        min-height: 8vw;
-    }
-
-    .profileSettings {
-        width: 42vw;
-
-        padding: 3vw;
-
-        gap: 1.5vh;
-
-        border-radius: 3.5vw;
-    }
-
-    .settingsUserName {
-        font-size: 3.5vw;
-    }
-
-    .userFriendCode {
-        font-size: 2.8vw;
-
-        padding: 2vw;
-    }
-
-    .quitBtn,
-    .deleteBtn {
-        padding: 2vw;
-
-        font-size: 3vw;
-
-        border-radius: 5vw;
+        width: min(260px, calc(100vw - 24px));
     }
 }
 
 @media all and (max-width: 360px) {
 
     .profile {
-        gap: 1vw;
+        padding: 3px;
     }
 
     .username {
-        font-size: 3vw;
+        display: none;
     }
+}
 
-    .profileAvatar {
-        width: 7.5vw;
-        height: 7.5vw;
-
-        min-width: 7.5vw;
-        min-height: 7.5vw;
-    }
-
+@media (prefers-reduced-motion: reduce) {
     .profileSettings {
-        width: 45vw;
-
-        padding: 2.5vw;
-    }
-
-    .settingsUserName {
-        font-size: 3.2vw;
-    }
-
-    .userFriendCode {
-        font-size: 2.6vw;
-    }
-
-    .quitBtn,
-    .deleteBtn {
-        padding: 1.8vw;
-
-        font-size: 2.8vw;
+        animation: none;
     }
 }

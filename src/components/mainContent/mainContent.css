@@ -1,11 +1,110 @@
-.mainContent {
+/* =========================================================
+   FunChat – page layout: chat list + chat
+   The chat list and the chat are always side by side,
+   on computers, tablets and phones.
+   On small phones the list shrinks to a rail of avatars.
+   The button left of the logo hides the list (full chat screen).
+   ========================================================= */
+
+   .mainContent {
     display: grid;
-    grid-template-columns: 15vw 85vw;
+    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    width: 100%;
+    transition: grid-template-columns 0.28s ease;
 }
 
-@media all and (max-width: 768px) {
+/* lets the list shrink to nothing without its content spilling out */
+.mainContent > .sideBar {
+    min-width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease, visibility 0s linear 0s;
+}
 
+/* chat list and chat each get their own column, the console shares the
+   chat list's spot (same grid cell) and sits at its bottom */
+.mainContent > .sideBar {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.mainContent > .main {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.mainContent > .console {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    z-index: 5;
+    min-width: 0;
+    margin: 0 10px 10px;
+}
+
+/* the last chats can still be scrolled out from under the console */
+.mainContent > .sideBar .chats {
+    padding-bottom: 70px;
+}
+
+/* tablets */
+@media all and (max-width: 1024px) {
     .mainContent {
-        grid-template-columns: 20vw 80vw;
+        grid-template-columns: 260px minmax(0, 1fr);
+    }
+}
+
+/* phones: narrower list, chat still next to it */
+@media all and (max-width: 768px) {
+    .mainContent {
+        grid-template-columns: 200px minmax(0, 1fr);
+    }
+}
+
+/* small phones: the list becomes a rail of avatars */
+@media all and (max-width: 520px) {
+    .mainContent {
+        grid-template-columns: 76px minmax(0, 1fr);
+    }
+}
+
+/* small phones: the chat list is only avatars, too narrow for text →
+   the console floats at the bottom-left, over the chat */
+@media all and (max-width: 520px) {
+    .mainContent > .console {
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        width: min(320px, calc(100vw - 20px));
+        margin: 0;
+    }
+}
+
+/* ---------------- full chat screen mode ---------------- */
+
+/* wins over all the sizes above (two classes beat one) */
+.mainContent.sideBarHidden {
+    grid-template-columns: 0px minmax(0, 1fr);
+}
+
+/* chat list hidden → the console floats at the bottom-left, over the chat */
+.mainContent.sideBarHidden > .console {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    width: min(320px, calc(100vw - 20px));
+    margin: 0;
+}
+
+.mainContent.sideBarHidden > .sideBar {
+    opacity: 0;
+    visibility: hidden;      /* can't be clicked or tabbed into while hidden */
+    border-right: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mainContent,
+    .mainContent > .sideBar {
+        transition: none;
     }
 }

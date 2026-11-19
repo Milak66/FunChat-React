@@ -1,284 +1,202 @@
 import React, { useState } from "react";
 import Cropper from "react-easy-crop";
+import { useSelector } from "react-redux";
 import "./avatarEditor.css";
 
-import {
-    getCroppedImg,
-    PixelCrop
-} from "./cropImage";
+import { RootState } from "../store/store.tsx";
+import { avatarUrl, handleAvatarError } from "./avatarUrl.ts";
+
+import { getCroppedImg, PixelCrop } from "./cropImage.ts";
 
 interface AvatarEditorProps {
-    userId: number | null;
-    currentAvatar?: string | null;
-    onAvatarChanged?: (avatar: string) => void;
+  userId: number | null;
+  currentAvatar?: string | null;
+  onAvatarChanged?: (avatar: string) => void;
 }
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 const AvatarEditor: React.FC<AvatarEditorProps> = ({
-    userId,
-    currentAvatar,
-    onAvatarChanged
+  userId,
+  currentAvatar,
+  onAvatarChanged,
 }) => {
+  const texts = useSelector((state: RootState) => state.reduser.texts);
 
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-    const [crop, setCrop] = useState({
-        x: 0,
-        y: 0
-    });
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
 
-    const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(1);
 
-    const [croppedAreaPixels, setCroppedAreaPixels] =
-        useState<PixelCrop | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<PixelCrop | null>(
+    null
+  );
 
-    const [isUploading, setIsUploading] =
-        useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
 
-    const handleFileSelect = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    // lets you pick the same file again after cancelling
+    event.target.value = "";
 
-        const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
 
-        if (!file) {
-            return;
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return;
+    }
+
+    setSelectedImage(URL.createObjectURL(file));
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+  };
+
+  const handleCropComplete = (_: unknown, areaPixels: PixelCrop) => {
+    setCroppedAreaPixels(areaPixels);
+  };
+
+  const closeEditor = () => {
+    if (selectedImage) {
+      URL.revokeObjectURL(selectedImage);
+    }
+
+    setSelectedImage(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCroppedAreaPixels(null);
+  };
+
+  const saveAvatar = async () => {
+    if (!selectedImage || !croppedAreaPixels || !userId) {
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+
+      const croppedBlob = await getCroppedImg(selectedImage, croppedAreaPixels);
+
+      const formData = new FormData();
+      formData.append("avatar", croppedBlob, "avatar.webp");
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/${userId}/avatar`,
+        {
+          method: "PATCH",
+          body: formData,
         }
+      );
 
+      const data = await response.json().catch(() => ({}));
 
-        if (!file.type.startsWith("image/")) {
-            alert("Please select an image");
-            return;
-        }
+      if (!response.ok) {
+        throw new Error(data.message || `Upload failed (${response.status})`);
+      }
 
-        if (file.size > 10 * 1024 * 1024) {
-            alert("Image must be smaller than 10MB");
-            return;
-        }
+      onAvatarChanged?.(data.avatar);
 
-        const imageUrl = URL.createObjectURL(file);
+      closeEditor();
 
-        setSelectedImage(imageUrl);
+    } catch (error) {
+      console.error("Avatar upload failed:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-        setCrop({
-            x: 0,
-            y: 0
-        });
+  return (
+    <>
+      <div className="avatarEditor">
+        <label className="avatarPreview">
+          {currentAvatar ? (
+            <img
+              src={avatarUrl(currentAvatar)}
+              alt=""
+              onError={handleAvatarError}
+            />
+          ) : (
+            <div className="avatarPlaceholder">+</div>
+          )}
 
-        setZoom(1);
-    };
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleFileSelect}
+            hidden
+          />
+        </label>
 
-    const handleCropComplete = (
-        _: any,
-        croppedAreaPixels: PixelCrop
-    ) => {
+        <div className="avatarHint">{texts.changeAvatarText}</div>
+      </div>
 
-        setCroppedAreaPixels(croppedAreaPixels);
-    };
+      {selectedImage && (
+        <div className="avatarModal">
+          <div className="avatarModalContent">
+            <div className="avatarModalTitle">{texts.changeAvatarText}</div>
 
-    const saveAvatar = async () => {
-
-        if (!selectedImage || !croppedAreaPixels) {
-            return;
-        }
-
-        try {
-
-            setIsUploading(true);
-
-            const croppedBlob = await getCroppedImg(
-                selectedImage,
-                croppedAreaPixels
-            );
-
-            const formData = new FormData();
-
-            formData.append(
-                "avatar",
-                croppedBlob,
-                "avatar.webp"
-            );
-
-            const response = await fetch(
-                `${import.meta.env.SERVER_URL}/users/${userId}/avatar`,
-                {
-                    method: "PATCH",
-                    body: formData
-                }
-            );
-
-            if (!response.ok) {
-
-                const message =
-                    await response.text();
-
-                throw new Error(message);
-            }
-
-            const data = await response.json();
-
-            if (onAvatarChanged) {
-                onAvatarChanged(data.avatar);
-            }
-
-            closeEditor();
-
-        } catch (error) {
-
-            console.error(
-                "Avatar upload failed:",
-                error
-            );
-
-            alert("Failed to upload avatar");
-
-        } finally {
-
-            setIsUploading(false);
-        }
-    };
-
-    const closeEditor = () => {
-
-        if (selectedImage) {
-            URL.revokeObjectURL(selectedImage);
-        }
-
-        setSelectedImage(null);
-
-        setCrop({
-            x: 0,
-            y: 0
-        });
-
-        setZoom(1);
-
-        setCroppedAreaPixels(null);
-    };
-
-
-    return (
-        <>
-            <div className="avatarEditor">
-                <label
-                    className="avatarPreview"
-                >
-                    {currentAvatar ? (
-                        <img
-                            src={`${import.meta.env.SERVER_URL}${currentAvatar}`}
-                            alt="Avatar"
-                        />
-                    ) : (
-                        <div className="avatarPlaceholder">
-                            +
-                        </div>
-                    )}
-                    <input
-                        type="file"
-                        accept="image/png,image/jpeg,image/webp"
-                        onChange={handleFileSelect}
-                        hidden
-                    />
-                </label>
-                <div className="avatarHint">
-                    Change avatar
-                </div>
+            <div className="cropContainer">
+              <Cropper
+                image={selectedImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                minZoom={1}
+                maxZoom={4}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={handleCropComplete}
+              />
             </div>
-            {selectedImage && (
-                <div className="avatarModal">
-                    <div className="avatarModalContent">
-                        <div className="avatarModalTitle">
-                            Choose your avatar
-                        </div>
-                        <div className="cropContainer">
-                            <Cropper
-                                image={selectedImage}
-                                crop={crop}
 
-                                zoom={zoom}
+            <div className="zoomContainer">
+              <span>−</span>
 
-                                aspect={1}
+              <input
+                type="range"
+                min="1"
+                max="4"
+                step="0.01"
+                value={zoom}
+                aria-label="Zoom"
+                onChange={(event) => setZoom(Number(event.target.value))}
+              />
 
-                                cropShape="round"
+              <span>+</span>
+            </div>
 
-                                showGrid={false}
+            <div className="avatarModalButtons">
+              <button
+                type="button"
+                className="avatarCancelButton"
+                onClick={closeEditor}
+                disabled={isUploading}
+              >
+                {texts.cancelAvatarText}
+              </button>
 
-                                minZoom={1}
-
-                                maxZoom={4}
-
-                                onCropChange={setCrop}
-
-                                onZoomChange={setZoom}
-
-                                onCropComplete={
-                                    handleCropComplete
-                                }
-                            />
-
-                        </div>
-
-
-                        <div className="zoomContainer">
-
-                            <span>
-                                −
-                            </span>
-
-                            <input
-                                type="range"
-                                min="1"
-                                max="4"
-                                step="0.01"
-                                value={zoom}
-                                onChange={(event) =>
-                                    setZoom(
-                                        Number(
-                                            event.target.value
-                                        )
-                                    )
-                                }
-                            />
-
-                            <span>
-                                +
-                            </span>
-
-                        </div>
-
-
-                        <div className="avatarModalButtons">
-
-                            <button
-                                type="button"
-                                className="avatarCancelButton"
-                                onClick={closeEditor}
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                type="button"
-                                className="avatarSaveButton"
-                                onClick={saveAvatar}
-                                disabled={isUploading}
-                            >
-                                {isUploading
-                                    ? "Saving..."
-                                    : "Save"
-                                }
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            )}
-
-        </>
-    );
+              <button
+                type="button"
+                className="avatarSaveButton"
+                onClick={saveAvatar}
+                disabled={isUploading}
+              >
+                {isUploading ? "..." : texts.saveAvatarText}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default AvatarEditor;

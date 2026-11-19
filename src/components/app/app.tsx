@@ -9,18 +9,16 @@ import {
   onSetLogOnModal,
   onSetUserStatus,
   onSetUser,
-  onSetUserId
+  onSetUserId,
 } from "../reduser/reduser";
-import Loading from "../animations/loading/loading";
-import Start from "../start/start";
-import LogIn from "../register/register";
-import LogOn from "../logIn/logIn";
-import MainContent from "../mainContent/mainContent";
-import AddChat from "../addChat/addChat";
-import { EmojiModal } from "../hooks/emojiModal";
+import Loading from "../animations/loading/Loading";
+import Start from "../start/Start";
+import LogIn from "../register/Register";
+import LogOn from "../logOn/LogOn";
+import MainContent from "../mainContent/MainContent";
+import AddChat from "../addChat/AddChat";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { connectSocket, disconnectSocket } from "../socket/socket";
-import { useEmojiModal } from "../hooks/useEmojiHook";
 
 interface AppProps {}
 
@@ -29,10 +27,6 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
 
   const loading = useSelector((state: RootState) => state.reduser.loading);
 
-  const emojiModal = useSelector(
-    (state: RootState) => state.reduser.emojiModal
-  );
-
   const isLoginInModalOpen = useSelector(
     (state: RootState) => state.reduser.isLogInModalOpen
   );
@@ -40,8 +34,6 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
   const isLogOnModalOpen = useSelector(
     (state: RootState) => state.reduser.isLogOnModalOpen
   );
-
-  const { showEmoji } = useEmojiModal();
 
   async function fetchAccount(id: number | null) {
     if (!id) {
@@ -55,8 +47,13 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
       );
 
       if (!response.ok) {
+        // the account no longer exists → forget it on this device
+        if (response.status === 404) {
+          localStorage.removeItem("userId");
+          dispatch(onSetUserId(null));
+        }
+
         dispatch(onSetLoading(false));
-        showEmoji(":(", "red", "Couldn't connect you to your account");
         return;
       }
 
@@ -124,13 +121,6 @@ const App: React.FC<AppProps> = (): React.JSX.Element => {
                 <div className="app">
                   <div className="startPlace">
                     <Start />
-                    {emojiModal.isOpen && (
-                      <EmojiModal
-                        emoji={emojiModal.emoji}
-                        color={emojiModal.color}
-                        text={emojiModal.text}
-                      />
-                    )}
                   </div>
 
                   {isLoginInModalOpen ? (

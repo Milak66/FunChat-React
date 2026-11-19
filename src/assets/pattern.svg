@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- speech bubble with dots -->
+  <g transform="translate(30 30) rotate(-12)">
+    <path d="M0 6a10 10 0 0 1 10-10h32a10 10 0 0 1 10 10v18a10 10 0 0 1-10 10H18l-12 10 3-11A10 10 0 0 1 0 24z"/>
+    <circle cx="15" cy="15" r="1.6" fill="#000"/><circle cx="26" cy="15" r="1.6" fill="#000"/><circle cx="37" cy="15" r="1.6" fill="#000"/>
+  </g>
+  <!-- heart -->
+  <g transform="translate(140 40) rotate(14)">
+    <path d="M16 30S0 20 0 9a8 8 0 0 1 16-3 8 8 0 0 1 16 3c0 11-16 21-16 21z"/>
+  </g>
+  <!-- smiley -->
+  <g transform="translate(232 28)">
+    <circle cx="18" cy="18" r="18"/><circle cx="12" cy="14" r="1.8" fill="#000"/><circle cx="24" cy="14" r="1.8" fill="#000"/>
+    <path d="M10 22c4 6 12 6 16 0"/>
+  </g>
+  <!-- star -->
+  <g transform="translate(330 36) rotate(-18)">
+    <path d="M16 0l5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z"/>
+  </g>
+  <!-- music notes -->
+  <g transform="translate(418 30) rotate(10)">
+    <path d="M8 30V4l20-4v26"/><circle cx="4" cy="30" r="4.5"/><circle cx="24" cy="26" r="4.5"/>
+  </g>
+
+  <!-- cloud -->
+  <g transform="translate(86 112) rotate(-6)">
+    <path d="M10 26a10 10 0 0 1 2-20 14 14 0 0 1 26 2 9 9 0 0 1 4 18z"/>
+  </g>
+  <!-- lightning -->
+  <g transform="translate(196 104) rotate(12)">
+    <path d="M14 0L2 20h10l-4 18 16-24H14l4-14z"/>
+  </g>
+  <!-- coffee cup -->
+  <g transform="translate(276 110) rotate(-10)">
+    <path d="M2 10h26v14a10 10 0 0 1-10 10h-6A10 10 0 0 1 2 24z"/><path d="M28 14h4a5 5 0 0 1 0 10h-4"/>
+    <path d="M10 0c-2 3 2 4 0 7M18 0c-2 3 2 4 0 7"/>
+  </g>
+  <!-- balloon -->
+  <g transform="translate(380 96) rotate(8)">
+    <ellipse cx="14" cy="16" rx="13" ry="16"/><path d="M12 32l2 3 2-3M14 35c-4 6 4 10 0 16"/>
+  </g>
+
+  <!-- camera -->
+  <g transform="translate(20 196) rotate(10)">
+    <rect x="0" y="6" width="40" height="28" rx="6"/><path d="M12 6l4-6h8l4 6"/><circle cx="20" cy="20" r="7"/>
+  </g>
+  <!-- ghost -->
+  <g transform="translate(120 186) rotate(-8)">
+    <path d="M0 36V16a15 15 0 0 1 30 0v20l-5-4-5 4-5-4-5 4-5-4z"/><circle cx="10" cy="15" r="1.8" fill="#000"/><circle cx="20" cy="15" r="1.8" fill="#000"/>
+  </g>
+  <!-- big chat bubble with heart -->
+  <g transform="translate(206 192) rotate(6)">
+    <path d="M24 0C11 0 0 8 0 19c0 6 3 11 8 14l-2 9 10-6c3 1 5 1 8 1 13 0 24-8 24-18S37 0 24 0z"/>
+    <path d="M24 26s-8-5-8-10a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 5-8 10-8 10z"/>
+  </g>
+  <!-- planet -->
+  <g transform="translate(316 192) rotate(-20)">
+    <circle cx="20" cy="18" r="12"/><ellipse cx="20" cy="18" rx="22" ry="6"/>
+  </g>
+  <!-- sparkle -->
+  <g transform="translate(420 196)">
+    <path d="M14 0c1 8 6 13 14 14-8 1-13 6-14 14-1-8-6-13-14-14 8-1 13-6 14-14z"/>
+  </g>
+
+  <!-- pizza slice -->
+  <g transform="translate(60 282) rotate(-14)">
+    <path d="M0 0c12-4 26-4 38 0L19 38z"/><path d="M2 6c11-3 23-3 34 0"/><circle cx="14" cy="14" r="2.5"/><circle cx="24" cy="20" r="2.5"/>
+  </g>
+  <!-- gamepad -->
+  <g transform="translate(150 290) rotate(10)">
+    <path d="M10 4h24a10 10 0 0 1 10 10l1 12a6 6 0 0 1-11 3l-3-5H13l-3 5a6 6 0 0 1-11-3l1-12A10 10 0 0 1 10 4z"/>
+    <path d="M12 12v8M8 16h8"/><circle cx="32" cy="13" r="1.6" fill="#000"/><circle cx="36" cy="19" r="1.6" fill="#000"/>
+  </g>
+  <!-- wink face -->
+  <g transform="translate(250 286) rotate(-12)">
+    <circle cx="18" cy="18" r="18"/><path d="M9 14h6"/><circle cx="24" cy="14" r="1.8" fill="#000"/>
+    <path d="M10 22c4 6 12 6 16 0"/>
+  </g>
+  <!-- headphones -->
+  <g transform="translate(338 280) rotate(8)">
+    <path d="M2 26v-6a16 16 0 0 1 32 0v6"/><rect x="0" y="22" width="8" height="14" rx="3"/><rect x="28" y="22" width="8" height="14" rx="3"/>
+  </g>
+  <!-- small hearts -->
+  <g transform="translate(430 290) rotate(-16)">
+    <path d="M8 15S0 10 0 4.5a4 4 0 0 1 8-1.5 4 4 0 0 1 8 1.5C16 10 8 15 8 15z"/>
+  </g>
+
+  <!-- envelope -->
+  <g transform="translate(24 384) rotate(8)">
+    <rect x="0" y="0" width="40" height="28" rx="4"/><path d="M2 3l18 14L38 3"/>
+  </g>
+  <!-- moon + stars -->
+  <g transform="translate(116 378) rotate(-10)">
+    <path d="M24 2A16 16 0 1 0 34 30 13 13 0 0 1 24 2z"/>
+  </g>
+  <!-- ice cream -->
+  <g transform="translate(212 372) rotate(12)">
+    <path d="M4 16a12 12 0 0 1 24 0z"/><path d="M4 16l12 26 12-26"/><path d="M10 24l12 0M12 30h8"/>
+  </g>
+  <!-- @ sign bubble -->
+  <g transform="translate(300 380) rotate(-6)">
+    <circle cx="16" cy="16" r="6"/><path d="M22 10v8a4 4 0 0 0 8 0v-2A14 14 0 1 0 22 29"/>
+  </g>
+  <!-- bell -->
+  <g transform="translate(384 376) rotate(14)">
+    <path d="M4 28h28l-4-6V14a10 10 0 0 0-20 0v8z"/><path d="M14 32a4 4 0 0 0 8 0M18 0v4"/>
+  </g>
+
+  <!-- tiny filler dots & plus -->
+  <g stroke-width="2">
+    <path d="M100 76v8M96 80h8"/><path d="M366 150v8M362 154h8"/><path d="M186 256v8M182 260h8"/>
+    <path d="M460 360v8M456 364h8"/><path d="M80 354v8M76 358h8"/><path d="M296 460v8M292 464h8"/>
+  </g>
+  <g fill="#000" stroke="none">
+    <circle cx="196" cy="76" r="2.4"/><circle cx="468" cy="132" r="2.4"/><circle cx="84" cy="248" r="2.4"/>
+    <circle cx="300" cy="258" r="2.4"/><circle cx="168" cy="452" r="2.4"/><circle cx="440" cy="452" r="2.4"/>
+  </g>
+</svg>

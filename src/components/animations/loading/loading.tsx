@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./loading.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
@@ -8,16 +8,18 @@ interface LoadingProps {}
 
 const Loading: React.FC<LoadingProps> = (): React.JSX.Element => {
   const texts = useSelector((state: RootState) => state.reduser.texts);
-
   const loadingRef = useRef<HTMLImageElement>(null);
-  let pos = 1;
-  let posAround = 1;
-  let directionUp = true;
+  const [dots, setDots] = useState<number>(1);
 
+  // logo: spin + bounce
   useEffect(() => {
     const loadingElement = loadingRef.current;
-
     if (!loadingElement) return;
+
+    let pos = 1;
+    let posAround = 1;
+    let directionUp = true;
+    let animationFrameId: number;
 
     function loadingAnimation() {
       if (directionUp) {
@@ -35,22 +37,51 @@ const Loading: React.FC<LoadingProps> = (): React.JSX.Element => {
           pos += 2;
         }
       }
-      posAround += 3;
-      loadingElement!.style.transform = `rotate(${posAround}deg)`;
-      loadingElement!.style.bottom = pos + "px";
 
-      requestAnimationFrame(loadingAnimation);
+      posAround = (posAround + 3) % 360;
+
+      if (loadingElement) {
+        loadingElement.style.transform = `rotate(${posAround}deg)`;
+        loadingElement.style.bottom = `${pos}px`;
+      }
+
+      animationFrameId = requestAnimationFrame(loadingAnimation);
     }
 
-    loadingAnimation();
+    animationFrameId = requestAnimationFrame(loadingAnimation);
 
-    return () => {};
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
+
+  // text: 1 → 2 → 3 dots, then back to 1
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDots((d) => (d % 3) + 1);
+    }, 400);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // remove dots already in the translation ("Загрузка...") so they don't double up
+  const loadingWord = (texts.loadingText ?? "").replace(/[.…]+$/, "");
 
   return (
     <div className="loading">
-      <img ref={loadingRef} className="loadingLogo" src={logo} alt="" />
-      <div className="loadingText">{texts.loadingText}</div>
+      <img ref={loadingRef} className="loadingLogo" src={logo} alt="FunChat" />
+      <div className="loadingText">
+        {loadingWord}
+        <span className="loadingDots">
+          {[1, 2, 3].map((i) => (
+            <span key={i} style={{ visibility: i <= dots ? "visible" : "hidden" }}>
+              .
+            </span>
+          ))}
+        </span>
+      </div>
     </div>
   );
 };

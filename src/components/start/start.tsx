@@ -6,10 +6,15 @@ import {
   onSetLanguage,
   onSetLogInModal,
   onSetLogOnModal,
+  onSetUser,
+  onSetSideBarOpen,
 } from "../reduser/reduser";
-import UserProfile from "../userProfile/userProfile";
-import languageImage from "../../assets/languageImage.jpg";
-import { useEmojiModal } from "../hooks/useEmojiHook";
+import { texts as translations } from "../reduser/languages";
+import UserProfile from "../userProfile/UserProfile";
+import LanguageIcon from "../images/LanguageIcon";
+import SettingsIcon from "../images/SettingsIcon";
+import { useNotify } from "../hooks/useNotify";
+import SidebarToggleIcon from "../images/SidebarToggleIcon";
 
 interface StartProps {}
 
@@ -20,7 +25,7 @@ interface Language {
   flag: string;
 }
 
-const languages: Language[] = [
+const allLanguages: Language[] = [
   { code: "en", name: "English", nativeName: "English", flag: "🇬🇧" },
   { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸" },
   { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷" },
@@ -57,6 +62,12 @@ const languages: Language[] = [
   { code: "fil", name: "Filipino", nativeName: "Filipino", flag: "🇵🇭" },
 ];
 
+// only show languages that have translations in languages.ts
+// (picking one without translations used to crash the app)
+const languages = allLanguages.filter(
+  (language) => language.code in translations
+);
+
 const Start: React.FC<StartProps> = (): React.JSX.Element => {
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
@@ -66,13 +77,25 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
 
   const user = useSelector((state: RootState) => state.reduser.user);
 
+  const userId = useSelector((state: RootState) => state.reduser.userId);
+
   const dispatch = useDispatch<AppDispatch>();
-  const { showEmoji } = useEmojiModal();
+  // errors go to the console (bottom of the chat list)
+  const notify = useNotify();
 
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
 
-  const setLanguage = async (lang: string) => {
+  // full chat screen mode: hides/shows the chat list (see mainContent)
+  const isSideBarOpen = useSelector(
+    (state: RootState) => state.reduser.isSideBarOpen
+  );
+
+  const setLanguage = async (lang: any) => {
+    setIsLanguageModalOpen(false);
+
+    // not signed in → just change it on this device
     if (!user.id) {
+      dispatch(onSetLanguage(lang));
       return;
     }
 
@@ -86,19 +109,57 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
         }
       );
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        showEmoji(":(", "red", data.message || "Couldn't change the language");
+        notify("error", data.message || "Couldn't change the language");
         return;
       }
 
       dispatch(onSetLanguage(data.language));
+      dispatch(onSetUser({ ...user, language: data.language }));
     } catch (err) {
       console.error(err);
 
-      showEmoji(":(", "red", "Server error");
+      notify("error", "Server error");
     }
+  };
+
+  const showIcons = () => {
+    if (!isUserRegister || !userId) {
+      return (
+        <button
+          className="languageButton"
+          onClick={() => setIsLanguageModalOpen(true)}
+          aria-label="Change language"
+          title="Change language"
+        >
+          <LanguageIcon />
+        </button>
+      );
+    }
+    return (
+      <>
+        <button
+          className="languageButton"
+          onClick={() => setIsLanguageModalOpen(true)}
+          aria-label="Change language"
+          title="Change language"
+        >
+          <LanguageIcon />
+        </button>
+
+        <button
+          className="settingsButton"
+          type="button"
+          onClick={() => {}}
+          aria-label="Settings"
+          title="Settings"
+        >
+          <SettingsIcon />
+        </button>
+      </>
+    );
   };
 
   const showUserOrBtn = () => {
@@ -124,21 +185,22 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
       <div className="start">
         <div className="menu">
           <div className="logoOfSite">
+            <button
+              className="sidebarToggleBtn"
+              type="button"
+              onClick={() => dispatch(onSetSideBarOpen(!isSideBarOpen))}
+              aria-label={isSideBarOpen ? "Hide chat list" : "Show chat list"}
+              aria-pressed={!isSideBarOpen}
+              title={isSideBarOpen ? "Hide chat list" : "Show chat list"}
+            >
+              <SidebarToggleIcon open={isSideBarOpen} />
+            </button>
+
             <div className="siteName">FunChat</div>
           </div>
 
           <div className="startSettings">
-            <button
-              className="languageButton"
-              onClick={() => setIsLanguageModalOpen(true)}
-              aria-label="Change language"
-            >
-              <img
-                className="modeButtonImg"
-                src={languageImage}
-                alt="Language"
-              />
-            </button>
+            {showIcons()}
           </div>
 
           {showUserOrBtn()}
@@ -153,13 +215,17 @@ const Start: React.FC<StartProps> = (): React.JSX.Element => {
           <div className="languageModal" onClick={(e) => e.stopPropagation()}>
             <button
               className="languageModalClose"
+              aria-label="Close"
               onClick={() => setIsLanguageModalOpen(false)}
             >
               ×
             </button>
 
             <div className="languageModalHeader">
-              <div className="languageModalIcon">🌐</div>
+              {/* the same globe as the header button, not the 🌐 emoji */}
+              <div className="languageModalIcon">
+                <LanguageIcon size={28} />
+              </div>
 
               <div>
                 <h2>Choose your language</h2>

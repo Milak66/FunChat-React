@@ -1,0 +1,245 @@
+/* =========================================================
+   FunChat – message options (right click / long press)
+   Frosted white card with purple accents.
+   ========================================================= */
+
+/* catches the click outside the menu; the chat dims a tiny bit */
+.messageMenuOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: rgba(40, 14, 100, 0.08);
+    animation: messageMenuOverlayIn 0.18s ease;
+}
+
+.messageMenu {
+    position: fixed;
+    width: 244px;
+    max-width: calc(100vw - 20px);
+    padding: 6px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(167, 123, 255, 0.16), transparent 55%),
+        rgba(255, 255, 255, 0.86);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    box-shadow:
+        0 18px 48px rgba(76, 31, 184, 0.24),
+        0 4px 12px rgba(76, 31, 184, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    font-family: var(--fc-font);
+    color: var(--fc-text);
+    user-select: none;
+    -webkit-user-select: none;
+    opacity: 0;               /* shown once it knows where to stand */
+}
+
+/* grows out of the spot you clicked, with a soft bounce */
+.messageMenu.placed {
+    animation: messageMenuIn 0.26s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+
+/* ---------------- header: when it was sent ---------------- */
+
+.messageMenuHeader {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 2px 4px 6px;
+    padding: 6px 8px 8px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.14);
+    color: var(--fc-muted);
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.messageMenuHeader svg {
+    flex-shrink: 0;
+    color: var(--fc-accent);
+}
+
+.messageMenuHeader span:not(.messageMenuChip) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.messageMenuChip {
+    margin-left: auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--fc-accent-soft);
+    color: var(--fc-accent-dark);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ---------------- options ---------------- */
+
+.messageMenuItems {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.messageMenuItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 6px 10px 6px 7px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--fc-text);
+    font-family: var(--fc-font);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    opacity: 0;
+    animation: messageMenuItemIn 0.24s ease forwards;
+    animation-delay: calc(0.04s + var(--i, 0) * 0.035s);
+    transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.messageMenuIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--fc-accent-soft);
+    color: var(--fc-accent-dark);
+    transition: background 0.15s ease, color 0.15s ease, transform 0.2s ease;
+}
+
+.messageMenuItem:hover,
+.messageMenuItem:focus-visible {
+    background: linear-gradient(120deg, #a77bff 0%, #8b5cf6 55%, #7a4cf0 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(109, 63, 224, 0.28);
+}
+
+.messageMenuItem:hover .messageMenuIcon,
+.messageMenuItem:focus-visible .messageMenuIcon {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    transform: scale(1.08) rotate(-6deg);
+}
+
+.messageMenuItem:active {
+    transform: scale(0.97);
+}
+
+.messageMenuDivider {
+    height: 1px;
+    margin: 4px 10px;
+    background: rgba(139, 92, 246, 0.14);
+    opacity: 0;
+    animation: messageMenuItemIn 0.24s ease forwards;
+    animation-delay: calc(0.04s + var(--i, 0) * 0.035s);
+}
+
+/* ---------------- delete (red) ---------------- */
+
+.messageMenuItem.danger {
+    color: var(--fc-danger, #e5484d);
+}
+
+.messageMenuItem.danger .messageMenuIcon {
+    background: var(--fc-danger-soft, #fdecec);
+    color: var(--fc-danger, #e5484d);
+}
+
+.messageMenuItem.danger:hover,
+.messageMenuItem.danger:focus-visible,
+.messageMenuItem.danger.confirm {
+    background: linear-gradient(120deg, #ff6b70 0%, #e5484d 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(229, 72, 77, 0.3);
+}
+
+.messageMenuItem.danger:hover .messageMenuIcon,
+.messageMenuItem.danger:focus-visible .messageMenuIcon,
+.messageMenuItem.danger.confirm .messageMenuIcon {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+/* "Tap again to delete": the trash can wiggles */
+.messageMenuItem.danger.confirm .messageMenuIcon {
+    animation: messageMenuWiggle 0.5s ease;
+}
+
+.messageMenuItem.danger.confirm {
+    font-size: 14px;
+}
+
+/* ---------------- the message you opened the menu for ---------------- */
+
+/* the bubble lifts up and glows while its menu is open */
+.message.messageSelected .messageContent {
+    transform: scale(1.025);
+    filter:
+        drop-shadow(0 6px 14px rgba(109, 63, 224, 0.35))
+        brightness(1.04);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* phones: no text selection popup or link preview while holding a message */
+@media (hover: none) {
+    .message .messageContent {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
+/* ---------------- animations ---------------- */
+
+@keyframes messageMenuOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes messageMenuIn {
+    from { opacity: 0; transform: scale(0.82); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes messageMenuItemIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes messageMenuWiggle {
+    0%, 100% { transform: rotate(0); }
+    20%      { transform: rotate(-14deg); }
+    40%      { transform: rotate(12deg); }
+    60%      { transform: rotate(-8deg); }
+    80%      { transform: rotate(5deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .messageMenuOverlay,
+    .messageMenu.placed,
+    .messageMenuItem,
+    .messageMenuDivider,
+    .messageMenuItem.danger.confirm .messageMenuIcon {
+        animation: none;
+        opacity: 1;
+    }
+
+    .messageMenu.placed {
+        opacity: 1;
+    }
+}

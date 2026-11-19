@@ -1,270 +1,146 @@
-.addChat {
+/* =========================================================
+   FunChat – find user / add chat page (white + purple)
+   ========================================================= */
+
+   .addChat {
     width: 100%;
     min-height: 100vh;
-    box-sizing: border-box;
+    min-height: 100dvh;
     background:
-        radial-gradient(
-            circle at 20% 15%,
-            rgba(0, 174, 255, 0.16),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(140, 50, 255, 0.18),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(0, 120, 255, 0.06),
-            transparent 45%
-        ),
-        linear-gradient(
-            145deg,
-            #050817 0%,
-            #081a32 45%,
-            #110a27 100%
-        );
-    color: #eaf8ff;
+        radial-gradient(circle at 0% 0%, rgba(167, 123, 255, 0.16), transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(255, 140, 230, 0.12), transparent 40%),
+        var(--fc-bg);
+    color: var(--fc-text);
+    font-family: var(--fc-font);
 }
 
+/* purple band with the title and the search field */
 .findUserDiv {
     display: flex;
-    height: 20vh;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 16px;
+    padding: 36px 16px 40px;
     background:
-        linear-gradient(
-            135deg,
-            rgba(0, 174, 255, 0.08),
-            rgba(120, 40, 255, 0.08)
-        );
-    border-bottom: 1px solid rgba(0, 174, 255, 0.2);
-    box-shadow:
-        0 8px 30px rgba(0, 110, 255, 0.08);
-
+        radial-gradient(circle at 12% -30%, rgba(255, 255, 255, 0.35), transparent 45%),
+        radial-gradient(circle at 88% 130%, var(--fc-glow-pink), transparent 45%),
+        var(--fc-grad);
+    box-shadow: 0 6px 24px rgba(109, 63, 224, 0.25);
 }
 
 .findUserText {
     display: flex;
-    color: #c66cff;
     justify-content: center;
-    font-size: 2vw;
-    font-family: Gill Sans, sans-serif;
-    text-shadow:
-        0 0 10px rgba(180, 60, 255, 0.35);
+    color: #ffffff;
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 800;
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(60, 10, 150, 0.3);
 }
 
 .findUserInput {
-    width: 40vw;
-    padding: 1vw;
-    border-radius: 3vw;
-    color: #eaf8ff;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(7, 24, 48, 0.95),
-            rgba(17, 10, 39, 0.95)
-        );
-    border: 1px solid rgba(0, 174, 255, 0.45);
+    width: 100%;
+    max-width: 560px;
+    height: 52px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 999px;
     outline: none;
-    box-shadow:
-        0 0 15px rgba(0, 174, 255, 0.08),
-        inset 0 0 12px rgba(0, 174, 255, 0.04);
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease;
-
+    background: var(--fc-surface);
+    color: var(--fc-text);
+    font-size: 16px;
+    box-shadow: 0 8px 24px rgba(60, 10, 150, 0.25);
+    transition: box-shadow 0.15s ease;
 }
 
 .findUserInput::placeholder {
-    color: rgba(190, 225, 240, 0.55);
+    color: var(--fc-placeholder);
 }
 
 .findUserInput:focus {
-    border-color: rgba(0, 200, 255, 0.85);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(8, 30, 58, 0.98),
-            rgba(20, 12, 45, 0.98)
-        );
-    box-shadow:
-        0 0 18px rgba(0, 174, 255, 0.2),
-        0 0 35px rgba(110, 50, 255, 0.08),
-        inset 0 0 12px rgba(0, 174, 255, 0.05);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.45), 0 8px 24px rgba(60, 10, 150, 0.25);
 }
 
 .addChatLoading {
     display: flex;
     justify-content: center;
-    margin-top: 10vh;
+    margin-top: 64px;
 }
 
+/* results list as one white card */
 .atUsernames {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: calc(100% - 32px);
+    max-width: 560px;
+    max-height: 60vh;
+    max-height: 60dvh;
+    margin: 20px auto 24px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-sizing: border-box;
+    background: var(--fc-surface);
+    border-radius: 20px;
+    box-shadow: var(--fc-shadow-md);
     scrollbar-width: thin;
-    scrollbar-color:
-        rgba(0, 174, 255, 0.45)
-        transparent;
+    scrollbar-color: #d6c6fb transparent;
+}
+
+.atUsernames:empty {
+    display: none;
 }
 
 .atUsername {
     width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-    padding: 1vw;
-    color: #dff7ff;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 174, 255, 0.03),
-            rgba(130, 50, 255, 0.05)
-        );
-    border-bottom: 1px solid rgba(0, 174, 255, 0.12);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--fc-line);
+    color: var(--fc-text);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: background 0.12s ease, color 0.12s ease;
+}
+
+.atUsername:last-child {
+    border-bottom: none;
 }
 
 .atUsername:hover {
-    color: #ffffff;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 174, 255, 0.12),
-            rgba(130, 50, 255, 0.14)
-        );
-    box-shadow:
-        inset 3px 0 0 rgba(0, 190, 255, 0.8),
-        0 0 18px rgba(0, 140, 255, 0.06);
+    background: var(--fc-accent-soft);
+    color: var(--fc-accent-dark);
 }
 
-.atUsernames::-webkit-scrollbar {
-    width: 0.4vw;
+.atUsername:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: -2px;
 }
 
-.atUsernames::-webkit-scrollbar-track {
-    background: transparent;
-}
-
+.atUsernames::-webkit-scrollbar { width: 6px; }
+.atUsernames::-webkit-scrollbar-track { background: transparent; }
 .atUsernames::-webkit-scrollbar-thumb {
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0, 190, 255, 0.65),
-            rgba(140, 50, 255, 0.65)
-        );
-    border-radius: 1vw;
-}
-
-@media all and (max-width: 768px) {
-
-    .addChat {
-        width: 100%;
-        min-height: 100vh;
-    }
-
-    .findUserDiv {
-        width: 100%;
-        height: 22vh;
-        padding: 3vw;
-        box-sizing: border-box;
-        gap: 2vw;
-    }
-
-    .findUserText {
-        font-size: 5vw;
-        text-align: center;
-    }
-
-    .findUserInput {
-        width: 70vw;
-        padding: 2.5vw 3vw;
-        box-sizing: border-box;
-        border-radius: 5vw;
-        font-size: 3.5vw;
-    }
-
-    .findUserInput::placeholder {
-        font-size: 3.3vw;
-    }
-
-    .addChatLoading {
-        margin-top: 8vh;
-    }
-
-    .atUsernames {
-        width: 100%;
-        max-height: 68vh;
-    }
-
-    .atUsername {
-        width: 100%;
-        padding: 2.5vw 3vw;
-        font-size: 3.8vw;
-        box-sizing: border-box;
-    }
+    background: #d6c6fb;
+    border-radius: 10px;
 }
 
 @media all and (max-width: 480px) {
-
     .findUserDiv {
-        height: 22vh;
-        padding: 3.5vw;
-    }
-
-    .findUserText {
-        font-size: 5.5vw;
+        padding: 28px 16px 30px;
+        gap: 14px;
     }
 
     .findUserInput {
-        width: 76vw;
-        padding: 2.8vw 3.5vw;
-        font-size: 3.8vw;
-        border-radius: 6vw;
-    }
-
-    .findUserInput::placeholder {
-        font-size: 3.5vw;
+        height: 48px;
+        padding: 0 18px;
     }
 
     .atUsernames {
-        max-height: 68vh;
+        margin-top: 16px;
+        border-radius: 16px;
     }
 
     .atUsername {
-        padding: 3vw;
-        font-size: 4vw;
-    }
-}
-
-@media all and (max-width: 360px) {
-
-    .findUserDiv {
-        height: 21vh;
-    }
-
-    .findUserText {
-        font-size: 5.8vw;
-    }
-
-    .findUserInput {
-        width: 80vw;
-        padding: 3vw 3.5vw;
-        font-size: 4vw;
-    }
-
-    .atUsername {
-        padding: 3.2vw;
-        font-size: 4.2vw;
+        padding: 14px 16px;
     }
 }

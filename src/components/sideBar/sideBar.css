@@ -1,67 +1,50 @@
+/* =========================================================
+   FunChat – chat list sidebar (purple)
+   ========================================================= */
+
+/* colors come from app.css */
+
 .sideBar {
     background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(0, 174, 255, 0.22),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 90% 85%,
-            rgba(120, 40, 255, 0.20),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(0, 100, 220, 0.07),
-            transparent 45%
-        ),
-        linear-gradient(
-            145deg,
-            #050817 0%,
-            #07152b 45%,
-            #100a24 100%
-        );
-
-    border-right: 1px solid rgba(0, 174, 255, 0.25);
-
-    box-shadow:
-        8px 0 35px rgba(0, 120, 255, 0.08),
-        inset -1px 0 rgba(130, 70, 255, 0.12);
-
-    color: #e8f7ff;
+        radial-gradient(circle at 0% 0%, rgba(167, 123, 255, 0.18), transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(255, 140, 230, 0.12), transparent 45%),
+        linear-gradient(180deg, #fbf9ff 0%, #f4eeff 100%);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--fc-header-h));
+    height: calc(100dvh - var(--fc-header-h));
+    border-right: 1px solid var(--fc-accent-line);
+    color: var(--fc-text);
+    font-family: var(--fc-font);
 }
 
 .sideBarHeader {
     display: flex;
-    height: 7vh;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 170, 255, 0.04),
-            rgba(100, 50, 255, 0.08)
-        );
-
-    border-bottom: 1px solid rgba(0, 190, 255, 0.12);
+    flex-shrink: 0;
+    height: 60px;
+    border-bottom: 1px solid var(--fc-accent-line);
 }
 
 .chatsSettings {
     display: grid;
-    height: 100%;
-    grid-template-columns: 9vw 6vw;
+    grid-template-columns: 1fr auto;
     align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px 0 18px;
+    box-sizing: border-box;
 }
 
 .chatsTitle {
-    font-size: 1.5vw;
     display: flex;
-    justify-content: flex-end;
-
-    color: #9beaff;
-
-    text-shadow:
-        0 0 8px rgba(0, 200, 255, 0.3),
-        0 0 18px rgba(80, 80, 255, 0.15);
+    justify-content: flex-start;
+    font-size: clamp(18px, 1.5vw, 22px);
+    font-weight: 800;
+    color: var(--fc-accent-dark);
+    background: var(--fc-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .addBtnPlace {
@@ -70,411 +53,363 @@
 }
 
 .addBtn {
-    padding: 0.7vw;
-    margin-right: 0.2vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            #00bfff,
-            #635bff
-        );
-
-    color: white;
-
-    border-radius: 2vw;
-    font-size: 1.3vw;
-
-    border: 1px solid rgba(130, 230, 255, 0.3);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    text-decoration: none;   /* the + is a link when you're signed in */
+    border: none;
+    border-radius: 999px;
+    background: var(--fc-grad);
+    color: #ffffff;
+    font-family: var(--fc-font);
+    font-size: clamp(13px, 1vw, 15px);
+    font-weight: 700;
     cursor: pointer;
-
-    box-shadow:
-        0 0 12px rgba(0, 190, 255, 0.22),
-        0 0 25px rgba(100, 60, 255, 0.12);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        filter 0.2s ease;
+    box-shadow: 0 4px 14px rgba(109, 63, 224, 0.32);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .addBtn:hover {
-    transform: scale(1.04);
-    filter: brightness(1.1);
+    filter: brightness(1.06);
+    box-shadow: 0 6px 18px rgba(109, 63, 224, 0.4);
+    transform: translateY(-1px);
+}
 
-    box-shadow:
-        0 0 18px rgba(0, 200, 255, 0.35),
-        0 0 30px rgba(100, 60, 255, 0.2);
+.addBtn:active {
+    transform: scale(0.96);
 }
 
 .chats {
-    height: 70vh;
-    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
-
-    scrollbar-color: rgba(0, 190, 255, 0.35) transparent;
+    padding: 8px;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #d6c6fb transparent;
 }
 
 .noChatsMessage {
-    font-size: 1.3vw;
     display: flex;
-    height: 100%;
-    text-align: center;
     justify-content: center;
     align-items: center;
-
-    color: #6f9eb3;
-
-    text-shadow:
-        0 0 10px rgba(0, 170, 255, 0.12);
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    color: var(--fc-muted);
+    font-size: 15px;
+    text-align: center;
 }
 
 .singleChat {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 1vw;
-
-    border-bottom: 1px solid rgba(0, 190, 255, 0.10);
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 130, 220, 0.025),
-            rgba(100, 50, 255, 0.04)
-        );
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-
+    gap: 12px;
+    margin-bottom: 2px;
+    padding: 9px 10px;
+    border-radius: 14px;
     cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .singleChat:hover {
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 180, 255, 0.12),
-            rgba(100, 60, 255, 0.12)
-        );
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 10px rgba(109, 63, 224, 0.1);
+}
 
-    border-bottom-color: rgba(0, 200, 255, 0.25);
+.singleChat:active {
+    transform: scale(0.99);
+}
 
-    box-shadow:
-        inset 3px 0 0 rgba(0, 205, 255, 0.7),
-        0 0 18px rgba(0, 160, 255, 0.06);
+/* add class "active" to the open chat */
+.singleChat.active {
+    background: var(--fc-grad);
+    box-shadow: 0 6px 18px rgba(109, 63, 224, 0.32);
+}
+
+.singleChat.active .singleChatTitle {
+    color: #ffffff;
+}
+
+.singleChat.active .chatAvatar {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
 }
 
 .singleChatTitle {
-    font-size: 1.3vw;
-
-    color: #dff8ff;
-
-    text-shadow:
-        0 0 7px rgba(0, 190, 255, 0.15);
+    min-width: 0;
+    color: var(--fc-text);
+    font-size: clamp(14px, 1.05vw, 16px);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chatAvatar {
-    width: 3vw;
-    height: 3vw;
+    display: block;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
     object-fit: cover;
     border-radius: 50%;
-    display: block;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--fc-accent-line);
 }
+
+/* ---------------- unread messages ---------------- */
+
+/* purple circle with the number, on the right of the chat */
+.unreadBadge {
+    flex-shrink: 0;
+    margin-left: auto;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #a77bff, #7a4cf0);
+    box-shadow: 0 2px 6px rgba(109, 63, 224, 0.35);
+    color: #ffffff;
+    font-family: var(--fc-font);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 22px;
+    text-align: center;
+    animation: unreadPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes unreadPop {
+    from { transform: scale(0.4); }
+    to   { transform: scale(1); }
+}
+
+/* on the purple (open) chat the circle turns white */
+.singleChat.active .unreadBadge {
+    background: #ffffff;
+    color: var(--fc-accent-dark);
+    box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .unreadBadge {
+        animation: none;
+    }
+}
+
+/* the chat whose menu (right click / hold) is open */
+.singleChat.menuOpen:not(.active) {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 0 0 2px var(--fc-accent-line), 0 4px 14px rgba(109, 63, 224, 0.16);
+}
+
+.singleChat.menuOpen {
+    transform: scale(0.98);
+}
+
+/* phones: no text selection or image popup while holding a chat */
+@media (hover: none) {
+    .singleChat {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
+/* spinner while the chat list loads */
+.sideBarLoading {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---------------- add chat popup ---------------- */
 
 .addChatDiv {
-    width: 20vw;
+    width: 320px;
+    max-width: calc(100vw - 32px);
     display: flex;
     flex-direction: column;
-
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    box-sizing: border-box;
+    z-index: 100;
     background:
-        radial-gradient(
-            circle at 20% 10%,
-            rgba(0, 190, 255, 0.16),
-            transparent 40%
-        ),
-        linear-gradient(
-            145deg,
-            #07101f,
-            #111033 55%,
-            #190b32
-        );
-
-    align-items: center;
-    z-index: 100;
-
-    border: 1px solid rgba(0, 200, 255, 0.2);
-    border-radius: 1vw;
-
-    box-shadow:
-        0 0 25px rgba(0, 0, 0, 0.5),
-        0 0 25px rgba(0, 160, 255, 0.08),
-        inset 0 0 20px rgba(100, 60, 255, 0.06);
+        radial-gradient(circle at 0% 0%, rgba(167, 123, 255, 0.14), transparent 50%),
+        var(--fc-surface);
+    border: 1px solid var(--fc-accent-line);
+    border-radius: 20px;
+    box-shadow: var(--fc-shadow-lg);
 }
 
-.enterUserNamePlace {
+.enterUserNamePlace,
+.enterUserCodePlace {
     display: flex;
-    height: 100%;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
     z-index: 100;
 }
 
-.usernameInput {
-    width: 15vw;
-    height: 5vh;
-    border-radius: 3vw;
-
-    background: rgba(4, 15, 30, 0.85);
-
-    color: #dff8ff;
-
-    border: 1px solid rgba(0, 190, 255, 0.3);
-
+.usernameInput,
+.codeInput {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--fc-accent-line);
+    border-radius: 999px;
+    background: #faf7ff;
+    color: var(--fc-text);
+    font-family: var(--fc-font);
+    font-size: 15px;
     outline: none;
-
-    box-shadow:
-        inset 0 0 10px rgba(0, 120, 220, 0.08),
-        0 0 10px rgba(0, 170, 255, 0.05);
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.usernameInput:focus {
-    border-color: rgba(0, 210, 255, 0.65);
+.usernameInput::placeholder,
+.codeInput::placeholder {
+    color: #a99fc4;
+}
 
-    box-shadow:
-        0 0 12px rgba(0, 190, 255, 0.18),
-        inset 0 0 12px rgba(0, 120, 220, 0.08);
+.usernameInput:focus,
+.codeInput:focus {
+    background: #ffffff;
+    border-color: var(--fc-accent);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.16);
 }
 
 .submitImg {
-    width: 3vw;
+    flex-shrink: 0;
+    width: 42px;
     cursor: pointer;
-
-    filter:
-        drop-shadow(0 0 5px rgba(0, 200, 255, 0.5))
-        drop-shadow(0 0 10px rgba(100, 60, 255, 0.25));
-
-    transition:
-        transform 0.2s ease,
-        filter 0.2s ease;
+    transition: transform 0.15s ease;
 }
 
-.submitImg:hover {
-    transform: scale(1.08);
+.submitImg:hover  { transform: scale(1.07); }
+.submitImg:active { transform: scale(0.94); }
 
-    filter:
-        brightness(1.15)
-        drop-shadow(0 0 8px rgba(0, 210, 255, 0.7))
-        drop-shadow(0 0 15px rgba(110, 60, 255, 0.35));
+.addBtn:focus-visible,
+.singleChat:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 2px;
 }
+
+/* ---------------- phone ---------------- */
 
 @media all and (max-width: 768px) {
 
-    .sideBarHeader {
-        height: 7vh;
-    }
-
     .chatsSettings {
-        grid-template-columns: 1fr auto;
-        align-items: center;
+        padding: 0 10px 0 14px;
     }
 
     .chatsTitle {
-        font-size: 3.8vw;
-        justify-content: flex-start;
-        padding-left: 3vw;
-    }
-
-    .addBtnPlace {
-        padding-right: 2vw;
+        font-size: 18px;
     }
 
     .addBtn {
-        padding: 1.5vw 2.5vw;
-        margin-right: 0;
-        border-radius: 4vw;
-        font-size: 3.5vw;
+        padding: 7px 13px;
+        font-size: 14px;
     }
 
     .chats {
-        height: 70vh;
-        overflow-x: hidden;
-        overflow-y: auto;
+        padding: 6px;
+    }
+
+    .singleChat {
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .singleChatTitle {
+        font-size: 15px;
+    }
+
+    .chatAvatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .addChatDiv {
+        width: 100%;
+    }
+}
+
+/* ---------------- small phone: avatar rail ---------------- */
+
+@media all and (max-width: 520px) {
+
+    .sideBarHeader {
+        height: 56px;
+    }
+
+    .chatsSettings {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        padding: 0;
+    }
+
+    /* no room for the word "Chats", only the + button */
+    .chatsTitle {
+        display: none;
+    }
+
+    .addBtnPlace {
+        justify-content: center;
+    }
+
+    .addBtn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        font-size: 20px;
+    }
+
+    .chats {
+        padding: 6px 4px;
+    }
+
+    .singleChat {
+        justify-content: center;
+        gap: 0;
+        padding: 6px 0;
+        margin-bottom: 4px;
+    }
+
+    /* the name is shown as a tooltip (title attribute) instead */
+    .singleChatTitle {
+        display: none;
+    }
+
+    .chatAvatar {
+        width: 48px;
+        height: 48px;
+    }
+
+    /* only avatars here: the number sits on the avatar's top-right corner */
+    .singleChat {
+        position: relative;
+    }
+
+    .unreadBadge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        font-size: 10.5px;
+        line-height: 18px;
+        box-shadow: 0 0 0 2px #faf7ff;
     }
 
     .noChatsMessage {
-        font-size: 3.5vw;
-        padding: 3vw;
-        box-sizing: border-box;
-    }
-
-    .singleChat {
-        min-height: 8vh;
-        padding: 1.5vw 3vw;
-        box-sizing: border-box;
-    }
-
-    .singleChatTitle {
-        font-size: 3.5vw;
-        font-family: Gill Sans, sans-serif;
-        text-align: center;
-    }
-
-    .chatAvatar {
-        width: 6vw;
-        height: 6vw;
-    }
-
-    .addChatDiv {
-        width: 70vw;
-        max-width: 80vw;
-
-        padding: 3vw;
-
-        box-sizing: border-box;
-
-        border-radius: 3vw;
-    }
-
-    .enterUserNamePlace {
-        width: 100%;
-        height: auto;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        gap: 2vw;
-    }
-
-    .usernameInput {
-        width: 52vw;
-        height: 5.5vh;
-
-        padding: 0 3vw;
-
-        box-sizing: border-box;
-
-        border-radius: 5vw;
-
-        font-size: 3.5vw;
-    }
-
-    .enterUserCodePlace {
-        width: 100%;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        gap: 2vw;
-    }
-
-    .codeInput {
-        width: 52vw;
-        height: 5.5vh;
-
-        padding: 0 3vw;
-
-        box-sizing: border-box;
-
-        border-radius: 5vw;
-
-        font-size: 3.5vw;
-    }
-
-    .submitImg {
-        width: 8vw;
-
-        cursor: pointer;
-    }
-}
-
-@media all and (max-width: 480px) {
-
-    .sideBarHeader {
-        height: 7vh;
-    }
-
-    .chatsTitle {
-        font-size: 4vw;
-        padding-left: 3vw;
-    }
-
-    .addBtn {
-        padding: 1.5vw 2.5vw;
-        font-size: 3.8vw;
-    }
-
-    .singleChat {
-        min-height: 8vh;
-        padding: 2vw 3vw;
-    }
-
-    .singleChatTitle {
-        font-size: 3.8vw;
-    }
-
-    .chatAvatar {
-        width: 6vw;
-        height: 6vw;
-    }
-
-    .addChatDiv {
-        width: 82vw;
-        padding: 4vw;
-        border-radius: 4vw;
-    }
-
-    .usernameInput,
-    .codeInput {
-        width: 62vw;
-        height: 5.5vh;
-        font-size: 3.5vw;
-    }
-
-    .submitImg {
-        width: 9vw;
-    }
-}
-
-@media all and (max-width: 360px) {
-
-    .chatsTitle {
-        font-size: 4.2vw;
-    }
-
-    .addBtn {
-        padding: 1.5vw 2.2vw;
-        font-size: 3.5vw;
-    }
-
-    .singleChatTitle {
-        font-size: 3.5vw;
-    }
-
-    .chatAvatar {
-        width: 6vw;
-        height: 6vw;
-    }
-
-    .addChatDiv {
-        width: 88vw;
-    }
-
-    .usernameInput,
-    .codeInput {
-        width: 67vw;
-        font-size: 3.2vw;
-    }
-
-    .submitImg {
-        width: 9vw;
+        padding: 8px 4px;
+        font-size: 12px;
     }
 }

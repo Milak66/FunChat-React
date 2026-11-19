@@ -1,27 +1,24 @@
-.miniLoading {
+/* =========================================================
+   FunChat – small two-dot loader (purple)
+   Same size on every screen, so no media queries needed.
+   ========================================================= */
+
+   .miniLoading {
     position: relative;
-
-    width: 5vw;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 64px;
+    height: 40px;
 }
 
 .loadingCircle {
     position: absolute;
-
-    width: 1.5vw;
-    height: 1.5vw;
-
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
+    background: var(--fc-grad);
+    box-shadow: 0 2px 8px rgba(109, 63, 224, 0.35);
     animation-duration: 1.2s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
@@ -33,123 +30,27 @@
 
 .loadingCircle2 {
     animation-name: circleRight;
+    background: linear-gradient(120deg, #c49bff, #ff8ce6);
 }
 
 @keyframes circleLeft {
-    0% {
-        transform: translateX(-1.8vw) scale(1);
-    }
-
-    35% {
-        transform: translateX(-0.5vw) scale(1);
-    }
-
-    50% {
-        transform: translateX(0) scale(1.8);
-    }
-
-    65% {
-        transform: translateX(-0.5vw) scale(1);
-    }
-
-    100% {
-        transform: translateX(-1.8vw) scale(1);
-    }
+    0%   { transform: translateX(-18px) scale(1); }
+    35%  { transform: translateX(-6px)  scale(1); }
+    50%  { transform: translateX(0)     scale(1.7); }
+    65%  { transform: translateX(-6px)  scale(1); }
+    100% { transform: translateX(-18px) scale(1); }
 }
 
 @keyframes circleRight {
-    0% {
-        transform: translateX(1.8vw) scale(1);
-    }
-
-    35% {
-        transform: translateX(0.5vw) scale(1);
-    }
-
-    50% {
-        transform: translateX(0) scale(1.8);
-    }
-
-    65% {
-        transform: translateX(0.5vw) scale(1);
-    }
-
-    100% {
-        transform: translateX(1.8vw) scale(1);
-    }
+    0%   { transform: translateX(18px) scale(1); }
+    35%  { transform: translateX(6px)  scale(1); }
+    50%  { transform: translateX(0)    scale(1.7); }
+    65%  { transform: translateX(6px)  scale(1); }
+    100% { transform: translateX(18px) scale(1); }
 }
 
-@media all and (max-width: 768px) {
-    .miniLoading {
-        position: relative;
-    
-        width: 5vw;
-    
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
+@media (prefers-reduced-motion: reduce) {
     .loadingCircle {
-        position: absolute;
-    
-        width: 4vw;
-        height: 4vw;
-    
-        border-radius: 50%;
-        background:
-            linear-gradient(
-                135deg,
-                #a52cff,
-                #6416d8
-            );
-    
-        animation-duration: 1.2s;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-    }  
-    
-    @keyframes circleLeft {
-        0% {
-            transform: translateX(-3.6vw) scale(1);
-        }
-    
-        35% {
-            transform: translateX(-1vw) scale(1);
-        }
-    
-        50% {
-            transform: translateX(0) scale(1.8);
-        }
-    
-        65% {
-            transform: translateX(-1vw) scale(1);
-        }
-    
-        100% {
-            transform: translateX(-3.6vw) scale(1);
-        }
-    }
-    
-    @keyframes circleRight {
-        0% {
-            transform: translateX(3.6vw) scale(1);
-        }
-    
-        35% {
-            transform: translateX(1vw) scale(1);
-        }
-    
-        50% {
-            transform: translateX(0) scale(1.8);
-        }
-    
-        65% {
-            transform: translateX(1vw) scale(1);
-        }
-    
-        100% {
-            transform: translateX(3.6vw) scale(1);
-        }
+        animation-duration: 3s;
     }
 }

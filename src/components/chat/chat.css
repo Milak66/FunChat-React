@@ -1,1143 +1,868 @@
+/* =========================================================
+   FunChat – chat (white + purple)
+   ========================================================= */
+
+/* colors come from app.css */
+
+/* ---------------- wallpaper ---------------- */
+
 .main {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    height: 90vh;
-
+    height: calc(100vh - var(--fc-header-h));
+    height: calc(100dvh - var(--fc-header-h));
     overflow: hidden;
-
-    background-image:
-        url(../../assets/pcDarkBackground.jpg);
-
-    background-size: cover;
-    background-repeat: no-repeat;
+    position: relative;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at var(--bg-x1) var(--bg-y1), var(--fc-wall-1) 0%, transparent 60%),
+        radial-gradient(circle at var(--bg-x2) var(--bg-y2), var(--fc-wall-2) 0%, transparent 60%),
+        radial-gradient(circle at var(--bg-x3) var(--bg-y3), var(--fc-wall-3) 0%, transparent 60%),
+        radial-gradient(circle at var(--bg-x4) var(--bg-y4), var(--fc-wall-4) 0%, transparent 60%),
+        #f6f2ff;
+    font-family: var(--fc-font);
+    transition:
+        --bg-x1 0.6s ease, --bg-y1 0.6s ease,
+        --bg-x2 0.6s ease, --bg-y2 0.6s ease,
+        --bg-x3 0.6s ease, --bg-y3 0.6s ease,
+        --bg-x4 0.6s ease, --bg-y4 0.6s ease;
 }
+
+/* the doodle pattern, in faint purple */
+.main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #6d3fe0;
+    opacity: 0.11;
+    -webkit-mask: url(../../assets/pattern.svg) 0 0 / 360px repeat;
+    mask: url(../../assets/pattern.svg) 0 0 / 360px repeat;
+}
+
+@property --bg-x1 { syntax: "<percentage>"; inherits: false; initial-value: 80%; }
+@property --bg-y1 { syntax: "<percentage>"; inherits: false; initial-value: 10%; }
+@property --bg-x2 { syntax: "<percentage>"; inherits: false; initial-value: 25%; }
+@property --bg-y2 { syntax: "<percentage>"; inherits: false; initial-value: 60%; }
+@property --bg-x3 { syntax: "<percentage>"; inherits: false; initial-value: 20%; }
+@property --bg-y3 { syntax: "<percentage>"; inherits: false; initial-value: 90%; }
+@property --bg-x4 { syntax: "<percentage>"; inherits: false; initial-value: 70%; }
+@property --bg-y4 { syntax: "<percentage>"; inherits: false; initial-value: 70%; }
+
+/* ---------------- empty chat ---------------- */
 
 .gretting {
     display: flex;
     flex-direction: column;
-
     justify-content: center;
     align-items: center;
-
+    gap: 14px;
     height: 100%;
+    padding: 0 16px;
+}
+
+/* "No messages here yet" – a small frosted card, like Telegram's */
+.emptyChatCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    max-width: 300px;
+    padding: 22px 26px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(139, 92, 246, 0.14);
+    box-shadow: 0 10px 30px rgba(109, 63, 224, 0.14);
+    text-align: center;
+    animation: emptyChatIn 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* the waving hand: tap it to send 👋 */
+.emptyChatWave {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 6px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.9), transparent 55%),
+        linear-gradient(135deg, #efe5ff, #dcc9ff);
+    box-shadow:
+        0 6px 18px rgba(109, 63, 224, 0.22),
+        inset 0 0 0 1px rgba(139, 92, 246, 0.18);
+    font-size: 40px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emptyChatWave span {
+    display: block;
+    transform-origin: 70% 75%;     /* waves from the wrist */
+    animation: emptyChatWave 2.4s ease-in-out infinite;
+}
+
+.emptyChatWave:hover {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow:
+        0 10px 24px rgba(109, 63, 224, 0.3),
+        inset 0 0 0 1px rgba(139, 92, 246, 0.28);
+}
+
+.emptyChatWave:active {
+    transform: scale(0.94);
+}
+
+.emptyChatWave:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.emptyChatWave:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 3px;
 }
 
 .emptyChatText {
-    color: #c66cff;
-    font-size: 2.5vw;
-    text-align: center;
-    font-family: Gill Sans, sans-serif;
+    color: var(--fc-text);
+    font-size: 17px;
+    font-weight: 700;
+}
 
-    text-shadow:
-        0 0 10px rgba(180, 60, 255, 0.35);
+.emptyChatHint {
+    color: var(--fc-muted);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+@keyframes emptyChatIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* waves twice, then rests */
+@keyframes emptyChatWave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10%           { transform: rotate(16deg); }
+    20%           { transform: rotate(-8deg); }
+    30%           { transform: rotate(16deg); }
+    40%           { transform: rotate(-4deg); }
+    50%           { transform: rotate(10deg); }
 }
 
 .createChatMessage {
-    font-size: 2.5vw;
-
+    max-width: 420px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--fc-surface);
+    box-shadow: var(--fc-shadow);
+    color: var(--fc-muted);
+    font-size: clamp(14px, 1.05vw, 16px);
     text-align: center;
-
-    color: #b14cff;
-
-    text-shadow:
-        0 0 8px rgba(177, 76, 255, 0.45),
-        0 0 25px rgba(0, 180, 255, 0.18);
-
     word-break: break-word;
 }
 
 .chatImage {
-    width: 25vw;
+    width: 200px;
+    max-width: 60%;
 }
+
+/* ---------------- chat layout ---------------- */
 
 .placeForChat {
     display: grid;
-
     width: 100%;
     max-width: 100%;
-
-    height: 90vh;
-
+    height: 100%;
     min-width: 0;
-
-    grid-template-rows: 1fr auto;
-
+    /* messages · "Editing" bar (only while editing) · message box */
+    grid-template-rows: minmax(0, 1fr) auto auto;
     box-sizing: border-box;
 }
 
 .chatWithUser {
-    gap: 3vh;
-
     display: flex;
     flex-direction: column;
-
+    gap: 12px;   /* space between messages from different people */
     width: 100%;
     min-width: 0;
-
     overflow-y: auto;
     overflow-x: hidden;
-
     box-sizing: border-box;
-
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-    padding-right: 1vw;
+    padding: 14px 20px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #dccff9 transparent;
 }
+
+/* ---------------- messages ---------------- */
 
 .message {
     display: flex;
-
-    align-items: flex-start;
-
+    align-items: flex-end;
+    gap: 14px;                 /* room for the bubble's tail next to the avatar */
     width: 100%;
     min-width: 0;
-
     box-sizing: border-box;
-
-    padding: 0.3vw 0.5vw;
+    animation: messageAppear 0.18s ease-out;
 }
 
-.defaultMessageAvatar {
-    flex-shrink: 0;
-
-    width: 3vw;
-    height: 3vw;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-}
-
+.defaultMessageAvatar,
 .messageAvatar {
     flex-shrink: 0;
-
-    width: 3vw;
-    height: 3vw;
-
+    width: 36px;
+    height: 36px;
     object-fit: cover;
-
     border-radius: 50%;
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.35);
-
-    box-shadow:
-        0 0 10px
-        rgba(160, 40, 255, 0.25);
+    overflow: hidden;
+    background: var(--fc-accent-soft);
+    color: transparent;   /* hides the alt text when an image fails to load */
+    font-size: 0;
 }
 
+/* the bubble – round, in the same purple as the rest of FunChat
+   (send button, open chat in the list), so it stands out from the
+   pale wallpaper but still belongs to it */
 .messageContent {
     display: flex;
-
-    flex-direction: column;
-
+    flex-wrap: wrap;           /* short text and the time share one line */
+    align-items: flex-end;
+    column-gap: 10px;
     min-width: 0;
-
-    max-width: 80%;
-
-    margin-left: 1vw;
+    max-width: min(72%, 500px);
+    padding: 8px 12px 7px 14px;
+    box-sizing: border-box;
+    position: relative;
+    /* left → right, so the whole left edge (where the tail is) is one
+       exact color: #9d76ff, the same as the tail */
+    background: linear-gradient(90deg, #9d76ff 0%, #8b5cf6 55%, #7a4cf0 100%);
+    border-radius: 20px;                 /* round on every corner; the tail curls out from under the bottom-left one */
+    /* a thin light edge on top makes the bubble look a bit glossy */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    transform-origin: 0 100%;            /* new messages "pop" out of the tail */
 }
 
+/* the tail: the iMessage-style curl. The bubble stays round on all four
+   corners, and a small hook curls out from under its bottom-left corner:
+   its outer edge sweeps down from the bubble's side to a point, and its
+   lower edge curves back up into the round corner.
+   Same color as the bubble's left edge (#9d76ff). */
+.messageContent::before {
+    content: "";
+    position: absolute;
+    z-index: -1;                /* behind the bubble, so only the curl shows */
+    left: -6.5px;
+    bottom: 0;
+    width: 24px;
+    height: 18px;
+    background: #9d76ff;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cpath d='M7 0C7 8.5 5.2 13.8 0.4 17.4C0.1 17.6 0.2 18 0.6 18C6 18 10.6 16.6 14.6 14.2C16.8 15.6 19.4 16.6 24 17V0Z'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cpath d='M7 0C7 8.5 5.2 13.8 0.4 17.4C0.1 17.6 0.2 18 0.6 18C6 18 10.6 16.6 14.6 14.2C16.8 15.6 19.4 16.6 24 17V0Z'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%;
+}
+
+/* time sits bottom-right inside the bubble */
 .messageHeader {
-    display: flex;
-
-    align-items: center;
-
-    gap: 0.7vw;
-
-    min-width: 0;
-
-    margin-bottom: 0.35vw;
+    display: contents;
 }
 
+/* no names on messages */
 .messageSender {
-    color: #d9a1ff;
-
-    font-size: 1vw;
-
-    font-family: Gill Sans, sans-serif;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.messageTime {
-    color:
-        rgba(220, 200, 240, 0.55);
-
-    font-size: 0.8vw;
-
-    font-family: Gill Sans, sans-serif;
-
-    white-space: nowrap;
+    display: none;
 }
 
 .messageText {
-    position: relative;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    font-size: 1.3vw;
-
-    font-family: Gill Sans, sans-serif;
-
+    order: 1;
+    display: block;
+    flex: 0 1 auto;
     min-width: 0;
     max-width: 100%;
-
-    padding: 0.7vw 1vw;
-
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1.4;
+    white-space: pre-wrap;     /* keeps line breaks from Shift+Enter */
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: anywhere;
+}
 
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    color: white;
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.35);
-
-    border-radius: 1.3vw;
-
-    box-shadow:
-        0 0 12px
-        rgba(160, 40, 255, 0.25),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.15);
-
+.messageTime {
+    order: 2;
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 11.5px;
     line-height: 1.4;
-
-    box-sizing: border-box;
+    white-space: nowrap;
+    user-select: none;
 }
 
-.typingMessage {
-    display: flex;
+/* ---------------- the eye on your messages ---------------- */
 
+/* closed eye = sent · open eye = everyone in the chat has seen it */
+.messageEye {
+    display: inline-flex;
     align-items: center;
+    margin-left: 5px;
+    vertical-align: -1px;
+    color: rgba(255, 255, 255, 0.72);
+    transition: color 0.25s ease;
+}
 
-    width: 100%;
+.messageEye svg {
+    display: block;
+    overflow: visible;
+}
+
+.messageEye path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.messageEye circle {
+    fill: currentColor;
+}
+
+/* both eyes squash and stretch from the middle line, like a real eyelid */
+.messageEyeClosed,
+.messageEyeOpen {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    transition: transform 0.28s ease, opacity 0.2s ease;
+}
+
+/* not seen yet: only the closed eye */
+.messageEyeOpen {
+    opacity: 0;
+    transform: scaleY(0.1);
+}
+
+/* seen: the closed eye disappears and the open one blinks open */
+.messageEye.seen {
+    color: #ffffff;
+}
+
+.messageEye.seen .messageEyeClosed {
+    opacity: 0;
+    transform: scaleY(0.1);
+}
+
+.messageEye.seen .messageEyeOpen {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.08s;
+}
+
+/* ---------------- grouped messages (same person in a row) ---------------- */
+
+/* same person in a row: the list has a 12px gap, this makes it 4px */
+.message.messageFollow {
+    margin-top: -8px;
+}
+
+/* placeholder where the avatar would be, so all bubbles line up */
+.messageAvatarSpacer {
+    flex-shrink: 0;
+    width: 36px;
+    height: 1px;
+}
+
+/* messages without an avatar: fully round, no tail */
+.messageFollow .messageContent {
+    border-radius: 20px;
+}
+
+.messageFollow .messageContent::before {
+    display: none;
+}
+
+@keyframes messageAppear {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* the bubble grows out of its tail with a tiny bounce */
+.message .messageContent {
+    animation: bubblePop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bubblePop {
+    from { transform: scale(0.6); opacity: 0; }
+    to   { transform: none;      opacity: 1; }
+}
+
+/* ---------------- typing indicator ---------------- */
+
+/* "Alexey is typing…" – a small pill stuck to the bottom of the messages */
+.typingStatus {
+    position: sticky;
+    bottom: 0;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    margin-top: 2px;
+    padding: 6px 12px 6px 10px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--fc-shadow);
+    color: var(--fc-accent);
+    font-size: 13.5px;
+    line-height: 1.2;
+    white-space: nowrap;
+    animation: messageAppear 0.2s ease-out;
+}
+
+.typingName {
     min-width: 0;
-
-    box-sizing: border-box;
-
-    padding: 0.3vw 0.5vw;
-
-    gap: 0.8vw;
-
-    animation:
-        typingMessageAppear 0.2s ease-out;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
 }
 
-.typingBubble {
-    display: flex;
+.typingText {
+    flex-shrink: 0;
+    color: var(--fc-muted);
+}
 
+.typingDots {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-
-    gap: 0.35vw;
-
-    width: 4.5vw;
-    height: 2.8vw;
-
-    padding: 0.5vw 0.8vw;
-
-    box-sizing: border-box;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.35);
-
-    border-radius: 1.3vw;
-
-    box-shadow:
-        0 0 12px
-        rgba(160, 40, 255, 0.25),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.15);
+    gap: 3px;
+    flex-shrink: 0;
 }
 
 .typingDot {
     display: block;
-
-    width: 0.55vw;
-    height: 0.55vw;
-
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 0 6px
-        rgba(255, 255, 255, 0.9),
-
-        0 0 12px
-        rgba(255, 255, 255, 0.45);
-
-    animation:
-        typingDotAnimation 1.2s
-        infinite ease-in-out;
+    background: var(--fc-accent);
+    animation: typingDotAnimation 1.2s infinite ease-in-out;
 }
 
-.typingDot:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.typingDot:nth-child(2) {
-    animation-delay: 0.15s;
-}
-
-.typingDot:nth-child(3) {
-    animation-delay: 0.3s;
-}
+.typingDot:nth-child(1) { animation-delay: 0s; }
+.typingDot:nth-child(2) { animation-delay: 0.15s; }
+.typingDot:nth-child(3) { animation-delay: 0.3s; }
 
 @keyframes typingDotAnimation {
-
-    0%,
-    60%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.45;
-    }
-
-    30% {
-        transform: translateY(-0.35vw);
-        opacity: 1;
-    }
+    0%, 60%, 100% { transform: translateY(0);    opacity: 0.35; }
+    30%           { transform: translateY(-3px); opacity: 1; }
 }
 
-@keyframes typingMessageAppear {
+/* ---------------- replies ---------------- */
 
-    from {
-        opacity: 0;
-
-        transform:
-            translateY(0.4vw)
-            scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
+/* the "who + what" box at the top of a reply bubble (like Telegram):
+   a white line on the left, the name in bold, one line of the text */
+.messageReply {
+    order: 0;                  /* above the text and the time */
+    flex: 0 0 100%;            /* its own row in the bubble */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0 0 5px;
+    padding: 4px 10px 5px 9px;
+    box-sizing: border-box;
+    border: none;
+    border-left: 3px solid rgba(255, 255, 255, 0.85);
+    border-radius: 6px 10px 10px 6px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
 }
+
+.messageReply:hover {
+    background: rgba(255, 255, 255, 0.26);
+}
+
+.messageReply:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 1px;
+}
+
+.messageReplyName {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.messageReplyText {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 13px;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* the original was deleted: grey italic "Deleted message", not clickable */
+.messageReply.deleted {
+    cursor: default;
+}
+
+.messageReply.deleted .messageReplyText {
+    font-style: italic;
+}
+
+/* "Reply to Alexey" bar above the message box (same look as "Editing") */
+.replyBar .editingBarIcon {
+    display: flex;
+}
+
+/* jumped to the original → it flashes */
+.message.messageFlash .messageContent {
+    animation: messageFlash 1.4s ease;
+}
+
+@keyframes messageFlash {
+    0%, 100% { filter: none; transform: none; }
+    15%      { filter: drop-shadow(0 0 14px rgba(167, 123, 255, 0.95)) brightness(1.12); transform: scale(1.04); }
+    45%      { filter: drop-shadow(0 0 10px rgba(167, 123, 255, 0.7)) brightness(1.06); transform: scale(1.01); }
+}
+
+/* ---------------- edited messages ---------------- */
+
+/* "edited" in front of the time */
+.messageEdited {
+    margin-right: 5px;
+    font-style: italic;
+}
+
+/* the message you're editing glows softly */
+.message.messageEditing .messageContent {
+    filter:
+        drop-shadow(0 0 0 rgba(0, 0, 0, 0))
+        drop-shadow(0 0 10px rgba(167, 123, 255, 0.75));
+}
+
+/* "Editing" bar above the message box */
+.editingBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 82px -2px;          /* lines up with the message box */
+    padding: 7px 8px 7px 12px;
+    border-radius: 16px 16px 6px 6px;
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--fc-shadow);
+    border-left: 3px solid var(--fc-accent);
+    animation: editingBarIn 0.2s ease-out;
+}
+
+.editingBarIcon {
+    flex-shrink: 0;
+    color: var(--fc-accent);
+    font-size: 18px;
+}
+
+.editingBarText {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.editingBarTitle {
+    color: var(--fc-accent-dark);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.editingBarPreview {
+    color: var(--fc-muted);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.editingBarClose {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: var(--fc-accent-soft);
+    color: var(--fc-accent-dark);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.2s ease;
+}
+
+.editingBarClose:hover {
+    background: #e4d8ff;
+    transform: rotate(90deg);
+}
+
+@keyframes editingBarIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------------- bottom bar ---------------- */
 
 .writeMessagePlace {
     display: grid;
-
-    grid-template-columns:
-        10vw minmax(0, 1fr) 10vw;
-
-    align-items: center;
-
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
+    align-items: end;
+    gap: 10px;
     width: 100%;
-    max-width: 100%;
-
     min-width: 0;
-
-    padding: 0 1vw;
-
+    padding: 6px 20px 16px;
     box-sizing: border-box;
 }
 
-.closeChatBtnPlace {
+.closeChatBtnPlace,
+.callPlace {
     display: flex;
-
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-
     width: 100%;
+    height: 52px;
 }
 
 .closeChatBtn {
-    width: 3.5vw;
-    height: 3.5vw;
-
-    border-radius: 50%;
-
-    border: 1px solid
-        rgba(220, 140, 255, 0.35);
-
-    cursor: pointer;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #6416d8
-        );
-
-    box-shadow:
-        0 0 12px
-        rgba(160, 40, 255, 0.25),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.15);
-
-    font-size: 2vw;
-
-    line-height: 1;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    background: var(--fc-surface);
+    color: var(--fc-muted);
+    box-shadow: var(--fc-shadow);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .closeChatBtn:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #bc4cff,
-            #7625e8
-        );
-
-    box-shadow:
-        0 0 18px
-        rgba(180, 60, 255, 0.5),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.2);
-
-    transform: scale(1.05);
+    background: var(--fc-accent-soft);
+    color: var(--fc-accent-dark);
 }
 
 .closeChatBtn:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
 }
 
 .messageInputWrapper {
     display: flex;
-
     align-items: flex-end;
-
-    width: 60vw;
-    max-width: 100%;
-
+    width: 100%;
     min-width: 0;
-
-    margin: 0 auto;
-
-    padding: 0.4vw;
-
-    border-radius: 1.5vw;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 8, 38, 0.96),
-            rgba(10, 13, 35, 0.96)
-        );
-
-    border: 1px solid
-        rgba(160, 80, 255, 0.3);
-
-    box-shadow:
-        0 0 20px
-        rgba(100, 40, 255, 0.12),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.05);
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-
+    min-height: 52px;
+    padding: 4px 4px 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 26px;
+    background: var(--fc-surface);
+    box-shadow: var(--fc-shadow);
     box-sizing: border-box;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .messageInputWrapper:focus-within {
-    border-color:
-        rgba(180, 90, 255, 0.65);
-
-    box-shadow:
-        0 0 20px
-        rgba(130, 50, 255, 0.2),
-
-        0 0 5px
-        rgba(100, 160, 255, 0.1),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.06);
+    border-color: rgba(139, 92, 246, 0.45);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12), var(--fc-shadow);
 }
 
 .writeMessageInput {
-    font-size: 1.3vw;
-
     width: 100%;
-
     max-width: 100%;
     min-width: 0;
-
-    min-height: 3.5vh;
-
-    max-height: 18vh;
-
+    min-height: 42px;
+    max-height: 160px;
     height: auto;
-
     resize: none;
-
-    overflow-y: auto;
-
+    overflow-y: hidden;        /* chat.tsx turns the scrollbar on when the text is too long */
     box-sizing: border-box;
-
-    padding: 0.8vw 0.7vw;
-
+    padding: 11px 8px;
     border: none;
-
     outline: none;
-
     background: transparent;
-
-    color: #eeeaff;
-
-    font-family: Gill Sans, sans-serif;
-
-    line-height: 1.4;
-
+    color: var(--fc-text);
+    caret-color: var(--fc-accent);
+    font-family: var(--fc-font);
+    font-size: 15px;
+    line-height: 1.35;
     scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(150, 80, 255, 0.5)
-        transparent;
+    scrollbar-color: #dccff9 transparent;
 }
 
 .writeMessageInput::placeholder {
-    color:
-        rgba(210, 200, 235, 0.45);
+    color: var(--fc-time);
 }
 
-.writeMessageInput::-webkit-scrollbar {
-    width: 0.35vw;
-}
-
-.writeMessageInput::-webkit-scrollbar-track {
-    background: transparent;
-}
-
+.writeMessageInput::-webkit-scrollbar { width: 5px; }
+.writeMessageInput::-webkit-scrollbar-track { background: transparent; }
 .writeMessageInput::-webkit-scrollbar-thumb {
-    background:
-        rgba(150, 80, 255, 0.45);
-
-    border-radius: 1vw;
-}
-
-.callPlace {
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-}
-
-.callImg {
-    width: 5vw;
-    height: 5vw;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
-    cursor: pointer;
-}
-
-.callImg:hover {
-    transform: scale(1.05);
-
-    box-shadow:
-        0 0 20px
-        rgba(180, 60, 255, 0.5),
-
-        inset 0 1px
-        rgba(255, 255, 255, 0.2);
-}
-
-.callImg:active {
-    transform: scale(0.95);
+    background: #dccff9;
+    border-radius: 10px;
 }
 
 .sendMessageBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-shrink: 0;
-
-    width: 3vw;
-    height: 3vw;
-
-    margin: 0.2vw;
-
+    width: 42px;
+    height: 42px;
+    margin: 0;
     border: none;
-
     border-radius: 50%;
-
+    background: var(--fc-accent);
+    color: #ffffff;
+    font-size: 18px;
     cursor: pointer;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52cff,
-            #5445e8
-        );
-
-    box-shadow:
-        0 0 12px
-        rgba(150, 60, 255, 0.3);
-
-    font-size: 1.3vw;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.sendMessageBtn:hover {
-    transform: scale(1.05);
+.sendMessageBtn:hover  { background: var(--fc-accent-dark); }
+.sendMessageBtn:active { transform: scale(0.92); }
 
-    box-shadow:
-        0 0 18px
-        rgba(170, 70, 255, 0.5);
+.sendMessageBtn:disabled {
+    opacity: 0.45;
+    cursor: default;
+    transform: none;
 }
 
-.sendMessageBtn:active {
-    transform: scale(0.95);
+/* close button: × on computers, ← (back to the chat list) on phones */
+.closeChatBtn .backIcon {
+    display: none;
 }
 
-.deleteChatPlace {
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-}
-
-.deleteChatImg {
-    width: 3vw;
-
+.callImg {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 50%;
     cursor: pointer;
+    box-shadow: var(--fc-shadow);
+    transition: transform 0.15s ease;
 }
+
+.callImg:hover  { transform: scale(1.05); }
+.callImg:active { transform: scale(0.95); }
+
+.closeChatBtn:focus-visible,
+.sendMessageBtn:focus-visible,
+.callImg:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 2px;
+}
+
+/* the empty spot right of the message box (keeps the box centered) */
+.chatSidePlace {
+    width: 100%;
+}
+
+/* ---------------- phone ---------------- */
 
 @media all and (max-width: 768px) {
 
-    .main {
-        height: 90vh;
-
-        background-image:
-            url(../../assets/mobileDarkBackground.jpg);
-    }
-
-    .gretting {
-        width: 100%;
-        height: 100%;
-    }
-
-    .emptyChatText {
-        font-size: 5vw;
-    }
-
-    .createChatMessage {
-        font-size: 5vw;
-        max-width: 72vw;
-    }
-
-    .chatImage {
-        width: 50vw;
-    }
-
-    .placeForChat {
-        display: grid;
-
-        width: 80vw;
-        max-width: 80vw;
-
-        height: 90vh;
-
-        min-width: 0;
-
-        grid-template-rows:
-            76vh 14vh;
+    .main::before {
+        -webkit-mask-size: 260px;
+        mask-size: 260px;
     }
 
     .chatWithUser {
-        width: 100%;
-        min-width: 0;
-
-        gap: 2vh;
-
-        padding-top: 1vh;
-        padding-bottom: 1vh;
-        padding-left: 1vw;
-        padding-right: 1vw;
-
-        overflow-x: hidden;
-        overflow-y: auto;
-
-        box-sizing: border-box;
-    }
-
-    .message {
-        width: 100%;
-        min-width: 0;
-
-        padding: 1vw;
-
-        gap: 2vw;
-
-        box-sizing: border-box;
-    }
-
-    .messageAvatar {
-        width: 10vw;
-        height: 10vw;
-
-        min-width: 40px;
-        min-height: 40px;
-
-        max-width: 50px;
-        max-height: 50px;
+        padding: 10px 8px 6px;
     }
 
     .messageContent {
-        max-width: calc(100% - 55px);
-
-        margin-left: 0;
+        max-width: 82%;
     }
 
-    .messageHeader {
-        gap: 2vw;
-
-        margin-bottom: 0.8vw;
+    .defaultMessageAvatar,
+    .messageAvatar,
+    .messageAvatarSpacer {
+        width: 32px;
     }
 
-    .messageSender {
-        font-size: 3.5vw;
-    }
-
-    .messageTime {
-        font-size: 2.7vw;
-    }
-
-    .messageText {
-        font-size: 3.8vw;
-
-        max-width: 100%;
-
-        padding: 1.5vw 2.5vw;
-
-        border-radius: 4vw;
-
-        line-height: 1.4;
-    }
-
-    .typingMessage {
-        width: 100%;
-        min-width: 0;
-
-        padding: 1vw;
-
-        gap: 2vw;
-
-        box-sizing: border-box;
-    }
-
-    .typingMessage .messageAvatar {
-        width: 10vw;
-        height: 10vw;
-
-        min-width: 40px;
-        min-height: 40px;
-
-        max-width: 50px;
-        max-height: 50px;
-    }
-
-    .typingBubble {
-        width: 14vw;
-        height: 9vw;
-
-        gap: 1.2vw;
-
-        padding: 1.5vw 2vw;
-
-        border-radius: 4vw;
-    }
-
-    .typingDot {
-        width: 1.8vw;
-        height: 1.8vw;
-
-        box-shadow:
-            0 0 5px
-            rgba(255, 255, 255, 0.9),
-
-            0 0 10px
-            rgba(255, 255, 255, 0.45);
-    }
-
-    @keyframes typingDotAnimation {
-
-        0%,
-        60%,
-        100% {
-            transform: translateY(0);
-            opacity: 0.45;
-        }
-
-        30% {
-            transform: translateY(-1.2vw);
-            opacity: 1;
-        }
+    .defaultMessageAvatar,
+    .messageAvatar {
+        height: 32px;
     }
 
     .writeMessagePlace {
-        display: grid;
-
-        grid-template-columns:
-            11vw minmax(0, 1fr) 11vw;
-
-        width: 100%;
-        max-width: 100%;
-
-        min-width: 0;
-
-        padding: 0 1vw;
-
-        box-sizing: border-box;
+        grid-template-columns: 44px minmax(0, 1fr) 44px;
+        gap: 6px;
+        padding: 6px 8px 10px;
     }
 
-    .closeChatBtnPlace {
-        width: 100%;
+    .closeChatBtnPlace,
+    .callPlace {
+        height: 46px;
     }
 
-    .closeChatBtn {
-        width: 8vw;
-        height: 8vw;
-
-        font-size: 5vw;
+    .closeChatBtn,
+    .callImg {
+        width: 44px;
+        height: 44px;
     }
 
     .messageInputWrapper {
-        width: 100%;
-        max-width: 100%;
-
-        min-width: 0;
-
-        padding: 0.8vw;
-
-        border-radius: 4vw;
+        min-height: 46px;
     }
 
     .writeMessageInput {
-        width: 100%;
-        max-width: 100%;
-
-        min-width: 0;
-
-        min-height: 3.5vh;
-        max-height: 10vh;
-
-        height: auto;
-
-        padding: 1.5vw 1.8vw;
-
-        font-size: 3.2vw;
-
-        line-height: 1.4;
+        min-height: 36px;
+        max-height: 120px;
+        padding: 8px 6px;
     }
 
     .sendMessageBtn {
-        width: 7vw;
-        height: 7vw;
-
-        margin: 0.5vw;
-
-        font-size: 3vw;
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
     }
 
-    .callPlace {
-        width: 100%;
-
-        display: flex;
-
-        justify-content: flex-end;
-        align-items: center;
+    .closeChatBtn .closeIcon {
+        display: none;
     }
 
-    .deleteChatImg {
-        width: 6vw;
+    .editingBar {
+        margin: 0 58px -2px;
+    }
+
+    .closeChatBtn .backIcon {
+        display: inline;
     }
 }
 
-@media all and (max-width: 480px) {
-
-    .createChatMessage {
-        font-size: 5.5vw;
-        max-width: 74vw;
-    }
-
-    .chatImage {
-        width: 55vw;
-    }
-
-    .placeForChat {
-        width: 80vw;
-        max-width: 80vw;
-
-        grid-template-rows:
-            76vh 14vh;
-    }
-
-    .chatWithUser {
-        gap: 1.5vh;
-    }
-
-    .message {
-        gap: 2.5vw;
-
-        padding: 1.2vw;
-    }
-
-    .messageAvatar {
-        width: 11vw;
-        height: 11vw;
-
-        min-width: 38px;
-        min-height: 38px;
-
-        max-width: 48px;
-        max-height: 48px;
-    }
-
-    .messageContent {
-        max-width: calc(100% - 50px);
-
-        margin-left: 0;
-    }
-
-    .messageHeader {
-        gap: 1.5vw;
-
-        margin-bottom: 1vw;
-    }
-
-    .messageSender {
-        font-size: 3.7vw;
-    }
-
-    .messageTime {
-        font-size: 2.5vw;
-    }
-
-    .messageText {
-        font-size: 4vw;
-
-        max-width: 100%;
-
-        padding: 1.8vw 2.8vw;
-
-        border-radius: 5vw;
-    }
-
-    .typingMessage {
-        gap: 2.5vw;
-
-        padding: 1.2vw;
-    }
-
-    .typingMessage .messageAvatar {
-        width: 11vw;
-        height: 11vw;
-
-        min-width: 38px;
-        min-height: 38px;
-
-        max-width: 48px;
-        max-height: 48px;
-    }
-
-    .typingBubble {
-        width: 16vw;
-        height: 10vw;
-
-        gap: 1.4vw;
-
-        border-radius: 5vw;
-    }
-
+@media (prefers-reduced-motion: reduce) {
+    .message.messageFlash .messageContent,
+    .emptyChatCard,
+    .emptyChatWave span,
+    .messageEyeClosed,
+    .messageEyeOpen,
+    .message .messageContent,
+    .message,
+    .typingStatus,
     .typingDot {
-        width: 2vw;
-        height: 2vw;
-    }
-
-    .writeMessagePlace {
-        grid-template-columns:
-            11vw minmax(0, 1fr) 11vw;
-    }
-
-    .closeChatBtn {
-        width: 8.5vw;
-        height: 8.5vw;
-
-        font-size: 5.5vw;
-    }
-
-    .writeMessageInput {
-        font-size: 3.5vw;
-
-        padding: 1.8vw 2vw;
-    }
-
-    .sendMessageBtn {
-        width: 7.5vw;
-        height: 7.5vw;
-
-        font-size: 3.2vw;
-    }
-
-    .deleteChatImg {
-        width: 6vw;
-    }
-}
-
-@media all and (max-width: 360px) {
-
-    .createChatMessage {
-        font-size: 5.8vw;
-    }
-
-    .chatImage {
-        width: 58vw;
-    }
-
-    .placeForChat {
-        width: 80vw;
-        max-width: 80vw;
-    }
-
-    .message {
-        gap: 2.5vw;
-
-        padding: 1.5vw;
-    }
-
-    .messageAvatar {
-        width: 12vw;
-        height: 12vw;
-
-        min-width: 36px;
-        min-height: 36px;
-
-        max-width: 44px;
-        max-height: 44px;
-    }
-
-    .messageContent {
-        max-width: calc(100% - 48px);
-
-        margin-left: 0;
-    }
-
-    .messageHeader {
-        gap: 1.2vw;
-
-        margin-bottom: 1vw;
-    }
-
-    .messageSender {
-        font-size: 3.8vw;
-    }
-
-    .messageTime {
-        font-size: 2.4vw;
-    }
-
-    .messageText {
-        font-size: 4.2vw;
-
-        max-width: 100%;
-
-        padding: 2vw 3vw;
-
-        border-radius: 5vw;
-    }
-
-    .typingMessage {
-        gap: 2.5vw;
-
-        padding: 1.5vw;
-    }
-
-    .typingMessage .messageAvatar {
-        width: 12vw;
-        height: 12vw;
-
-        min-width: 36px;
-        min-height: 36px;
-
-        max-width: 44px;
-        max-height: 44px;
-    }
-
-    .typingBubble {
-        width: 18vw;
-        height: 11vw;
-
-        gap: 1.5vw;
-
-        border-radius: 5vw;
-    }
-
-    .typingDot {
-        width: 2.2vw;
-        height: 2.2vw;
-    }
-
-    .writeMessageInput {
-        font-size: 3.7vw;
-    }
-
-    .sendMessageBtn {
-        width: 8vw;
-        height: 8vw;
-
-        font-size: 3.3vw;
-    }
-
-    .deleteChatImg {
-        width: 6vw;
+        animation: none;
     }
 }

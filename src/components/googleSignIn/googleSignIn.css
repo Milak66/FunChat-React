@@ -1,0 +1,51 @@
+/* =========================================================
+   FunChat – "Continue with Google" block under the forms
+   ========================================================= */
+
+   .googleSignIn {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+}
+
+/* ———— or ———— */
+.authDivider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--fc-muted);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: lowercase;
+}
+
+.authDivider::before,
+.authDivider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--fc-line);
+}
+
+/* Google draws its own button inside this box */
+.googleButton {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    transition: opacity 0.15s ease;
+}
+
+.googleButtonBusy {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.googleError {
+    color: var(--fc-danger);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}

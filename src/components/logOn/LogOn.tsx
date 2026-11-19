@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./logIn.css";
+import "./logOn.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import {
@@ -7,9 +7,12 @@ import {
   onSetLogOnModal,
   onSetUser,
   onSetUserId,
+  onSetLanguage,
+  User,
 } from "../reduser/reduser";
-import { useEmojiModal } from "../hooks/useEmojiHook";
-import MiniLoading from "../animations/miniLoading/miniLoadin";
+import MiniLoading from "../animations/miniLoading/MiniLoading";
+import VerifyEmail from "../register/VerifyEmail";
+import GoogleSignInButton from "../googleSignIn/GoogleSignIn";
 
 interface LogOnProps {}
 
@@ -18,21 +21,33 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // set after the right password → shows the email code screen
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { showEmoji } = useEmojiModal();
+
+  const logInUser = (user: User) => {
+    dispatch(onSetUser(user));
+    dispatch(onSetUserId(user.id));
+    dispatch(onSetUserStatus(true));
+    dispatch(onSetLanguage(user.language));
+    localStorage.removeItem("temporaryMode");
+    localStorage.setItem("userId", String(user.id));
+    dispatch(onSetLogOnModal());
+  };
 
   const getUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (isLoading) return;
+
     if (!username.trim()) {
-      showEmoji(":(", "red", "Enter a username");
       return;
     }
 
     if (!password.trim()) {
-      showEmoji(":(", "red", "Enter a password");
       return;
     }
 
@@ -43,73 +58,85 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
         `${import.meta.env.VITE_SERVER_URL}/users/getUserByProperties`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            username,
-            password,
+            username: username.trim(),
+            password: password.trim(),
           }),
         }
       );
 
-      if (!response.ok) {
-        showEmoji(":(", "red", "Coudn't find the user");
-        setIsLoading(false);
+      const data = await response.json().catch(() => ({}));
+
+      // right password → the server emailed a code → code screen
+      if (response.status === 202 && data.email) {
+        setPendingEmail(data.email);
         return;
       }
 
-      const correctUser = await response.json();
+      if (response.status === 401) {
+        return;
+      }
 
-      dispatch(onSetUser(correctUser));
-      dispatch(onSetUserId(correctUser.id));
-      dispatch(onSetUserStatus(true));
-      setIsLoading(false);
-      localStorage.removeItem("temporaryMode");
-      localStorage.setItem("userId", String(correctUser.id));
-      dispatch(onSetLogOnModal());
+      if (!response.ok) {
+        return;
+      }
 
-      showEmoji(
-        ":)",
-        "green",
-        "You have successfully logged into your account."
-      );
+      logInUser(data);
     } catch (err) {
       console.error(err);
+    } finally {
       setIsLoading(false);
-      showEmoji(":(", "red", "Something went wrong!");
     }
   };
+
+  if (pendingEmail) {
+    return <VerifyEmail email={pendingEmail} onVerified={logInUser} />;
+  }
 
   return (
     <div className="logOn">
       <form className="userFormLogOn" onSubmit={getUser}>
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">{texts.enterUserNameText}</label>
+          <label className="writeUserInfoText" htmlFor="logOnUsername">
+            {texts.usernameOrEmailText}
+          </label>
           <input
+            id="logOnUsername"
             className="inputText"
             type="text"
+            autoComplete="username"
+            autoCapitalize="none"
             value={username}
             placeholder={texts.inputText}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+
         <div className="writeUserInfoDiv">
-          <label className="writeUserInfoText">{texts.enterPasswordText}</label>
+          <label className="writeUserInfoText" htmlFor="logOnPassword">
+            {texts.enterPasswordText}
+          </label>
           <input
+            id="logOnPassword"
             className="inputText"
             type="password"
+            autoComplete="current-password"
             value={password}
             placeholder={texts.inputText}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
         <div className="submitBtnDiv">
-          <button className="submitBtn" type="submit">
+          <button className="submitBtn" type="submit" disabled={isLoading}>
             {texts.logInText}
           </button>
         </div>
+
         {isLoading ? <MiniLoading /> : null}
+
+        <GoogleSignInButton onLoggedIn={logInUser} text="continue_with" />
       </form>
     </div>
   );

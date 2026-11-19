@@ -1,64 +1,122 @@
-.placeForModal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 300;
-}
+/* =========================================================
+   FunChat – global theme (white + purple)
+   All colors and the header height live here; every other
+   stylesheet uses these variables.
+   ========================================================= */
 
-.startPlace {
-    height: 10vh;
+   :root {
+    /* purple */
+    --fc-accent: #8b5cf6;
+    --fc-accent-dark: #6d3fe0;
+    --fc-accent-deep: #4c1fb8;
+    --fc-accent-soft: #f1e9ff;
+    --fc-accent-line: #e4d8ff;
+    --fc-grad: linear-gradient(120deg, #a77bff 0%, #8b5cf6 40%, #6d3fe0 100%);
+    --fc-glow-pink: rgba(255, 140, 230, 0.35);
+
+    /* neutrals */
+    --fc-surface: #ffffff;
+    --fc-bg: #f7f3ff;
+    --fc-input: #faf7ff;
+    --fc-line: #ece6f7;
+    --fc-text: #1c1530;
+    --fc-muted: #7b7490;
+    --fc-placeholder: #a99fc4;
+    --fc-time: #a59fb5;
+
+    /* status */
+    --fc-danger: #e5484d;
+    --fc-danger-soft: #fdecec;
+    --fc-success: #16a34a;
+
+    /* chat wallpaper */
+    --fc-wall-1: #ffffff;
+    --fc-wall-2: #ece4ff;
+    --fc-wall-3: #f8f0ff;
+    --fc-wall-4: #e9ecff;
+
+    /* shadows */
+    --fc-shadow: 0 1px 2px rgba(40, 20, 90, 0.08), 0 0 0 1px rgba(40, 20, 90, 0.03);
+    --fc-shadow-md: 0 6px 18px rgba(76, 31, 184, 0.12);
+    --fc-shadow-lg: 0 20px 50px rgba(76, 31, 184, 0.22), 0 2px 8px rgba(76, 31, 184, 0.08);
+
+    /* layout */
+    --fc-header-h: 64px;
+
+    --fc-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
 }
 
 @media all and (max-width: 768px) {
+    :root {
+        --fc-header-h: 56px;
+    }
+}
 
+/* ---------------- base ---------------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--fc-bg);
+    color: var(--fc-text);
+    font-family: var(--fc-font);
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+/* ---------------- page layout ---------------- */
+
+.app {
+    min-height: 100vh;      /* fallback for old browsers */
+    min-height: 100dvh;     /* real visible height on phones */
+}
+
+/* reserves room under the fixed header */
+.startPlace {
+    height: var(--fc-header-h);
+}
+
+/* ---------------- modal overlay (log in / register) ---------------- */
+
+.placeForModal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    overflow-y: auto;
+    background: rgba(45, 15, 110, 0.35);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    animation: fcOverlayIn 0.2s ease;
+}
+
+@keyframes fcOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
     .placeForModal {
-        width: 100vw;
-        height: 100vh;
-    }
-
-    .startPlace {
-        height: 10vh;
-    }
-
-    .loading {
-        width: 100vw;
-        height: 100vh;
-    }
-
-    .loadingLogo {
-        width: 35vw;
-    }
-
-    .loadingText {
-        font-size: 6vw;
-        text-align: center;
-    }
-}
-
-@media all and (max-width: 480px) {
-
-    .loadingLogo {
-        width: 40vw;
-    }
-
-    .loadingText {
-        font-size: 6.5vw;
-    }
-}
-
-@media all and (max-width: 360px) {
-
-    .loadingLogo {
-        width: 44vw;
-    }
-
-    .loadingText {
-        font-size: 7vw;
+        animation: none;
     }
 }

@@ -1,314 +1,176 @@
-.logIn {
-    width: 50vw;
-    height: 60vh;
-    margin-top: 1vw;
+/* =========================================================
+   FunChat – register form (white + purple)
+   .logIn (register) and .logOn (log in) share the same look.
+   ========================================================= */
 
+   .logIn {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    overflow: hidden;
     background:
-        radial-gradient(
-            circle at 12% 12%,
-            rgba(0, 174, 255, 0.18),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 88% 88%,
-            rgba(100, 40, 255, 0.2),
-            transparent 42%
-        ),
-        linear-gradient(
-            145deg,
-            #07101f 0%,
-            #081a32 48%,
-            #120a2b 100%
-        );
+        radial-gradient(circle at 100% 0%, rgba(167, 123, 255, 0.14), transparent 45%),
+        var(--fc-surface);
+    border-radius: 24px;
+    box-shadow: var(--fc-shadow-lg);
+    animation: fcCardIn 0.22s ease;
+}
 
-    border: 1px solid rgba(0, 174, 255, 0.25);
-    border-radius: 2vw;
-
-    box-shadow:
-        0 0 30px rgba(0, 140, 255, 0.12),
-        0 0 70px rgba(110, 40, 255, 0.08),
-        inset 0 1px rgba(255, 255, 255, 0.06);
+/* purple strip across the top of the card */
+.logIn::before {
+    content: "";
+    display: block;
+    height: 6px;
+    background: var(--fc-grad);
 }
 
 .userFormLogIn {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
+    align-items: stretch;
+    gap: 18px;
+    padding: 28px 28px 30px;
 }
 
 .writeUserInfoDiv {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1vw;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
 }
 
 .writeUserInfoText {
-    font-size: 1.5vw;
-    color: #e8f7ff;
-
-    text-shadow:
-        0 0 8px rgba(0, 174, 255, 0.35);
+    color: var(--fc-text);
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .inputText {
-    width: 40vw;
-    padding: 1vw;
-
-    color: #e8f7ff;
-    background: rgba(3, 15, 32, 0.75);
-
-    border: 1px solid rgba(0, 174, 255, 0.35);
-    border-radius: 3vw;
-
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--fc-accent-line);
+    border-radius: 14px;
     outline: none;
-
-    box-shadow:
-        inset 0 0 15px rgba(0, 100, 255, 0.06),
-        0 0 12px rgba(0, 140, 255, 0.05);
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
+    background: var(--fc-input);
+    color: var(--fc-text);
+    font-size: 16px;   /* 16px stops iPhone from zooming in on focus */
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .inputText::placeholder {
-    color: rgba(190, 225, 245, 0.45);
+    color: var(--fc-placeholder);
 }
 
 .inputText:focus {
-    background: rgba(5, 20, 42, 0.9);
-
-    border-color: rgba(0, 190, 255, 0.8);
-
-    box-shadow:
-        0 0 10px rgba(0, 174, 255, 0.2),
-        0 0 25px rgba(0, 100, 255, 0.08),
-        inset 0 0 12px rgba(0, 174, 255, 0.06);
+    background: var(--fc-surface);
+    border-color: var(--fc-accent);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.16);
 }
 
 .submitBtnDiv {
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     align-items: center;
+    margin-top: 4px;
 }
 
 .submitBtn {
-    padding: 1vw;
-
+    width: 100%;
+    height: 50px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 14px;
+    background: var(--fc-grad);
     color: #ffffff;
-
-    border-radius: 2vw;
-    font-size: 1.3vw;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0077ff,
-            #743cff
-        );
-
-    border: 1px solid rgba(120, 210, 255, 0.35);
-
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-
-    box-shadow:
-        0 0 12px rgba(0, 140, 255, 0.25),
-        0 0 25px rgba(100, 50, 255, 0.12);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        filter 0.2s ease;
+    box-shadow: 0 6px 18px rgba(109, 63, 224, 0.32);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .submitBtn:hover {
-    transform: translateY(-2px);
-
-    filter: brightness(1.15);
-
-    box-shadow:
-        0 0 18px rgba(0, 170, 255, 0.4),
-        0 0 35px rgba(110, 50, 255, 0.2);
+    filter: brightness(1.05);
+    box-shadow: 0 8px 22px rgba(109, 63, 224, 0.4);
+    transform: translateY(-1px);
 }
 
 .submitBtn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.99);
 }
 
-@media all and (max-width: 768px) {
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}
 
-    .logIn {
-        width: 82vw;
-        height: 60vh;
+.submitBtn:focus-visible {
+    outline: 2px solid var(--fc-accent-dark);
+    outline-offset: 3px;
+}
 
-        margin-top: 2vw;
+/* ---------------- email code screen (VerifyEmail.tsx) ---------------- */
 
-        border-radius: 4vw;
+.verifyCodeInput {
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 22px;
+    font-weight: 700;
+}
 
-        box-shadow:
-            0 0 25px rgba(0, 140, 255, 0.12),
-            0 0 50px rgba(110, 40, 255, 0.08);
-    }
+.verifyError {
+    color: var(--fc-danger);
+    font-size: 14px;
+    font-weight: 600;
+}
 
-    .userFormLogIn {
-        height: 100%;
+.resendCodeBtn {
+    align-self: center;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    color: var(--fc-accent-dark);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
 
-        display: flex;
-        flex-direction: column;
+.resendCodeBtn:hover:not(:disabled) {
+    background: var(--fc-accent-soft);
+}
 
-        justify-content: space-around;
-        align-items: center;
-    }
+.resendCodeBtn:disabled {
+    color: var(--fc-muted);
+    cursor: default;
+}
 
-    .writeUserInfoDiv {
-        width: 100%;
+.resendCodeBtn:focus-visible {
+    outline: 2px solid var(--fc-accent);
+    outline-offset: 2px;
+}
 
-        gap: 3vw;
-
-        display: flex;
-        flex-direction: column;
-
-        justify-content: center;
-        align-items: center;
-    }
-
-    .writeUserInfoText {
-        font-size: 4vw;
-
-        font-family: Gill Sans, sans-serif;
-
-        text-align: center;
-
-        color: #e8f7ff;
-
-        text-shadow:
-            0 0 8px rgba(0, 174, 255, 0.35);
-    }
-
-    .inputText {
-        width: 65vw;
-
-        padding: 2.5vw;
-
-        box-sizing: border-box;
-
-        font-size: 3.5vw;
-
-        border-radius: 4vw;
-
-        color: #e8f7ff;
-
-        background: rgba(3, 15, 32, 0.8);
-
-        border: 1px solid rgba(0, 174, 255, 0.4);
-
-        outline: none;
-    }
-
-    .inputText::placeholder {
-        font-size: 3.2vw;
-    }
-
-    .submitBtnDiv {
-        display: flex;
-
-        justify-content: center;
-        align-items: center;
-    }
-
-    .submitBtn {
-        padding: 2.5vw 5vw;
-
-        color: white;
-
-        border-radius: 5vw;
-
-        font-size: 4vw;
-
-        background:
-            linear-gradient(
-                135deg,
-                #0077ff,
-                #743cff
-            );
-
-        border: 1px solid rgba(120, 210, 255, 0.35);
-
-        cursor: pointer;
-
-        box-shadow:
-            0 0 12px rgba(0, 140, 255, 0.25),
-            0 0 25px rgba(100, 50, 255, 0.12);
-    }
+@keyframes fcCardIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
 }
 
 @media all and (max-width: 480px) {
+    .userFormLogIn {
+        gap: 16px;
+        padding: 22px 18px 24px;
+    }
 
     .logIn {
-        width: 88vw;
-        height: 50vh;
-
-        border-radius: 5vw;
-    }
-
-    .writeUserInfoDiv {
-        gap: 3.5vw;
-    }
-
-    .writeUserInfoText {
-        font-size: 4.2vw;
-
-        padding: 0 4vw;
-    }
-
-    .inputText {
-        width: 72vw;
-
-        padding: 2.8vw;
-
-        font-size: 3.7vw;
-
-        border-radius: 5vw;
-    }
-
-    .inputText::placeholder {
-        font-size: 3.3vw;
-    }
-
-    .submitBtn {
-        padding: 2.5vw 6vw;
-
-        font-size: 4vw;
-
-        border-radius: 6vw;
+        border-radius: 20px;
     }
 }
 
-@media all and (max-width: 360px) {
-
+@media (prefers-reduced-motion: reduce) {
     .logIn {
-        width: 92vw;
-        height: 48vh;
-    }
-
-    .writeUserInfoText {
-        font-size: 4.5vw;
-    }
-
-    .inputText {
-        width: 78vw;
-
-        font-size: 3.8vw;
-    }
-
-    .submitBtn {
-        padding: 2.5vw 6vw;
-
-        font-size: 4vw;
+        animation: none;
     }
 }

@@ -1,34 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../store/store";
+import { RootState, AppDispatch } from "../store/store.tsx";
 import {
   onSetUserStatus,
   onSetUser,
   onSetUserId,
   onSetCurrentChat,
-} from "../reduser/reduser";
-import { useEmojiModal } from "../hooks/useEmojiHook";
-import AvatarEditor from "../avatarEditor/avatarEditor";
-import userIcon from "../../assets/userIcon.jpg";
+  onSetChat,
+} from "../reduser/reduser.ts";
+import AvatarEditor from "../avatarEditor/AvatarEditor.tsx";
+import { avatarUrl, handleAvatarError } from "../avatarEditor/avatarUrl.ts";
 
 interface UserProfileProps {}
 
 const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
   const user = useSelector((state: RootState) => state.reduser.user);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { showEmoji } = useEmojiModal();
 
-  const handleOpenSettings = () => {
-    setIsSettingsOpen(!isSettingsOpen);
-  };
+  // close the menu when clicking anywhere outside it
+  // (except the avatar crop window, which is shown on top of everything)
+  useEffect(() => {
+    if (!isSettingsOpen) return;
 
-  const quitFromProfile = () => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      if (
+        profileRef.current?.contains(target) ||
+        target.closest(".avatarModal")
+      ) {
+        return;
+      }
+
+      setIsSettingsOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [isSettingsOpen]);
+
+  const resetUser = () => {
     dispatch(
       onSetUser({
         nickname: "",
@@ -43,36 +64,46 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
     dispatch(onSetUserId(null));
     dispatch(onSetUserStatus(false));
     dispatch(onSetCurrentChat(null));
+    dispatch(onSetChat([]));
     localStorage.removeItem("userId");
-    showEmoji(":)", "green", "Exit successfully completed");
+    setIsSettingsOpen(false);
+  };
+
+  const quitFromProfile = () => {
+    resetUser();
   };
 
   const deleteAccount = async () => {
-    try {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/users/deleteUser/${user?.id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+    if (!user.id || isDeleting) {
+      return;
+    }
 
-      showEmoji(":)", "green", "Account has been successfully deleted");
-      dispatch(
-        onSetUser({
-          nickname: "",
-          username: "",
-          id: null,
-          password: "",
-          language: "en",
-          avatar: "",
-          chats: [],
-        })
+    if (
+      !window.confirm(
+        "Delete your account? All your chats and messages will be deleted too. This can't be undone."
+      )
+    ) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/deleteUser/${user.id}`,
+        { method: "DELETE" }
       );
-      dispatch(onSetUserId(null));
-      dispatch(onSetUserStatus(false));
-      dispatch(onSetCurrentChat(null));
-      localStorage.removeItem("userId");
+
+      // 404 = already deleted, which is fine too
+      if (!response.ok && response.status !== 404) {
+        return;
+      }
+
+      resetUser();
     } catch (err) {
       console.error(err);
-      showEmoji(":(", "red", "Server error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -83,13 +114,21 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
       <div className="profileSettings">
         <div className="settingsUserName">@{user?.username}</div>
 
-        <AvatarEditor userId={user.id} currentAvatar={user.avatar} />
+        <AvatarEditor
+          userId={user.id}
+          currentAvatar={user.avatar}
+          onAvatarChanged={(avatar) => dispatch(onSetUser({ ...user, avatar }))}
+        />
 
         <button className="quitBtn" onClick={quitFromProfile}>
           {texts.logOutText}
         </button>
 
-        <button className="deleteBtn" onClick={deleteAccount}>
+        <button
+          className="deleteBtn"
+          onClick={deleteAccount}
+          disabled={isDeleting}
+        >
           {texts.deleteAccountText}
         </button>
       </div>
@@ -97,18 +136,24 @@ const UserProfile: React.FC<UserProfileProps> = (): React.JSX.Element => {
   };
 
   return (
-    <div className="userProfile">
-      <div className="profile" onClick={handleOpenSettings}>
+    <div className="userProfile" ref={profileRef}>
+      <div
+        className="profile"
+        role="button"
+        tabIndex={0}
+        aria-expanded={isSettingsOpen}
+        onClick={() => setIsSettingsOpen((open) => !open)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") setIsSettingsOpen((open) => !open);
+        }}
+      >
         <div className="username">{user?.nickname}</div>
-        {user.avatar ? <img
+        <img
           className="profileAvatar"
-          src={`${import.meta.env.VITE_SERVER_URL}${user.avatar}`}
-          alt="Avatar"
-        /> : <img
-          className="profileAvatar"
-          src={userIcon}
-          alt="Avatar"
-      />}
+          src={avatarUrl(user.avatar)}
+          alt=""
+          onError={handleAvatarError}
+        />
       </div>
 
       {returnProfileSettings()}
