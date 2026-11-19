@@ -47,6 +47,17 @@ export interface Texts {
     editedText: string;
     editingText: string;
     copiedText: string;
+    usernameMissingText: string;
+    emailInvalidText: string;
+    passwordShortText: string;
+    nicknameMissingText: string;
+    registerFailedText: string;
+    loginIdMissingText: string;
+    passwordMissingText: string;
+    wrongCredentialsText: string;
+    codeSentText: string;
+    loggedInText: string;
+    logInFailedText: string;
 }
 
 const engTexts: Texts = {
@@ -97,7 +108,18 @@ const engTexts: Texts = {
     deleteConfirmText: "Tap again to delete",
     editedText: "edited",
     editingText: "Editing",
-    copiedText: "Copied"
+    copiedText: "Copied",
+    usernameMissingText: "Enter a username",
+    emailInvalidText: "Enter a valid email address",
+    passwordShortText: "The password must be at least 6 characters",
+    nicknameMissingText: "Enter a nickname",
+    registerFailedText: "Couldn't create the account, try again",
+    loginIdMissingText: "Enter your username or email",
+    passwordMissingText: "Enter a password",
+    wrongCredentialsText: "Wrong username or password",
+    codeSentText: "We sent a code to your email",
+    loggedInText: "You're logged in",
+    logInFailedText: "Couldn't log in, try again",
 };
 
 const spaTexts: Texts = {
@@ -148,7 +170,18 @@ const spaTexts: Texts = {
     deleteConfirmText: "Toca de nuevo para eliminar",
     editedText: "editado",
     editingText: "Editando",
-    copiedText: "Copiado"
+    copiedText: "Copiado",
+    usernameMissingText: "Introduce un nombre de usuario",
+    emailInvalidText: "Introduce un correo electrónico válido",
+    passwordShortText: "La contraseña debe tener al menos 6 caracteres",
+    nicknameMissingText: "Introduce un apodo",
+    registerFailedText: "No se pudo crear la cuenta, inténtalo de nuevo",
+    loginIdMissingText: "Introduce tu nombre de usuario o correo",
+    passwordMissingText: "Introduce una contraseña",
+    wrongCredentialsText: "Usuario o contraseña incorrectos",
+    codeSentText: "Te enviamos un código a tu correo",
+    loggedInText: "Has iniciado sesión",
+    logInFailedText: "No se pudo iniciar sesión, inténtalo de nuevo",
 };
 
 const fraTexts: Texts = {
@@ -199,7 +232,18 @@ const fraTexts: Texts = {
     deleteConfirmText: "Touchez encore pour supprimer",
     editedText: "modifié",
     editingText: "Modification",
-    copiedText: "Copié"
+    copiedText: "Copié",
+    usernameMissingText: "Saisissez un nom d'utilisateur",
+    emailInvalidText: "Saisissez une adresse e-mail valide",
+    passwordShortText: "Le mot de passe doit contenir au moins 6 caractères",
+    nicknameMissingText: "Saisissez un pseudonyme",
+    registerFailedText: "Impossible de créer le compte, réessayez",
+    loginIdMissingText: "Saisissez votre nom d'utilisateur ou e-mail",
+    passwordMissingText: "Saisissez un mot de passe",
+    wrongCredentialsText: "Nom d'utilisateur ou mot de passe incorrect",
+    codeSentText: "Nous avons envoyé un code à votre e-mail",
+    loggedInText: "Vous êtes connecté",
+    logInFailedText: "Connexion impossible, réessayez",
 };
 
 const deuTexts: Texts = {
@@ -250,7 +294,18 @@ const deuTexts: Texts = {
     deleteConfirmText: "Zum Löschen erneut tippen",
     editedText: "bearbeitet",
     editingText: "Bearbeiten",
-    copiedText: "Kopiert"
+    copiedText: "Kopiert",
+    usernameMissingText: "Gib einen Benutzernamen ein",
+    emailInvalidText: "Gib eine gültige E-Mail-Adresse ein",
+    passwordShortText: "Das Passwort muss mindestens 6 Zeichen lang sein",
+    nicknameMissingText: "Gib einen Spitznamen ein",
+    registerFailedText: "Das Konto konnte nicht erstellt werden, versuche es erneut",
+    loginIdMissingText: "Gib deinen Benutzernamen oder deine E-Mail ein",
+    passwordMissingText: "Gib ein Passwort ein",
+    wrongCredentialsText: "Falscher Benutzername oder falsches Passwort",
+    codeSentText: "Wir haben dir einen Code per E-Mail geschickt",
+    loggedInText: "Du bist angemeldet",
+    logInFailedText: "Anmeldung fehlgeschlagen, versuche es erneut",
 };
 
 const porTexts: Texts = {
@@ -301,7 +356,18 @@ const porTexts: Texts = {
     deleteConfirmText: "Toque de novo para excluir",
     editedText: "editada",
     editingText: "Editando",
-    copiedText: "Copiado"
+    copiedText: "Copiado",
+    usernameMissingText: "Introduza um nome de utilizador",
+    emailInvalidText: "Introduza um e-mail válido",
+    passwordShortText: "A palavra-passe deve ter pelo menos 6 caracteres",
+    nicknameMissingText: "Introduza um apelido",
+    registerFailedText: "Não foi possível criar a conta, tente novamente",
+    loginIdMissingText: "Introduza o seu nome de utilizador ou e-mail",
+    passwordMissingText: "Introduza uma palavra-passe",
+    wrongCredentialsText: "Nome de utilizador ou palavra-passe incorretos",
+    codeSentText: "Enviámos um código para o seu e-mail",
+    loggedInText: "Sessão iniciada",
+    logInFailedText: "Não foi possível iniciar sessão, tente novamente",
 };
 
 const itaTexts: Texts = {
@@ -352,7 +418,18 @@ const itaTexts: Texts = {
     deleteConfirmText: "Tocca di nuovo per eliminare",
     editedText: "modificato",
     editingText: "Modifica",
-    copiedText: "Copiato"
+    copiedText: "Copiato",
+    usernameMissingText: "Inserisci un nome utente",
+    emailInvalidText: "Inserisci un indirizzo email valido",
+    passwordShortText: "La password deve contenere almeno 6 caratteri",
+    nicknameMissingText: "Inserisci un soprannome",
+    registerFailedText: "Impossibile creare l'account, riprova",
+    loginIdMissingText: "Inserisci il tuo nome utente o email",
+    passwordMissingText: "Inserisci una password",
+    wrongCredentialsText: "Nome utente o password errati",
+    codeSentText: "Ti abbiamo inviato un codice via email",
+    loggedInText: "Hai effettuato l'accesso",
+    logInFailedText: "Accesso non riuscito, riprova",
 };
 
 const nldTexts: Texts = {
@@ -403,7 +480,18 @@ const nldTexts: Texts = {
     deleteConfirmText: "Tik nogmaals om te verwijderen",
     editedText: "bewerkt",
     editingText: "Bewerken",
-    copiedText: "Gekopieerd"
+    copiedText: "Gekopieerd",
+    usernameMissingText: "Voer een gebruikersnaam in",
+    emailInvalidText: "Voer een geldig e-mailadres in",
+    passwordShortText: "Het wachtwoord moet minstens 6 tekens hebben",
+    nicknameMissingText: "Voer een bijnaam in",
+    registerFailedText: "Account aanmaken mislukt, probeer het opnieuw",
+    loginIdMissingText: "Voer je gebruikersnaam of e-mail in",
+    passwordMissingText: "Voer een wachtwoord in",
+    wrongCredentialsText: "Onjuiste gebruikersnaam of wachtwoord",
+    codeSentText: "We hebben een code naar je e-mail gestuurd",
+    loggedInText: "Je bent ingelogd",
+    logInFailedText: "Inloggen mislukt, probeer het opnieuw",
 };
 
 const polTexts: Texts = {
@@ -454,7 +542,18 @@ const polTexts: Texts = {
     deleteConfirmText: "Dotknij ponownie, aby usunąć",
     editedText: "edytowano",
     editingText: "Edycja",
-    copiedText: "Skopiowano"
+    copiedText: "Skopiowano",
+    usernameMissingText: "Wpisz nazwę użytkownika",
+    emailInvalidText: "Wpisz poprawny adres e-mail",
+    passwordShortText: "Hasło musi mieć co najmniej 6 znaków",
+    nicknameMissingText: "Wpisz pseudonim",
+    registerFailedText: "Nie udało się utworzyć konta, spróbuj ponownie",
+    loginIdMissingText: "Wpisz nazwę użytkownika lub e-mail",
+    passwordMissingText: "Wpisz hasło",
+    wrongCredentialsText: "Nieprawidłowa nazwa użytkownika lub hasło",
+    codeSentText: "Wysłaliśmy kod na Twój e-mail",
+    loggedInText: "Zalogowano",
+    logInFailedText: "Nie udało się zalogować, spróbuj ponownie",
 };
 
 const ukrTexts: Texts = {
@@ -505,7 +604,18 @@ const ukrTexts: Texts = {
     deleteConfirmText: "Натисніть ще раз, щоб видалити",
     editedText: "змінено",
     editingText: "Редагування",
-    copiedText: "Скопійовано"
+    copiedText: "Скопійовано",
+    usernameMissingText: "Введіть ім'я користувача",
+    emailInvalidText: "Введіть дійсну електронну адресу",
+    passwordShortText: "Пароль має містити щонайменше 6 символів",
+    nicknameMissingText: "Введіть псевдонім",
+    registerFailedText: "Не вдалося створити обліковий запис, спробуйте ще раз",
+    loginIdMissingText: "Введіть ім'я користувача або пошту",
+    passwordMissingText: "Введіть пароль",
+    wrongCredentialsText: "Неправильне ім'я користувача або пароль",
+    codeSentText: "Ми надіслали код на вашу пошту",
+    loggedInText: "Ви увійшли",
+    logInFailedText: "Не вдалося увійти, спробуйте ще раз",
 };
 
 const rusTexts: Texts = {
@@ -556,7 +666,18 @@ const rusTexts: Texts = {
     deleteConfirmText: "Нажмите ещё раз, чтобы удалить",
     editedText: "изменено",
     editingText: "Редактирование",
-    copiedText: "Скопировано"
+    copiedText: "Скопировано",
+    usernameMissingText: "Введите имя пользователя",
+    emailInvalidText: "Введите правильный адрес почты",
+    passwordShortText: "Пароль должен содержать не менее 6 символов",
+    nicknameMissingText: "Введите никнейм",
+    registerFailedText: "Не удалось создать аккаунт, попробуйте ещё раз",
+    loginIdMissingText: "Введите имя пользователя или почту",
+    passwordMissingText: "Введите пароль",
+    wrongCredentialsText: "Неверное имя пользователя или пароль",
+    codeSentText: "Мы отправили код на вашу почту",
+    loggedInText: "Вы вошли в аккаунт",
+    logInFailedText: "Не удалось войти, попробуйте ещё раз",
 };
 
 const turTexts: Texts = {
@@ -607,7 +728,18 @@ const turTexts: Texts = {
     deleteConfirmText: "Silmek için tekrar dokunun",
     editedText: "düzenlendi",
     editingText: "Düzenleniyor",
-    copiedText: "Kopyalandı"
+    copiedText: "Kopyalandı",
+    usernameMissingText: "Bir kullanıcı adı girin",
+    emailInvalidText: "Geçerli bir e-posta adresi girin",
+    passwordShortText: "Şifre en az 6 karakter olmalıdır",
+    nicknameMissingText: "Bir takma ad girin",
+    registerFailedText: "Hesap oluşturulamadı, tekrar deneyin",
+    loginIdMissingText: "Kullanıcı adınızı veya e-postanızı girin",
+    passwordMissingText: "Bir şifre girin",
+    wrongCredentialsText: "Kullanıcı adı veya şifre yanlış",
+    codeSentText: "E-postanıza bir kod gönderdik",
+    loggedInText: "Giriş yaptınız",
+    logInFailedText: "Giriş yapılamadı, tekrar deneyin",
 };
 
 const araTexts: Texts = {
@@ -658,7 +790,18 @@ const araTexts: Texts = {
     deleteConfirmText: "اضغط مرة أخرى للحذف",
     editedText: "معدّلة",
     editingText: "جارٍ التعديل",
-    copiedText: "تم النسخ"
+    copiedText: "تم النسخ",
+    usernameMissingText: "أدخل اسم مستخدم",
+    emailInvalidText: "أدخل بريدًا إلكترونيًا صالحًا",
+    passwordShortText: "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+    nicknameMissingText: "أدخل لقبًا",
+    registerFailedText: "تعذّر إنشاء الحساب، حاول مرة أخرى",
+    loginIdMissingText: "أدخل اسم المستخدم أو البريد الإلكتروني",
+    passwordMissingText: "أدخل كلمة المرور",
+    wrongCredentialsText: "اسم المستخدم أو كلمة المرور غير صحيحة",
+    codeSentText: "أرسلنا رمزًا إلى بريدك الإلكتروني",
+    loggedInText: "تم تسجيل دخولك",
+    logInFailedText: "تعذّر تسجيل الدخول، حاول مرة أخرى",
 };
 
 const hinTexts: Texts = {
@@ -709,7 +852,18 @@ const hinTexts: Texts = {
     deleteConfirmText: "हटाने के लिए फिर से टैप करें",
     editedText: "संपादित",
     editingText: "संपादन",
-    copiedText: "कॉपी हो गया"
+    copiedText: "कॉपी हो गया",
+    usernameMissingText: "उपयोगकर्ता नाम दर्ज करें",
+    emailInvalidText: "मान्य ईमेल पता दर्ज करें",
+    passwordShortText: "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+    nicknameMissingText: "उपनाम दर्ज करें",
+    registerFailedText: "खाता नहीं बन सका, फिर से कोशिश करें",
+    loginIdMissingText: "अपना उपयोगकर्ता नाम या ईमेल दर्ज करें",
+    passwordMissingText: "पासवर्ड दर्ज करें",
+    wrongCredentialsText: "गलत उपयोगकर्ता नाम या पासवर्ड",
+    codeSentText: "हमने आपके ईमेल पर एक कोड भेजा है",
+    loggedInText: "आप लॉग इन हो गए हैं",
+    logInFailedText: "लॉग इन नहीं हो सका, फिर से कोशिश करें",
 };
 
 const benTexts: Texts = {
@@ -760,7 +914,18 @@ const benTexts: Texts = {
     deleteConfirmText: "মুছতে আবার ট্যাপ করুন",
     editedText: "সম্পাদিত",
     editingText: "সম্পাদনা হচ্ছে",
-    copiedText: "কপি হয়েছে"
+    copiedText: "কপি হয়েছে",
+    usernameMissingText: "একটি ব্যবহারকারীর নাম লিখুন",
+    emailInvalidText: "একটি সঠিক ইমেল ঠিকানা লিখুন",
+    passwordShortText: "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে",
+    nicknameMissingText: "একটি ডাকনাম লিখুন",
+    registerFailedText: "অ্যাকাউন্ট তৈরি করা যায়নি, আবার চেষ্টা করুন",
+    loginIdMissingText: "আপনার ব্যবহারকারীর নাম বা ইমেল লিখুন",
+    passwordMissingText: "একটি পাসওয়ার্ড লিখুন",
+    wrongCredentialsText: "ভুল ব্যবহারকারীর নাম বা পাসওয়ার্ড",
+    codeSentText: "আমরা আপনার ইমেলে একটি কোড পাঠিয়েছি",
+    loggedInText: "আপনি লগ ইন করেছেন",
+    logInFailedText: "লগ ইন করা যায়নি, আবার চেষ্টা করুন",
 };
 
 const zhoTexts: Texts = {
@@ -811,7 +976,18 @@ const zhoTexts: Texts = {
     deleteConfirmText: "再点一次以删除",
     editedText: "已编辑",
     editingText: "正在编辑",
-    copiedText: "已复制"
+    copiedText: "已复制",
+    usernameMissingText: "请输入用户名",
+    emailInvalidText: "请输入有效的邮箱地址",
+    passwordShortText: "密码至少需要 6 个字符",
+    nicknameMissingText: "请输入昵称",
+    registerFailedText: "无法创建账户，请重试",
+    loginIdMissingText: "请输入用户名或邮箱",
+    passwordMissingText: "请输入密码",
+    wrongCredentialsText: "用户名或密码错误",
+    codeSentText: "我们已向你的邮箱发送了验证码",
+    loggedInText: "你已登录",
+    logInFailedText: "无法登录，请重试",
 };
 
 const jpnTexts: Texts = {
@@ -862,7 +1038,18 @@ const jpnTexts: Texts = {
     deleteConfirmText: "もう一度タップして削除",
     editedText: "編集済み",
     editingText: "編集中",
-    copiedText: "コピーしました"
+    copiedText: "コピーしました",
+    usernameMissingText: "ユーザー名を入力してください",
+    emailInvalidText: "有効なメールアドレスを入力してください",
+    passwordShortText: "パスワードは6文字以上にしてください",
+    nicknameMissingText: "ニックネームを入力してください",
+    registerFailedText: "アカウントを作成できませんでした。もう一度お試しください",
+    loginIdMissingText: "ユーザー名またはメールアドレスを入力してください",
+    passwordMissingText: "パスワードを入力してください",
+    wrongCredentialsText: "ユーザー名またはパスワードが違います",
+    codeSentText: "メールにコードを送信しました",
+    loggedInText: "ログインしました",
+    logInFailedText: "ログインできませんでした。もう一度お試しください",
 };
 
 const korTexts: Texts = {
@@ -913,7 +1100,18 @@ const korTexts: Texts = {
     deleteConfirmText: "삭제하려면 다시 누르세요",
     editedText: "수정됨",
     editingText: "수정 중",
-    copiedText: "복사됨"
+    copiedText: "복사됨",
+    usernameMissingText: "사용자 이름을 입력하세요",
+    emailInvalidText: "올바른 이메일 주소를 입력하세요",
+    passwordShortText: "비밀번호는 6자 이상이어야 합니다",
+    nicknameMissingText: "닉네임을 입력하세요",
+    registerFailedText: "계정을 만들 수 없습니다. 다시 시도하세요",
+    loginIdMissingText: "사용자 이름 또는 이메일을 입력하세요",
+    passwordMissingText: "비밀번호를 입력하세요",
+    wrongCredentialsText: "사용자 이름 또는 비밀번호가 올바르지 않습니다",
+    codeSentText: "이메일로 코드를 보냈습니다",
+    loggedInText: "로그인되었습니다",
+    logInFailedText: "로그인할 수 없습니다. 다시 시도하세요",
 };
 
 const vieTexts: Texts = {
@@ -964,7 +1162,18 @@ const vieTexts: Texts = {
     deleteConfirmText: "Nhấn lần nữa để xóa",
     editedText: "đã sửa",
     editingText: "Đang sửa",
-    copiedText: "Đã sao chép"
+    copiedText: "Đã sao chép",
+    usernameMissingText: "Nhập tên người dùng",
+    emailInvalidText: "Nhập địa chỉ email hợp lệ",
+    passwordShortText: "Mật khẩu phải có ít nhất 6 ký tự",
+    nicknameMissingText: "Nhập biệt danh",
+    registerFailedText: "Không thể tạo tài khoản, hãy thử lại",
+    loginIdMissingText: "Nhập tên người dùng hoặc email",
+    passwordMissingText: "Nhập mật khẩu",
+    wrongCredentialsText: "Sai tên người dùng hoặc mật khẩu",
+    codeSentText: "Chúng tôi đã gửi mã đến email của bạn",
+    loggedInText: "Bạn đã đăng nhập",
+    logInFailedText: "Không thể đăng nhập, hãy thử lại",
 };
 
 const indTexts: Texts = {
@@ -1015,7 +1224,18 @@ const indTexts: Texts = {
     deleteConfirmText: "Ketuk lagi untuk menghapus",
     editedText: "diedit",
     editingText: "Mengedit",
-    copiedText: "Disalin"
+    copiedText: "Disalin",
+    usernameMissingText: "Masukkan nama pengguna",
+    emailInvalidText: "Masukkan alamat email yang valid",
+    passwordShortText: "Kata sandi minimal 6 karakter",
+    nicknameMissingText: "Masukkan nama panggilan",
+    registerFailedText: "Tidak dapat membuat akun, coba lagi",
+    loginIdMissingText: "Masukkan nama pengguna atau email",
+    passwordMissingText: "Masukkan kata sandi",
+    wrongCredentialsText: "Nama pengguna atau kata sandi salah",
+    codeSentText: "Kami telah mengirim kode ke email Anda",
+    loggedInText: "Anda sudah masuk",
+    logInFailedText: "Tidak dapat masuk, coba lagi",
 };
 
 export const texts = {

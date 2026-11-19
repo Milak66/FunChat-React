@@ -13,12 +13,15 @@ import {
 import MiniLoading from "../animations/miniLoading/MiniLoading";
 import VerifyEmail from "./VerifyEmail";
 import GoogleSignInButton from "../googleSignIn/GoogleSignIn";
+import { useNotify } from "../hooks/useNotify";
 
-interface LogInProps {}
+interface RegisterProps {}
 
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
+const MIN_PASSWORD_LENGTH = 6;
+
+const Register: React.FC<RegisterProps> = (): React.JSX.Element => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -31,42 +34,38 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
   const texts = useSelector((state: RootState) => state.reduser.texts);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  /** errors and successes go to the FunChat console instead of alert() */
+  const notify = useNotify();
+
   const sendData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (isLoading) return;
 
+    const cleanUsername = username.trim();
     const cleanEmail = email.trim().toLowerCase();
+    const cleanNickname = nickname.trim();
 
-    if (!username.trim()) {
-<<<<<<< HEAD
-      return;
-    }
-
-    if (username.trim().length > 10) {
+    if (!cleanUsername) {
+      notify("error", texts.usernameMissingText);
       return;
     }
 
     if (!EMAIL_PATTERN.test(cleanEmail)) {
-=======
-      showEmoji(":(", "red", "The username is missing");
->>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
+      notify("error", texts.emailInvalidText);
       return;
     }
 
-    if (password.trim().length < 6) {
-<<<<<<< HEAD
-=======
-      showEmoji(":(", "red", "The password must be at least 6 characters long");
->>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
+    // the password is sent exactly as typed (spaces included),
+    // so the user can log in with the same thing they typed here
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      notify("error", texts.passwordShortText);
       return;
     }
 
-    if (!nickname.trim()) {
-<<<<<<< HEAD
-=======
-      showEmoji(":(", "red", "The username is missing");
->>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
+    if (!cleanNickname) {
+      notify("error", texts.nicknameMissingText);
       return;
     }
 
@@ -79,10 +78,10 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            username: username.trim(),
+            username: cleanUsername,
             email: cleanEmail,
-            password: password.trim(),
-            nickname: nickname.trim(),
+            password,
+            nickname: cleanNickname,
           }),
         }
       );
@@ -90,6 +89,8 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
+        // e.g. "This username is occupied!" or "This email is already registered"
+        notify("error", data.message ?? texts.registerFailedText);
         return;
       }
 
@@ -97,6 +98,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
       setPendingEmail(data.email ?? cleanEmail);
     } catch (err) {
       console.error(err);
+      notify("error", texts.registerFailedText);
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +121,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
 
   return (
     <div className="logIn">
-      <form className="userFormLogIn" onSubmit={sendData}>
+      <form className="userFormLogIn" onSubmit={sendData} noValidate>
         <div className="writeUserInfoDiv">
           <label className="writeUserInfoText" htmlFor="registerUsername">
             {texts.enterUserNameText}
@@ -160,6 +162,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
             className="inputText"
             type="password"
             autoComplete="new-password"
+            minLength={MIN_PASSWORD_LENGTH}
             placeholder={texts.inputText}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -195,4 +198,4 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
   );
 };
 
-export default LogIn;
+export default Register;

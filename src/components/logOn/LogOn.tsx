@@ -13,6 +13,7 @@ import {
 import MiniLoading from "../animations/miniLoading/MiniLoading";
 import VerifyEmail from "../register/VerifyEmail";
 import GoogleSignInButton from "../googleSignIn/GoogleSignIn";
+import { useNotify } from "../hooks/useNotify";
 
 interface LogOnProps {}
 
@@ -28,6 +29,10 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  /** errors and successes go to the FunChat console */
+  const notify = useNotify();
+
+  // runs after the right code was entered (or after Google sign-in)
   const logInUser = (user: User) => {
     dispatch(onSetUser(user));
     dispatch(onSetUserId(user.id));
@@ -36,6 +41,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
     localStorage.removeItem("temporaryMode");
     localStorage.setItem("userId", String(user.id));
     dispatch(onSetLogOnModal());
+    notify("success", texts.loggedInText);
   };
 
   const getUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,11 +49,15 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
     if (isLoading) return;
 
-    if (!username.trim()) {
+    const cleanUsername = username.trim();
+
+    if (!cleanUsername) {
+      notify("error", texts.loginIdMissingText);
       return;
     }
 
-    if (!password.trim()) {
+    if (!password) {
+      notify("error", texts.passwordMissingText);
       return;
     }
 
@@ -60,8 +70,9 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            username: username.trim(),
-            password: password.trim(),
+            username: cleanUsername,
+            // exactly as typed, the same way register.tsx saves it
+            password,
           }),
         }
       );
@@ -70,29 +81,25 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
       // right password → the server emailed a code → code screen
       if (response.status === 202 && data.email) {
+        notify("info", texts.codeSentText);
         setPendingEmail(data.email);
         return;
       }
 
       if (response.status === 401) {
+        notify("error", texts.wrongCredentialsText);
         return;
       }
 
       if (!response.ok) {
+        notify("error", data.message ?? texts.logInFailedText);
         return;
       }
 
-<<<<<<< HEAD:src/components/logOn/LogOn.tsx
       logInUser(data);
-=======
-      showEmoji(
-        ":)",
-        "green",
-        "You have successfully logged into your account"
-      );
->>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086:src/components/logIn/logIn.tsx
     } catch (err) {
       console.error(err);
+      notify("error", texts.logInFailedText);
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +111,7 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
 
   return (
     <div className="logOn">
-      <form className="userFormLogOn" onSubmit={getUser}>
+      <form className="userFormLogOn" onSubmit={getUser} noValidate>
         <div className="writeUserInfoDiv">
           <label className="writeUserInfoText" htmlFor="logOnUsername">
             {texts.usernameOrEmailText}
