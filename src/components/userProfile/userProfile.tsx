@@ -9,7 +9,7 @@ import {
   onSetCurrentChat,
   onSetChat,
 } from "../reduser/reduser.ts";
-import AvatarEditor from "../avatarEditor/AvatarEditor.tsx";
+import AvatarEditor from "../avatarEditor/avatarEditor.tsx";
 import { avatarUrl, handleAvatarError } from "../avatarEditor/avatarUrl.ts";
 
 interface UserProfileProps {}

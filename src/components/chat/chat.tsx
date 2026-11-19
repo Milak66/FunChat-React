@@ -37,7 +37,7 @@ import {
   subscribeToReads,
 } from "../socket/socket.ts";
 
-import MessageMenu from "../menus/MessageMenu.tsx";
+import MessageMenu from "../menus/messageMenu.tsx";
 
 import MiniLoading from "../animations/miniLoading/miniLoading.tsx";
 
