@@ -6,7 +6,7 @@ import "./chatMenu.css";
 import { RootState, AppDispatch } from "../store/store";
 import { Chat, onRemoveChat, onSetChat, onSetCurrentChat } from "../reduser/reduser";
 import { TrashIcon } from "../images/MessageMenuIcons";
-import { useNotify } from "../hooks/UseNotify";
+import { useNotify } from "../hooks/useNotify";
 
 interface ChatMenuProps {
   /** where the right click / long press happened (px, on screen) */
