@@ -61,6 +61,7 @@ const Register: React.FC<RegisterProps> = (): React.JSX.Element => {
     // so the user can log in with the same thing they typed here
     if (password.length < MIN_PASSWORD_LENGTH) {
       notify("error", texts.passwordShortText);
+      alert("The password must be at least 6 characters");
       return;
     }
 
