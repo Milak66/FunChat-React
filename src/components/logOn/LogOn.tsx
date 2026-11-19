@@ -82,7 +82,15 @@ const LogOn: React.FC<LogOnProps> = (): React.JSX.Element => {
         return;
       }
 
+<<<<<<< HEAD:src/components/logOn/LogOn.tsx
       logInUser(data);
+=======
+      showEmoji(
+        ":)",
+        "green",
+        "You have successfully logged into your account"
+      );
+>>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086:src/components/logIn/logIn.tsx
     } catch (err) {
       console.error(err);
     } finally {

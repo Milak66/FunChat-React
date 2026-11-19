@@ -39,6 +39,7 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     const cleanEmail = email.trim().toLowerCase();
 
     if (!username.trim()) {
+<<<<<<< HEAD
       return;
     }
 
@@ -47,14 +48,25 @@ const LogIn: React.FC<LogInProps> = (): React.JSX.Element => {
     }
 
     if (!EMAIL_PATTERN.test(cleanEmail)) {
+=======
+      showEmoji(":(", "red", "The username is missing");
+>>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
       return;
     }
 
     if (password.trim().length < 6) {
+<<<<<<< HEAD
+=======
+      showEmoji(":(", "red", "The password must be at least 6 characters long");
+>>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
       return;
     }
 
     if (!nickname.trim()) {
+<<<<<<< HEAD
+=======
+      showEmoji(":(", "red", "The username is missing");
+>>>>>>> 0d9a1f8fd43e3ba90b70101138fca205f068d086
       return;
     }
 
